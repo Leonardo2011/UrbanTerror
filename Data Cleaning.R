@@ -12,11 +12,10 @@
 ###### Cleaning Data  ######
 ############################
 
-Load basic R packages
-library(plyr)           
-library(ggplot2)
-library(RColorBrewer)
+#Load basic R packages
+install.packages("car")
 library(foreign) 
+library(car)
 
 #Load the Global Terrorism Database
 
@@ -31,4 +30,6 @@ GTD <- subset(rawGTD, select = c(eventid, iyear, imonth, iday, country, region, 
 
 #We introduce our first scale: "Targets Urbanity Potential Scale (TUPscale)" 
 
-GTD["TUPscale"] <- NA
+GTD["TUPscale"] <- GTD$targsubtype1
+
+GTD$TUPscale <- recode(GTD$TUPscale, "40:42 = 0; 9 = 1; 27:35 = 1; 37:39 = 1; 65 = 1; 72 = 1; 1 = 2; 4:5 = 2; 10 = 2; 12 = 2; 53:56 = 2; 58:59 = 2; 61:62 = 2; 82 = 2; 95:96 = 2;6 = 3; 13 = 3; 104:108 = 3; 51:52 = 3; 57 = 3; 60 = 3; 63:64 = 3; 73 = 3; 80:81 = 3; 88:92 = 3; 98 = 3; 2 = 4; 3 = 4; 7:8 = 4; 44 = 4;  48:50 = 4; 67:71 = 4; 74:79 = 4; 83:87 = 4; 97 = 4; 99 = 4; 14:26 = 5; 100:103 = 5; 111 = 5; 109 = 5; 110 = 5; 36 = 5; 43 = 5; 45:47 = 5; 66 = 5; 93:94 = 5")
