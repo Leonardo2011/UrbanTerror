@@ -18,7 +18,7 @@ library(ggplot2)
 library(RColorBrewer)
 library(foreign) 
 
-Load the Global Terrorism Database
+#Load the Global Terrorism Database
 
 rawGTD <- read.csv("globalterrorismdb_0814dist.csv", header=TRUE)
 
@@ -31,3 +31,4 @@ GTD <- subset(rawGTD, select = c(eventid, iyear, imonth, iday, country, region, 
 
 #We introduce our first scale: "Targets Urbanity Potential Scale (TUPscale)" 
 
+GTD["TUPscale"] <- NA
