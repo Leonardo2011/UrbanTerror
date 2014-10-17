@@ -18,12 +18,16 @@ library(ggplot2)
 library(RColorBrewer)
 library(foreign) 
 
+Load the Global Terrorism Database
 
-GTD <- read.csv("globalterrorismdb_0814dist.csv", header=TRUE)
+rawGTD <- read.csv("globalterrorismdb_0814dist.csv", header=TRUE)
 
-#The Global Terror Database (GTD) we are using for our analysis contains over a 100k observations on more than 120 variables. 
-#The complete database contains redundant (because it is also stored in the codebook) or dispensable (because we do not need it for our
-#analysis) information. We therefore filter the database to make it fit our needs. We erase over a 100 variables. Also, we only want to look
-#at successfull terror attacks and the ones that happened after 1989.
+#The Global Terror Database (GTD) we are using for our analysis contains over a 120k observations on more than 120 variables. 
+#The complete database contains redundant or dispensable data because we do not need it for our analysis.
+#We therefore filter the database to make it fit our needs. We erase over a 100 variables. 
+#We only want to look at successfull terror attacks and the ones that happened after 1989.
 
-filtered.GTD <- subset(GTD, select = c(eventid, iyear, imonth, iday, country, region, attacktype1, targtype1, targsubtype1, weaptype1, weapsubtype1, propextent), iyear >= 1990 & success == 1, na.strings = c("", " "))
+GTD <- subset(rawGTD, select = c(eventid, iyear, imonth, iday, country, region, attacktype1, targtype1, targsubtype1, weaptype1, weapsubtype1, propextent), iyear >= 1990 & success == 1, na.strings = c("", " "))
+
+#We introduce our first scale: "Targets Urbanity Potential Scale (TUPscale)" 
+
