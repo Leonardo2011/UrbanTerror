@@ -30,10 +30,19 @@ GTD <- subset(rawGTD, select = c(eventid, iyear, imonth, iday, country, region, 
 #We introduce our first scale: "Targets Urbanity Potential Scale (TUPscale)" 
 GTD["TUPscale"] <- GTD$targsubtype1
 GTD$TUPscale <- recode(GTD$TUPscale, "40:42 = 3; 9 = 1; 27:35 = 1; 37:39 = 1; 65 = 1; 72 = 1; 1 = 2; 4:5 = 2; 10 = 2; 12 = 2; 53:56 = 2; 58:59 = 2; 61:62 = 2; 82 = 2; 95:96 = 2;6 = 3; 13 = 3; 104:108 = 3; 51:52 = 3; 57 = 3; 60 = 3; 63:64 = 3; 73 = 3; 80:81 = 3; 88:92 = 3; 98 = 3; 2 = 4; 3 = 4; 7:8 = 4; 44 = 4;  48:50 = 4; 67:71 = 4; 74:79 = 4; 83:87 = 4; 97 = 4; 99 = 4; 14:26 = 5; 100:103 = 5; 111 = 5; 109 = 5; 110 = 5; 36 = 5; 43 = 5; 45:47 = 5; 66 = 5; 93:94 = 5")
+GTD$TUPscale <- as.numeric(GTD$TUPscale)
+#Bring down to values between 0 and 10 that reflect our appreciation for the targets potential urbanity.
+GTD$TUPscale <- recode(GTD$TUPscale, "1=0; 2=1; 3=3; 4=6; 5=10")
 
-#We introduce our second scale: "Extend of Property Damage (DAMscale)" 
+#We introduce our second scale: "Extend of Property Damage (DAMscale)"
 GTD["PROPscale"] <- GTD$propextent
-GTD$PROPscale <- recode(GTD$PROPscale, "1=3; 2=2; 3=1; 4=NA")
+GTD$PROPscale <- as.numeric(GTD$PROPscale)
+#Bring down to values between 0 and 1 that reflect our appreciation for the vast gaps between the originally coded categories. 
+GTD$PROPscale <- recode(GTD$PROPscale, "1=1; 2=0.5; 3=0.001; 4=NA")
+
 
 #We introduce our second scale: "Extend of Human Damage (HUMscale)" 
 GTD["HUMscale"] <- GTD$nkill+GTD$nwound
+GTD$HUMscale <- as.numeric(GTD$HUMscale)
+#Bring down to values between 0 and 1. 
+GTD$HUMscale <- (GTD$HUMscale/5513)
