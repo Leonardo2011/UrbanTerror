@@ -82,3 +82,29 @@ Plotframe1 <- data.frame(year=GTD$iyear, tup= TUP_weight_as_DAMAGE_0_up_to_1, da
 #qplot(x=year, y=tupanddamage, data=Plotframe1, log="y", geom=c("point", "smooth"), method="lm")
 #ggplot(data=Plotframe1,aes(x=year,y=tupanddamage) +geom_point() + stat_smooth(method="lm"))
 
+GTD2<- subset(rawGTD, select = c(eventid, iyear, imonth, iday, country, region, attacktype1, targtype1, targsubtype1,
+                                 weaptype1, weapsubtype1, propextent, nkill, nwound, success),
+              iyear >= 1989 & success == 1, na.strings = c("", " "))
+library(car)
+GTD2["TUPscale"] <- GTD2$targsubtype1
+GTD2$TUPscale <- recode(GTD2$TUPscale, "40:42 = 3; 9 = 1; 27:35 = 1; 37:39 = 1; 65 = 1; 72 = 1; 1 = 2; 4:5 = 2; 10 = 2;
+                       12 = 2; 53:56 = 2; 58:59 = 2; 61:62 = 2; 82 = 2; 95:96 = 2;6 = 3; 13 = 3;
+                       104:108 = 3; 51:52 = 3; 57 = 3; 60 = 3; 63:64 = 3; 73 = 3; 80:81 = 3; 88:92 = 3;
+                       98 = 3; 2 = 4; 3 = 4; 7:8 = 4; 44 = 4; 48:50 = 4; 67:71 = 4; 74:79 = 4; 83:87 = 4;
+                       97 = 4; 99 = 4; 14:26 = 5; 100:103 = 5; 111 = 5; 109 = 5; 110 = 5; 36 = 5; 43 = 5;
+                       45:47 = 5; 66 = 5; 93:94 = 5; 11 = 5", as.numeric.result=TRUE)
+
+
+
+Plotframe2 <- subset(GTD2, select = c(iyear, GTD2$TUPscale), iyear >=1990 & success == 1, na.strings = c("", " "))
+
+
+
+TUPforPlot <- Plotframe2$TUPscale
+TUPforPlot <- recode(TUPforPlot, "1 = '0 - Military and Farmland'; 2 = '2 - Local Governanceand Police'; 
+                     3 = '5 - Potentially Urban Workplace'; 4 = '7 - Potentially Urban Infrastructure'; 5
+                     = '9 - Potentially Expressions of Urban Life'; 11 = NA", as.numeric.result=FALSE)
+
+
+qplot(factor(iyear), data=Plotframe2, geom="bar", fill=factor(TUPforPlot), xlab='year', 
+      ylab='count of successfull attacks', main= 'count of attacks by Bretzinger-Reed categories of potential urbanity')
