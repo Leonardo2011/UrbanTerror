@@ -47,13 +47,13 @@ GTD$TUPscale <- as.numeric(GTD$TUPscale)
 #Bring TUPscale down to values between 0 and 1 that reflect our appreciation for the targets potential urbanity.
 GTD$TUPscale <- recode(GTD$TUPscale, "1=0; 2=0.1; 3=0.3; 4=0.6; 5=1")
 
-### We introduce our second scale: "Extend of Property Damage (DAMscale)"
+### We introduce our second scale: "Extent of Property Damage (PROPscale)"
 GTD["PROPscale"] <- GTD$propextent
 GTD$PROPscale <- as.numeric(GTD$PROPscale)
 #Bring down to values between 0 and 1 that reflect our appreciation for the vast gaps between the originally coded categories. 
 GTD$PROPscale <- recode(GTD$PROPscale, "1=1; 2=0.002; 3=0.001; 4=0; NA=0")
 
-### We introduce our second scale: "Extend of Human Damage (HUMscale)" 
+### We introduce our second scale: "Extent of Human Damage (HUMscale)" 
 GTD["HUMscale"] <- GTD$nkill+GTD$nwound
 GTD$HUMscale <- as.numeric(GTD$HUMscale)
 #Bring down to values between 0 and 1 and normalize to the same sum as GTD$PROPscale
