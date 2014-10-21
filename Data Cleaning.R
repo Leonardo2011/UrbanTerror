@@ -96,7 +96,7 @@ GTD2$TUPscale <- recode(GTD2$TUPscale, "40:42 = 3; 9 = 1; 27:35 = 1; 37:39 = 1; 
 
 
 
-Plotframe2 <- subset(GTD2, select = c(iyear, GTD2$TUPscale), iyear >=1990 & success == 1, na.strings = c("", " "))
+Plotframe2 <- subset(GTD2, select = c(iyear, TUPscale), iyear >=1990 & success == 1, na.strings = c("", " "))
 
 
 
