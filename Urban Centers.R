@@ -12,7 +12,7 @@ install.packages("XML")
 ######## BIG CITY DATA ########
 ###############################
 
-
+# here: http://download.maxmind.com/download/worldcities/worldcitiespop.txt.gz
 worldcitiespop <- read.csv("worldcitiespop.txt")
 
 ### cities with a known population with more than 333000 inhabitants
