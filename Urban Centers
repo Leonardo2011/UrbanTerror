@@ -1,0 +1,17 @@
+install.packages("httr")
+install.packages("dplyr")
+install.packages("XML")
+
+library(httr)
+library(dplyr)
+library(XML)
+
+URL <- 'http://en.wikipedia.org/w/index.php?title=List_of_urban_areas_by_population&section=2'
+# Get and parse all tables on the webpage
+
+table <- readHTMLTable(URL)
+UrbanCenters <- table [[2]] 
+UrbanCenters$City <- gsub("\\[.+?\\]","", UrbanCenters$City)
+UrbanCenters$City <- gsub("\\(.+?\\)","", UrbanCenters$City)
+UrbanCenters$City <- gsub("[[:digit:]]", "", UrbanCenters$City)
+UrbanCenters$City <- gsub("[[:punct:]]", "", UrbanCenters$City)
