@@ -1,7 +1,0 @@
-# before, create a testframe
-testframe <- c(GTD$iyear, GTD$TUPscale, GTD$PROPscale, GTD$HUMscale, (GTD$PROPscale+GTD$HUMscale1))
-
-# make numeric
-testframe[, 1:6] <- lapply(testframe[, 1:6], as.numeric)
-
-# idea is to plot x = iyear nad y = (GTD$PROPscale+GTD$HUMscale1)* GTD$TUPscale
