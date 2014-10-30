@@ -107,8 +107,8 @@ GTD$HUMscale <- (GTD$HUMscale*sum(GTD$PROPscale, na.rm = TRUE)/sum(GTD$HUMscale,
 ############## BIG CITY DATA ##############
 ###########################################
 
-# here: http://download.maxmind.com/download/worldcities/worldcitiespop.txt.gz
-worldcitiespop <- read.csv("City Data/worldcitiespop.txt")
+# here: http://download.maxmind.com/download/worldcities/worldcitiespop.txt.gz and transformed into CSV
+worldcitiespop <- read.csv("City Data/worldcitiespop.csv")
 
 ### cities with a known population with more than 100.000 inhabitants
 Cities_over_100k <- subset(worldcitiespop, select = c(Country, City, AccentCity, Region, Latitude, Longitude, Population), Population > 100000)
