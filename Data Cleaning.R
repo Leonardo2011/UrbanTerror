@@ -16,95 +16,141 @@
 #Load basic R packages
 library(foreign) 
 library(car)
+library(RCurl)
 library(ggplot2)
+library(WDI)
+library(httr)
+library(dplyr)
+library(XML)
 
-setwd("C:/Users/Lokus/Dropbox/Master Thesis/GitHub-Repo/UrbanTerror")
 
-#Load the Global Terrorism Database
-rawGTD <- read.csv("globalterrorismdb_0814dist.csv", header=TRUE)
+########################################################################################
+########################################################################################
+############################   GATHERING  DATA    ######################################
+########################################################################################
+########################################################################################
 
-#The Global Terror Database (GTD) we are using for our analysis contains over a 120k observations on more than 120 variables. 
-#The complete database contains redundant or dispensable data because we do not need it for our analysis.
-#We therefore filter the database to make it fit our needs. We erase over a 100 variables. 
-#We only want to look at successfull terror attacks and the ones that happened after 1989.
 
+
+############################################
+###### The Global Terrorism Database  ######
+############################################
+
+
+############################################
+#Load the Global Terrorism Database (GTD). It is open souce and can be downloaded after registration at 
+# http://www.start.umd.edu/gtd/contact/
+
+rawGTD <- read.csv("Terror Data/globalterrorismdb_0814dist.csv", header=TRUE)
+
+
+#The (GTD) contains over a 120k observations on more than 120 variables. We don't need them all. 
+#We therefore filter the database to make it fit our needs, erasing over a 100 variables. 
+#We only want to look at successfull terror attacks and include basic data on time, location and target.
 GTD <- subset(rawGTD, select = c(eventid, iyear, imonth, iday, country, region, attacktype1, targtype1, targsubtype1,
                                 weaptype1, weapsubtype1, propextent, nkill, nwound), 
-                                iyear >= 1989 & success == 1, na.strings = c("", " "))
+                                iyear >= 1970 & success == 1, na.strings = c("", " "))
 
-### We introduce our first scale: "Targets Urbanity Potential Scale (TUPscale)" 
+
+############################################
+#We introduce our first scale: "Targets Urbanity Potential Scale (TUPscale)"
+
 GTD["TUPscale"] <- GTD$targsubtype1
-GTD$TUPscale <- recode(GTD$TUPscale, "40:42 = 3; 9 = 1; 27:35 = 1; 37:39 = 1; 65 = 1; 72 = 1; 1 = 2; 4:5 = 2; 10 = 2; 
-                                      12 = 2; 53:56 = 2; 58:59 = 2; 61:62 = 2; 82 = 2; 95:96 = 2;6 = 3; 13 = 3;
-                                      104:108 = 3; 51:52 = 3; 57 = 3; 60 = 3; 63:64 = 3; 73 = 3; 80:81 = 3; 88:92 = 3;
-                                      98 = 3; 2 = 4; 3 = 4; 7:8 = 4; 44 = 4;  48:50 = 4; 67:71 = 4; 74:79 = 4; 83:87 = 4;
-                                      97 = 4; 99 = 4; 14:26 = 5; 100:103 = 5; 111 = 5; 109 = 5; 110 = 5; 36 = 5; 43 = 5; 
-                                      45:47 = 5; 66 = 5; 93:94 = 5")
-# 1= Rural & Military; 2= Government & Police; 3= Potentilly Urban Workplace; 
-#4= Potentilly Urban Infrastructure; 5= Potentilly Urban Core Life 
+GTD$TUPscale <- recode(GTD$TUPscale, "40:42 = 9; 9 = 0; 27:35 = 0; 37:39 = 0; 65 = 0; 72 = 0; 1 = 2; 4:5 = 2; 10 = 2;
+                       12 = 2; 53:56 = 2; 58:59 = 2; 61:62 = 2; 82 = 2; 95:96 = 2;6 = 9; 13 = 9; 104:108 = 9; 
+                       51:52 = 9; 57 = 9; 60 = 9; 63:64 = 9; 73 = 9; 80:81 = 9; 88:92 = 9; 98 = 9; 2 = 7; 3 = 7; 
+                       7:8 = 7; 44 = 7; 48:50 = 7; 67:71 = 7; 74:79 = 7; 83:87 = 7; 97 = 7; 99 = 7; 14:26 = 9; 
+                       100:103 = 9; 111 = 9; 109 = 9; 110 = 9; 36 = 9; 43 = 9; 45:47 = 9; 66 = 9; 93:94 = 9; 
+                       11 = 9", as.numeric.result=TRUE)
 
-GTD$TUPscale <- as.numeric(GTD$TUPscale)
-#Bring TUPscale down to values between 0 and 1 that reflect our appreciation for the targets potential urbanity.
-GTD$TUPscale <- recode(GTD$TUPscale, "1=0; 2=0.1; 3=0.3; 4=0.6; 5=1")
 
-### We introduce our second scale: "Extent of Property Damage (PROPscale)"
+# 0= Rural & Military; 2= Government & Police; 3= Potentilly Urban Workplace; #7= Potentilly Urban Infrastructure; 
+# 9= Potentilly Expression of Urban Core Life
+
+
+############################################
+# We introduce our second scale: "Extent of Property Damage (PROPscale)" and write it back into the GTD
+
 GTD["PROPscale"] <- GTD$propextent
 GTD$PROPscale <- as.numeric(GTD$PROPscale)
+
+#Bring the values to the $ values coded in the originally coded categories. 
+GTD$PROPscale <- recode(GTD$PROPscale, "1=1000000000; 2=1000000; 3=1000; 4=0; NA=NA")
+
+
+############################################
+# We introduce our third scale: "Extent of Human Damage (HUMscale)" which adds wounded and killed /and write it back into the GTD
+
+GTD["HUMscale"] <- GTD$nkill+GTD$nwound
+GTD$HUMscale <- as.numeric(GTD$HUMscale)
+
+
+############################################
+# We introduce our second scale: "Extent of Property Damage (PROPscale)"
+
+GTD["PROPscale"] <- GTD$propextent
+GTD$PROPscale <- as.numeric(GTD$PROPscale)
+
 #Bring down to values between 0 and 1 that reflect our appreciation for the vast gaps between the originally coded categories. 
 GTD$PROPscale <- recode(GTD$PROPscale, "1=1; 2=0.002; 3=0.001; 4=0; NA=0")
 
 ### We introduce our second scale: "Extent of Human Damage (HUMscale)" 
 GTD["HUMscale"] <- GTD$nkill+GTD$nwound
 GTD$HUMscale <- as.numeric(GTD$HUMscale)
+
 #Bring down to values between 0 and 1 and normalize to the same sum as GTD$PROPscale
 GTD$HUMscale <- (GTD$HUMscale*sum(GTD$PROPscale, na.rm = TRUE)/sum(GTD$HUMscale, na.rm = TRUE))
 
 
-#### prepare a data frame for plotting ###
 
-DAMAGE <- GTD$HUMscale+GTD$PROPscale
-DAMAGE_0_up_to_1 <- HUM/max(HUM, na.rm = TRUE)
-TUP_weight_as_DAMAGE_0_up_to_1 <-GTD$TUPscale*sum(DAMAGE_0_up_to_1, na.rm = TRUE)/sum(GTD$TUPscale, na.rm = TRUE)
+###########################################
+############## BIG CITY DATA ##############
+###########################################
 
-#now we have the damage scale and the targeting scale with the same weight, a mixed factor is now possible
-TUPxDAMAGE <-TUP_weight_as_DAMAGE_0_up_to_1*DAMAGE_0_up_to_1
-TUPandDAMAGE <-TUP_weight_as_DAMAGE_0_up_to_1+DAMAGE_0_up_to_1
+# here: http://download.maxmind.com/download/worldcities/worldcitiespop.txt.gz
+worldcitiespop <- read.csv("City Data/worldcitiespop.txt")
 
-# make dataframe for plotting
-Plotframe1 <- data.frame(year=GTD$iyear, tup= TUP_weight_as_DAMAGE_0_up_to_1, dam= DAMAGE_0_up_to_1, 
-                          tupxdamage= TUPxDAMAGE, tupanddamage= TUPandDAMAGE, region= GTD$region)
-
-
-##!!!!!!!##########plots dont produce trendline########!!!!!!!!##
-# plot for the addition of the two scales, damage and targets urbanity potential over time
-#Plotframe1$year <- as.numeric(Plotframe1$year)
-#Plotframe1$tupanddamage <- as.numeric(Plotframe1$tupanddamage)
-#qplot(x=year, y=tupanddamage, data=Plotframe1, log="y", geom=c("point", "smooth"), method="lm")
-#ggplot(data=Plotframe1,aes(x=year,y=tupanddamage) +geom_point() + stat_smooth(method="lm"))
-
-GTD2<- subset(rawGTD, select = c(eventid, iyear, imonth, iday, country, region, attacktype1, targtype1, targsubtype1,
-                                 weaptype1, weapsubtype1, propextent, nkill, nwound, success),
-              iyear >= 1989 & success == 1, na.strings = c("", " "))
-library(car)
-GTD2["TUPscale"] <- GTD2$targsubtype1
-GTD2$TUPscale <- recode(GTD2$TUPscale, "40:42 = 3; 9 = 1; 27:35 = 1; 37:39 = 1; 65 = 1; 72 = 1; 1 = 2; 4:5 = 2; 10 = 2;
-                       12 = 2; 53:56 = 2; 58:59 = 2; 61:62 = 2; 82 = 2; 95:96 = 2;6 = 3; 13 = 3;
-                       104:108 = 3; 51:52 = 3; 57 = 3; 60 = 3; 63:64 = 3; 73 = 3; 80:81 = 3; 88:92 = 3;
-                       98 = 3; 2 = 4; 3 = 4; 7:8 = 4; 44 = 4; 48:50 = 4; 67:71 = 4; 74:79 = 4; 83:87 = 4;
-                       97 = 4; 99 = 4; 14:26 = 5; 100:103 = 5; 111 = 5; 109 = 5; 110 = 5; 36 = 5; 43 = 5;
-                       45:47 = 5; 66 = 5; 93:94 = 5; 11 = 5", as.numeric.result=TRUE)
+### cities with a known population with more than 100.000 inhabitants
+Cities_over_100k <- subset(worldcitiespop, select = c(Country, City, AccentCity, Region, Latitude, Longitude, Population), Population > 100000)
 
 
 
-Plotframe2 <- subset(GTD2, select = c(iyear, TUPscale), iyear >=1990 & success == 1, na.strings = c("", " "))
+#########################################
+########## URBAN CENTERS DATA ###########
+#########################################
+
+# Scrap Wiki on urban Centers
+URL <- 'http://en.wikipedia.org/w/index.php?title=List_of_urban_areas_by_population&section=2'
+
+
+#clean up the Urban Centers name in order to align with City Names
+table <- readHTMLTable(URL)
+UrbanCenters <- table [[2]] 
+UrbanCenters$City <- gsub("\\[.+?\\]","", UrbanCenters$City)
+UrbanCenters$City <- gsub("\\(.+?\\)","", UrbanCenters$City)
+UrbanCenters$City <- gsub("[[:digit:]]", "", UrbanCenters$City)
+UrbanCenters$City <- gsub("[[:punct:]]", "", UrbanCenters$City)
 
 
 
-TUPforPlot <- Plotframe2$TUPscale
-TUPforPlot <- recode(TUPforPlot, "1 = '0 - Military and Farmland'; 2 = '2 - Local Governanceand Police'; 
-                     3 = '5 - Potentially Urban Workplace'; 4 = '7 - Potentially Urban Infrastructure'; 5
-                     = '9 - Potentially Expressions of Urban Life'; 11 = NA", as.numeric.result=FALSE)
+############################################
+############# World Bank Data  #############
+############################################
 
 
-qplot(factor(iyear), data=Plotframe2, geom="bar", fill=factor(TUPforPlot), xlab='year', 
-      ylab='count of successfull attacks', main= 'count of attacks by Bretzinger-Reed categories of potential urbanity')
+############################################
+#Load the World Bank Data on the nominal Urban Population 
+WB_Urban_Pop = WDI(indicator='SP.URB.TOTL', country='all', start=1970, end=2013)
+
+
+
+########################################################################################
+########################################################################################
+############################   MERGING  DATA    ########################################
+########################################################################################
+########################################################################################
+
+
+#### try to merge, not leading anywhere but if city names in UrbanCenters are cleaned, it could lead somewhere
+#UrbanCenters["AccentCity"] <- UrbanCenters$City
+#try <- merge(Cities_over_50k, UrbanCenters, by=c("AccentCity"))
