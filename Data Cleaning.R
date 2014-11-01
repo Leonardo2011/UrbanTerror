@@ -22,7 +22,7 @@ library(WDI)
 library(httr)
 library(dplyr)
 library(XML)
-
+library(maps)
 
 ########################################################################################
 ########################################################################################
@@ -114,6 +114,9 @@ worldcitiespop <- read.csv("City Data/worldcitiespop.csv")
 Cities_over_100k <- subset(worldcitiespop, select = c(Country, City, AccentCity, Region, Latitude, Longitude, Population), Population > 100000)
 
 
+### list the world capital citys
+all.cities(world.cities)
+Capitals <- subset(all.cities, select = name, capital == 1)
 
 #########################################
 ########## URBAN CENTERS DATA ###########
