@@ -115,8 +115,9 @@ Cities_over_100k <- subset(worldcitiespop, select = c(Country, City, AccentCity,
 
 
 ### list the world capital citys
-all.cities(world.cities)
-Capitals <- subset(all.cities, select = name, capital == 1)
+capitals <- subset(world.cities, select = c(name, country.etc, pop), capital == 1)
+
+
 
 #########################################
 ########## URBAN CENTERS DATA ###########
