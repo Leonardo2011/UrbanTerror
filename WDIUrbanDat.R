@@ -2,10 +2,8 @@
 #The World Bank offers large datasets on information about the distribution of population. Most importantly, these include urban 
 #population. The datasets are available for download on the World Banks Website (http://data.worldbank.org/). Though downloadable,
 #data there is not presented in a tidy way. Vincent Arel-Bundocks' WDI package (https://github.com/vincentarelbundock/WDI) offers
-#fuctions to scrape data from the World Bank's database in a tidy way.
-
-install.packages("WDI")
-library(WDI)
+#fuctions to scrape data from the World Bank's database in a tidy way. If not done as of now, either install the WDI package or 
+#run Data.Cleaning.R from our repository
 
 #With WDISearch(), we can look for a list of indicators we are interested in containing the character string specified as an 
 #argument. Regular Experessions can be used. We are interested in a subset of all indicators that contain [Uu]rban.
@@ -22,6 +20,7 @@ WDIUrbanDat <- WDI(indicator=c('EN.URB.LCTY.UR.ZS',
                               country="all", start=1970, end=2013, extra=TRUE,
                     )
 WDIUrbanDat <- WDIUrbanDat[order(WDIUrbanDat$country, WDIUrbanDat$year), ]
+
 #We leave the World Bank codings of the indicators unchanged. Though they would be easier human-readable if we used their full
 #names, the codes are easier to google. They directly link to exact the definitions used by the World Bank. The codes stand for:
 #EN.POP.SLUM.UR.ZS = Population living in slums, (% of urban population)
