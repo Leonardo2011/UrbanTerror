@@ -13,16 +13,22 @@
 ############################
 
 
-#Load basic R packages
-library(foreign) 
-library(car)
-library(RCurl)
-library(ggplot2)
-library(WDI)
-library(httr)
-library(dplyr)
-library(XML)
-library(maps)
+#Loading R packages using @stevenworthington's ipak.R gist from https://gist.github.com/stevenworthington/3178163.
+
+# ipak function: install and load multiple R packages.
+# check to see if packages are installed. Install them if they are not, then load them into the R session.
+
+ipak <- function(pkg){
+  new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+  if (length(new.pkg))
+    install.packages(new.pkg, dependencies = TRUE)
+  sapply(pkg, require, character.only = TRUE)
+}
+
+# usage
+packages <- c("foreign", "car", "RCurl", "ggplot2", "WDI", "httr", "dplyr", "XML", "maps")
+ipak(packages)
+
 
 ########################################################################################
 ########################################################################################
