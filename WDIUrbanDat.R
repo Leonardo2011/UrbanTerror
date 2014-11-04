@@ -23,10 +23,26 @@ WDIUrbanDat <- WDIUrbanDat[order(WDIUrbanDat$country, WDIUrbanDat$year), ]
 
 #We leave the World Bank codings of the indicators unchanged. Though they would be easier human-readable if we used their full
 #names, the codes are easier to google. They directly link to exact the definitions used by the World Bank. The codes stand for:
-#EN.POP.SLUM.UR.ZS = Population living in slums, (% of urban population)
 #EN.URB.LCTY.UR.ZS = Population in the largest city (% of urban population)
 #EN.URB.MCTY = Population in urban agglomerations of more than 1 million
 #EN.URB.MCTY.TL.ZS = Population in urban agglomerations of more than 1 million (% of total population)
 #SP.URB.GROW = Urban population growth (annual %)
 #SP.URB.TOTL = Urban population
 #SP.URB.TOTL.IN.ZS = Urban population (% of total)
+
+# Additional Info: We counted the amount of NAs across all dataframes.
+#> sum(is.na(WDIUrbanDat$EN.URB.LCTY.UR.ZS))
+#[1] 3519
+#> sum(is.na(WDIUrbanDat$EN.URB.MCTY))
+#[1] 6356
+#> sum(is.na(WDIUrbanDat$EN.URB.MCTY.TL.ZS))
+#[1] 5391
+#> sum(is.na(WDIUrbanDat$SP.URB.GROW))
+#[1] 675
+#> sum(is.na(WDIUrbanDat$SP.URB.TOTL))
+#[1] 671
+#> sum(is.na(WDIUrbanDat$SP.URB.TOTL.IN.ZS))
+#[1] 612
+
+#While for some of the variables we have pretty much complete information (or at least enough to extrapolate), 
+#it does not look that good for other variables. We decided to drag them along for the time being anyway.
