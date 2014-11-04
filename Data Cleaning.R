@@ -91,23 +91,6 @@ GTD["HUMscale"] <- GTD$nkill+GTD$nwound
 GTD$HUMscale <- as.numeric(GTD$HUMscale)
 
 
-############################################
-# We introduce our second scale: "Extent of Property Damage (PROPscale)"
-
-GTD["PROPscale"] <- GTD$propextent
-GTD$PROPscale <- as.numeric(GTD$PROPscale)
-
-#Bring down to values between 0 and 1 that reflect our appreciation for the vast gaps between the originally coded categories. 
-GTD$PROPscale <- recode(GTD$PROPscale, "1=1; 2=0.002; 3=0.001; 4=0; NA=0")
-
-### We introduce our second scale: "Extent of Human Damage (HUMscale)" 
-GTD["HUMscale"] <- GTD$nkill+GTD$nwound
-GTD$HUMscale <- as.numeric(GTD$HUMscale)
-
-#Bring down to values between 0 and 1 and normalize to the same sum as GTD$PROPscale
-GTD$HUMscale <- (GTD$HUMscale*sum(GTD$PROPscale, na.rm = TRUE)/sum(GTD$HUMscale, na.rm = TRUE))
-
-
 
 ###########################################
 ############## BIG CITY DATA ##############
@@ -115,7 +98,7 @@ GTD$HUMscale <- (GTD$HUMscale*sum(GTD$PROPscale, na.rm = TRUE)/sum(GTD$HUMscale,
 
 # here: http://download.maxmind.com/download/worldcities/worldcitiespop.txt.gz and transformed into CSV
 worldcities2013 <- read.csv("City Data/worldcitiespop.csv")
-worldcities2013 <- [order(-worldcities2013$Population, na.last=TRUE) , ]
+worldcities2013 <- worldcities2013[order(-worldcities2013$Population, na.last=TRUE) , ]
 
 ### cities with a known population with more than 100.000 inhabitants
 worldcities2013_over_100k <- subset(worldcities2013, select = c(Country, City, AccentCity, Region, Latitude, Longitude, Population), Population > 100000)
