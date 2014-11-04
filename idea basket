@@ -64,6 +64,13 @@ Marseilles = marseille
 Marsielle = mmarseille
 
 
+Border Town of Beitbridge = beitbridge
+Beit Bridge = beitbridge
+Fort Victoria = fort victoria
+Ft. Victoria = fort victoria
+Nyamandlovw = nyamandlovu
+Nyamandhlovu = nyamandlovu
+
 
 Thats how I got rid of (something), [something], all spaces, all :"<>)@*#^ in another dataset:
 UrbanCenters$City <- gsub("\\[.+?\\]","", UrbanCenters$City)
@@ -71,6 +78,10 @@ UrbanCenters$City <- gsub("\\(.+?\\)","", UrbanCenters$City)
 UrbanCenters$City <- gsub("[[:digit:]]", "", UrbanCenters$City)
 UrbanCenters$City <- gsub("[[:punct:]]", "", UrbanCenters$City)
 UrbanCenters$City <- tolower(UrbanCenters$City)
+GTD$city <- sub("^ +", "", GTD$city)
+GTD$city <- sub(" +$", "", GTD$city)
+### If we want to select characters in the string and eliminate the rest ###
+GTD$city <- substr(GTD$city, 1, 8)
 
 NA = (blank), blank, unknown, Unknown, not stated, na, NA, ns, NS, unk, not stated, Unkknown
 remove: Airfield, Air Fields, district, International Airport, Airport, suburbs, port, Municipality, Near
