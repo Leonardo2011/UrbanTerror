@@ -1,2 +1,33 @@
+Things to clean the city vector in the gtd
+
+1. Al-something and al-soemthing and al something and al-'something should both be alsomething 
+
+Buenas Aires = buenos aires,
+Buenos Aiers = buenos aires,
+Buenos Aires = buenos aires,
+Buenos Aires (La Tablada) = buenos aires,
+Buenos Aires (Olivos) = buenos aires, 
+Buenos Aires (Pacheco Sector) = buenos aires, 
+Buenos Aires Province = buenos aires, 
+Buenos Aries = buenos aires, 
+San Juan City = san juan 
+San Salvador de Jujuy = jujuy
+Cochabamba City = cochabamba
+LaPaz = la paz
+
+
+Thats how I got rid of (something), [something], all spaces, all :"<>)@*#^ in another dataset:
+UrbanCenters$City <- gsub("\\[.+?\\]","", UrbanCenters$City)
+UrbanCenters$City <- gsub("\\(.+?\\)","", UrbanCenters$City)
+UrbanCenters$City <- gsub("[[:digit:]]", "", UrbanCenters$City)
+UrbanCenters$City <- gsub("[[:punct:]]", "", UrbanCenters$City)
+UrbanCenters$City <- tolower(UrbanCenters$City)
+
+NA = (blank), blank, unknown, Unknown, not stated
+remove: Airfield, Air Fields, district, International Airport, Airport, 
+
+
+
+
 controlling: putting them in one after the other and then combine them finally, but carefull with taht: 
 mind covariaten if using other things then urbanization, like GDP or something 
