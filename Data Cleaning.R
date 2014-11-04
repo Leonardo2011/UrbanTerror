@@ -132,6 +132,8 @@ UrbanCenters$City <- gsub("[[:punct:]]", "", UrbanCenters$City)
 UrbanCenters$City <- tolower(UrbanCenters$City)
 
 
+#Ruhrgebiet: Bochum DortmundDuisburg Essen Gelsenkirchen Hagen Hamm
+
 
 ############################################
 ############# World Bank Data  #############
