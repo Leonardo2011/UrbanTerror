@@ -114,14 +114,18 @@ GTD$HUMscale <- (GTD$HUMscale*sum(GTD$PROPscale, na.rm = TRUE)/sum(GTD$HUMscale,
 ###########################################
 
 # here: http://download.maxmind.com/download/worldcities/worldcitiespop.txt.gz and transformed into CSV
-worldcitiespop <- read.csv("City Data/worldcitiespop.csv")
+worldcities2013 <- read.csv("City Data/worldcitiespop.csv")
 
 ### cities with a known population with more than 100.000 inhabitants
-Cities_over_100k <- subset(worldcitiespop, select = c(Country, City, AccentCity, Region, Latitude, Longitude, Population), Population > 100000)
+worldcities2013_over_100k <- subset(worldcities2013, select = c(Country, City, AccentCity, Region, Latitude, Longitude, Population), Population > 100000)
 
 
-### list the world capital citys
-capitals <- subset(world.cities, select = c(name, country.etc, pop), capital == 1)
+### list the world capital cities
+data(world.cities)
+world.cities$name <- tolower(world.cities$name)
+world.cities2009 <- world.cities[order(-world.cities$pop, na.last=TRUE) , ]
+rm(world.cities)
+capitals <- subset(world.cities2009, select = c(name, country.etc, pop), capital == 1)
 
 
 
@@ -140,6 +144,7 @@ UrbanCenters$City <- gsub("\\[.+?\\]","", UrbanCenters$City)
 UrbanCenters$City <- gsub("\\(.+?\\)","", UrbanCenters$City)
 UrbanCenters$City <- gsub("[[:digit:]]", "", UrbanCenters$City)
 UrbanCenters$City <- gsub("[[:punct:]]", "", UrbanCenters$City)
+UrbanCenters$City <- tolower(UrbanCenters$City)
 
 
 
