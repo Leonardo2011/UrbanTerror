@@ -22,6 +22,10 @@ UrbanCenters$City <- gsub("\\(.+?\\)","", UrbanCenters$City)
 UrbanCenters$City <- gsub("[[:digit:]]", "", UrbanCenters$City)
 UrbanCenters$City <- gsub("[[:punct:]]", "", UrbanCenters$City)
 UrbanCenters$City <- tolower(UrbanCenters$City)
+GTD$city <- sub("^ +", "", GTD$city)
+GTD$city <- sub(" +$", "", GTD$city)
+GTD$city <- gsub(" ", "", GTD$city)
+GTD$city <- substr(GTD$city, 1, 8)
 
 NA = (blank), blank, unknown, Unknown, not stated
 remove: Airfield, Air Fields, district, International Airport, Airport, 
