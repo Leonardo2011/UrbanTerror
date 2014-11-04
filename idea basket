@@ -1,6 +1,6 @@
 Things to clean the city vector in the gtd
 
-1. Al-something and al-soemthing and al something and al-'something should both be alsomething -> (should be "al[name]" all lowercase no punct.)
+1. Al-something and al-soemthing and al something and al-'something should both be alsomething 
 
 Buenas Aires = buenos aires,
 Buenos Aiers = buenos aires,
@@ -10,10 +10,59 @@ Buenos Aires (Olivos) = buenos aires,
 Buenos Aires (Pacheco Sector) = buenos aires, 
 Buenos Aires Province = buenos aires, 
 Buenos Aries = buenos aires, 
-San Juan City = san juan 
-San Salvador de Jujuy = jujuy
-Cochabamba City = cochabamba
-LaPaz = la paz
+San Juan City = san juan,
+San Salvador de Jujuy = jujuy,
+Cochabamba City = cochabamba,
+LaPaz = la paz,
+Santa Cruz City = santa cruz, 
+Rio de Janeiro = rio de janeiro,
+Rio de Janeiro (Baixada Fluminense area) = rio de janeiro,
+Rio de Janeiro (Baixada Fluminese Area) = rio de janeiro,
+Rio De Janerio = rio de janeiro,
+Rio de Janiero = rio de janeiro,
+Rio de Janiero State = rio de janeiro,
+Rio De Jeneiro = rio de janeiro,
+Sao Paulop = sao paulo, 
+Santiago and Central = santiago,
+Valparaiso/Viva del Mar* = valparaiso,
+Valparasio = valparaiso,
+Valpariaso = valparaiso,
+Valpariso = valparaiso,
+Agua Chiza = agua chica, 
+Barrancabermaja = barrancabermeja,
+Barrancabermeha = barrancabermeja,
+Barrancabermeja = barrancabermeja,
+Barrancabermeta = barrancabermeja,
+Barrancaberneja = barrancabermeja,
+barrancabermeja = barrancabermeja,
+Barranquila = barranquilla,
+Barranquilia = barranquilla,
+Barranquilla = barranquilla,
+Bogota, Palermo Section = bogota,
+Bucanamanca = bucaramanga, 
+Bucaramanga = bucaramanga, 
+Bucaramango = bucaramanga, 
+Bucaramanja = bucaramanga, 
+Medelin = medellin,
+Medell¡n = medellin,
+Medillin = medellin,
+Brazzavilla = brazzaville,
+Brazzaville = brazzaville,
+Brazzville = brazzaville,
+Kinshasa = kinshasa,
+Kinshasha = kinshasa,
+Kinshoasa = kinshasa,
+Ajaccio/ Ile Rousse = ajaccio,
+East Berlin = berlin,
+Cario = cairo,
+Addis  Adaba = addis abeba,
+Addis Ababa = addis abeba,
+Adigale = addis abeba,
+Adis Ababa = addis abeba,
+Marseille
+Marseilles = marseille
+Marsielle = mmarseille
+
 
 
 Thats how I got rid of (something), [something], all spaces, all :"<>)@*#^ in another dataset:
@@ -22,13 +71,9 @@ UrbanCenters$City <- gsub("\\(.+?\\)","", UrbanCenters$City)
 UrbanCenters$City <- gsub("[[:digit:]]", "", UrbanCenters$City)
 UrbanCenters$City <- gsub("[[:punct:]]", "", UrbanCenters$City)
 UrbanCenters$City <- tolower(UrbanCenters$City)
-GTD$city <- sub("^ +", "", GTD$city)
-GTD$city <- sub(" +$", "", GTD$city)
-GTD$city <- gsub(" ", "", GTD$city)
-GTD$city <- substr(GTD$city, 1, 8)
 
-NA = (blank), blank, unknown, Unknown, not stated
-remove: Airfield, Air Fields, district, International Airport, Airport, 
+NA = (blank), blank, unknown, Unknown, not stated, na, NA, ns, NS, unk, not stated, Unkknown
+remove: Airfield, Air Fields, district, International Airport, Airport, suburbs, port, Municipality, Near
 
 
 
