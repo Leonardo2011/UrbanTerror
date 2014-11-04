@@ -53,7 +53,7 @@ rawGTD <- read.csv("Terror Data/globalterrorismdb_0814dist.csv", header=TRUE)
 #The (GTD) contains over a 120k observations on more than 120 variables. We don't need them all. 
 #We therefore filter the database to make it fit our needs, erasing over a 100 variables. 
 #We only want to look at successfull terror attacks and include basic data on time, location and target.
-GTD <- subset(rawGTD, select = c(eventid, iyear, imonth, iday, country, region, attacktype1, targtype1, targsubtype1,
+GTD <- subset(rawGTD, select = c(eventid, iyear, imonth, iday, country, region, city, attacktype1, targtype1, targsubtype1,
                                 weaptype1, weapsubtype1, propextent, nkill, nwound), 
                                 iyear >= 1970 & success == 1, na.strings = c("", " "))
 
