@@ -10,18 +10,18 @@ library(WDI)
 #With WDISearch(), we can look for a list of indicators we are interested in containing the character string specified as an 
 #argument. Regular Experessions can be used. We are interested in a subset of all indicators that contain [Uu]rban.
 #We now let the WDI() function create our dataframe with all the urban indicators we are interested in. We also include the 
-#extra argument, which adds information that is typically presented together with the urban indicators.
+#extra argument, which adds information that is typically presented together with the urban indicators. Next we order the data
+#first by country, then by year.
 
-WDIUrbanDat <- WDI(indicator=c('EN.POP.SLUM.UR.ZS', 
-                              'EN.URB.LCTY.UR.ZS',
+WDIUrbanDat <- WDI(indicator=c('EN.URB.LCTY.UR.ZS',
                               'EN.URB.MCTY',
                               'EN.URB.MCTY.TL.ZS',
                               'SP.URB.GROW', 
                               'SP.URB.TOTL', 
                               'SP.URB.TOTL.IN.ZS'),
-                              country="all", start=1970, end=2013, extra=TRUE
+                              country="all", start=1970, end=2013, extra=TRUE,
                     )
-
+WDIUrbanDat <- WDIUrbanDat[order(WDIUrbanDat$country, WDIUrbanDat$year), ]
 #We leave the World Bank codings of the indicators unchanged. Though they would be easier human-readable if we used their full
 #names, the codes are easier to google. They directly link to exact the definitions used by the World Bank. The codes stand for:
 #EN.POP.SLUM.UR.ZS = Population living in slums, (% of urban population)
