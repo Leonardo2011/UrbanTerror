@@ -1,7 +1,7 @@
 Things to clean the city vector in the gtd
 
 Step 1: Rename (District) -> District 
-Step 3: NA = (blank), blank, unknown, Unknown, not stated, na, NA, ns, NS, unk, not stated, Unkknown, (Leer), unk, unidentified
+Step 3: NA = (blank), blank, unknown, Unknown, na, NA, ns, NS, unk, not stated, Unkknown, (Leer), unidentified, area unk, exact location unk, no city or area shown
 
 Buenas Aires = buenos aires,
 Buenos Aiers = buenos aires,
@@ -81,12 +81,97 @@ Teberan = Tehran,
 Teheran = Tehran,
 Teherau = Tehran,
 Tehram = Tehran,
-Ashquelon = ashqelon
+Ashquelon = ashqelon,
+Beersheba = beersheva,
+Giuatayim = Givatayim,
+Heizelya = herzliya,
+Herzilyya Pituah = herzliya,
+Herzliya = herzliya,
+Herzliyya = herzliya,
+Hezliyya = herzliya,
+herzeliyya = herzliya,
+Arab East Jerusalem = jerusalem,
+West Jerusalem = jerusalem,
+Jersualem = jerusalem,
+Jerusalem (Talpiyyat) on Hebron road = jerusalem,
+Jerusam = jerusalem,
+Kefar Saba = kefar sava, 
+Kfar Saba = kefar sava, 
+Kfar Saba Settlement = kefar sava, 
+KFAR SABA(15 miles north of Tel Aviv) = kefar sava, 
+Kfar Saba(9mi. N.E. of Tel Aviv) = kefar sava, 
+Kfar Sava = kefar sava, 
+Lydda(10 Mi. east of Tel Aviv = Lydda,
+Naharayim = nahariyya,
+Naharia = nahariyya,
+Nahariua* = nahariyya,
+Nahariya = nahariyya,
+Nahariyah = nahariyya,
+Peath-Tiqva = petah tiqwa,
+Petach Tikva = petah tiqwa,
+Petah Tikua = petah tiqwa,
+Petah tikva = petah tiqwa,
+Petah Tikvah = petah tiqwa,
+Petah Tiova = petah tiqwa,
+Petah Tiqua = petah tiqwa,
+Petah Tiqva = petah tiqwa,
+Petah Tiqvah = petah tiqwa,
+Petah-Tikva = petah tiqwa,
+Petah-Tiqua = petah tiqwa,
+Petam-Tikva = petah tiqwa,
+Qabatiyeh = Qabatiyah,
+Qalqilya = qalqilyah,
+Qalqilyah = qalqilyah,
+Qalquilya = qalqilyah,
+Ramat Gun = Ramat Gan,
+Rishon al Ziyyon = rishon leziyyon,
+Rishon le Zion = rishon leziyyon,
+Rishon Letzion = rishon leziyyon,
+Rishon Lezion = rishon leziyyon,
+Rishon Leziyyon = rishon leziyyon,
+Rishon-Lezion = rishon leziyyon,
+Ashdod Yaacor = ashdod,
+Ashdot Yaacov = ashdod,
+AShod = ashdod,
+South of Tel Aviv = tel aviv,
+Tel Aviv Suburb = tel aviv,
+Tel Aviv-Haifa = tel aviv,
+Shibuya Ward, Tokyo = tokyo,
+Mombassa = mombasa,
+Mommassa = mombasa,
+Vientiane = vientiane,
+Vientiane-Luang = vientiane,
+Vietiane = vientiane,
+Beiruit = bayrut,
+E. Beirut = bayrut,
+E. Beruit = bayrut,
+E.Beirut = bayrut,
+East Beirut = bayrut,
+East Beruit = bayrut,
+W. Beirut = bayrut,
+W. Beruit = bayrut,
+West Beirut = bayrut,
+West Beriut = bayrut,
+West Beruit = bayrut,
+Western Beirut = bayrut,
+Zaharani (Beirut) = bayrut,
+South Beirut = bayrut,
+Jubail = jubayl,
+Western Fwayhat = fwayhat,
+Ciudad Altamirano = Altamirano,
+Ciudad Juan Aldama = Juan Aldama,
+Ciudad Juarez = Juarez,
+Ciudad Mante = Mante,
+Ciudad Obregon = Obregon,
+Ciudad Victoria = Victoria,
+San Cristobal de Las Casas = san cristobal,
+Ramgoon = rangoon,
 
 
- Ashkelon
- Arab East Jerusalem
+
+
  
+al-hirmil
 
 
 
@@ -108,18 +193,20 @@ Nyamandhlovu = nyamandlovu
 
 
 Thats how I got rid of (something), [something], all spaces, all :"<>)@*#^ in another dataset:
-UrbanCenters$City <- gsub("\\[.+?\\]","", UrbanCenters$City)
-UrbanCenters$City <- gsub("\\(.+?\\)","", UrbanCenters$City)
-UrbanCenters$City <- gsub("[[:digit:]]", "", UrbanCenters$City)
-UrbanCenters$City <- gsub("[[:punct:]]", "", UrbanCenters$City)
-UrbanCenters$City <- tolower(UrbanCenters$City)
+gsub("\\,.*","",x)
+gsub("\\\\.*", "", x)
+gsub("\\[.+?\\]","", x)
+gsub("\\(.+?\\)","", x)
+gsub("[[:digit:]]", "", x)
+gsub("[[:punct:]]", "", x)
+tolower(x)
 GTD$city <- sub("^ +", "", GTD$city)
 GTD$city <- sub(" +$", "", GTD$city)
 ### If we want to select characters in the string and eliminate the rest ###
 GTD$city <- substr(GTD$city, 1, 8)
 
 
-remove: Airfield, Air Fields, district, International Airport, Airport, suburbs, port, Municipality, Near
+remove: Airfield, Air Fields, district, International Airport, Airport, suburbs, port, Municipality, Near, township, slum
 
 
 
