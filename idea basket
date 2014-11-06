@@ -1,7 +1,7 @@
 Things to clean the city vector in the gtd
 
-Step 1: Rename (District) -> District and  ((District)) -> District
-remove: Airfield, Air Fields, district, International Airport, Airport, suburbs, port, Municipality, Near, township, Township, slum
+Step 1: Rename (District) -> District and  ((District)) -> District and (Province) -> Province and (Province - > Province
+remove: Airfield, Air Fields, district, International Airport, Airport, suburbs, port, Municipality, Near, township, Township, town, slum
 
 Step 3: NA = (blank), blank, unknown, Unknown, na, NA, ns, NS, unk, not stated, n/s,Unkknown, (Leer), unidentified, area unk, exact location unk, no city or area shown
 
@@ -424,6 +424,29 @@ Lakeside = johannesburg,
 Alexandira = johannesburg,
 Alexandria = johannesburg,
 Prutoria = Pretoria,
+San Sebastien = San Sebastian,
+Seville = Sevilla, 
+Akkaaraipattu = Akkaraipattu, 
+Akkaraipattu = Akkaraipattu, 
+Anuradapura = Anuradhapura, 
+Anuradhapuma = Anuradhapura,
+Anuradhapura = Anuradhapura,
+Anuradnapura = Anuradhapura,
+Batticalao = batticaloa,
+Batticalia = batticaloa,
+Batticalo = batticaloa,
+Batticaloa = batticaloa,
+Batticaloa City = batticaloa,
+Batticaloa Town = batticaloa,
+Batticalola = batticaloa,
+Batticalon = batticaloa,
+Batticoloa = batticaloa,
+Battticalon = batticaloa,
+
+
+
+
+
 
 
 
