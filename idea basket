@@ -1,7 +1,9 @@
 Things to clean the city vector in the gtd
 
-Step 1: Rename (District) -> District 
-Step 3: NA = (blank), blank, unknown, Unknown, na, NA, ns, NS, unk, not stated, Unkknown, (Leer), unidentified, area unk, exact location unk, no city or area shown
+Step 1: Rename (District) -> District and  ((District)) -> District
+remove: Airfield, Air Fields, district, International Airport, Airport, suburbs, port, Municipality, Near, township, Township, slum
+
+Step 3: NA = (blank), blank, unknown, Unknown, na, NA, ns, NS, unk, not stated, n/s,Unkknown, (Leer), unidentified, area unk, exact location unk, no city or area shown
 
 Buenas Aires = buenos aires,
 Buenos Aiers = buenos aires,
@@ -166,109 +168,266 @@ Ciudad Obregon = Obregon,
 Ciudad Victoria = Victoria,
 San Cristobal de Las Casas = san cristobal,
 Ramgoon = rangoon,
+Ondahgwa = ondangwa,
+Ondangiva = ondangwa,
+Ondangua = ondangwa,
+Ondangua Road* = ondangwa,
+Ondangwa = ondangwa,
+Oshakati West = Oshakati,
+Wind Hoek = windhoek,
+Windhock = windhoek,
+Birgunj = birganj,
+Kathmando = kathmandu,
+Kathmandu = kathmandu,
+Katmandu = kathmandu,
+Nepalgunj = nepalganj,
+Nepalgunji = nepalganj,
+Masayan = masaya,
+lagoa = lagos,
+ibandan = ibadan,
+Sana = sanaa,
+sanah = sanaa,
+Northern Ireland, Belfast = belfast,
+Andersonstown = belfast,
+Shankill = belfast,
+Shankill, Belfast = belfast,
+Andersontown, Belfast = belfast,
+Ardoyne = belfast,
+Ardoyne, Belfast = belfast,
+Ballymurphy, Belfast = belfast,
+Falls, Belfast = belfast,
+Lower Falls, Belfast = belfast,
+New Lodge, Belfast = belfast,
+Shankill, Belfast = belfast,
+Suffolk, Belfast = belfast,
+Chota Lahore = lahore,
+Faizabad = Faisalabad,
+Panama City = panama,
+acos vichos = acos vinchos,
+Lima and El Callao = lima,
+Lima Blanca = lima,
+Lima-Callao = lima,
+Lima-Huancayo = lima,
+San Juan de Lurigancho = lima,
+San Juan de Lurighancho = lima,
+San Martin de Porres = lima,
+Comas = lima,
+Comas District = lima,
+Villa El Salvador = lima,
+Villa El Savador = lima,
+Villa Maria del Tricanfo = lima,
+Villa Maria del Triunfo = lima,
+Villa Marina = lima,
+Villa Rica = lima,
+Villa Virgen = lima,
+Miraflores = lima,
+San Juan de Mira Flores = lima,
+San Juan de Miraflores = lima,
+Chorrillas District = lima,
+Chorrillos = lima,
+Puente Piedra = lima,
+Independencia = lima,
+La Victoria = lima,
+Carabayllo = lima,
+rimac = lima,
+El Agustino = lima,
+Santa Anita = lima,
+San Borja = lima,
+Brena  = lima,
+Lurigancho = lima,
+Surquillo = lima,
+Pueblo Libre = lima,
+Lurin = lima,
+San Isidro = lima,
+Pachacamac = lima,
+Lince = lima,
+Magdalena del Mar = lima,
+San Luis = lima,
+Barranco = lima,
+Chaclacayo = lima,
+Ayachucho = ayacucho,
+Ayachucho City = ayacucho,
+Ayachuco = ayacucho,
+Ayacocho = ayacucho,
+Ayacucho = ayacucho,
+Ayacucho - Huancavelica = ayacucho,
+Ayacucho City = ayacucho,
+Ayacucho City (southeast of) = ayacucho,
+Ayacucno = ayacucho,
+Ayacucuo = ayacucho,
+Ayacunho = ayacucho,
+Ayacuoho = ayacucho,
+Ayagucho = ayacucho,
+Chanchmayo = Chanchamayo,
+Chiclaya = Chiclayo,
+Trujilio = trujillo,
+Trujulo (La Esperanga) = trujillo,
+Chiclaya = Chiclayo,
+Huancaya = Huancayo,
+Huancayo and Cerro de Pasco = Huancayo,
+Huancayo city = Huancayo,
+Huancayo township = Huancayo,
+Bacolod City = Bacolod,
+Badoc City = Badoc,
+Bago City = bago,
+Batangas City = Batangas,
+Bislig City = Bislig,
+Bugallon municipality = Bugallon,
+Butuan City = Butuan,
+Cabanatuan City = Cabanatuan,
+Calapan City = Calapan,
+Calbayog City = Calbayog,
+Candon City = Candon,
+Canlaon City = Canlaon,
+Catbalogan City = Catbalogan,
+Cauayan Town = Cauayan,
+Cavayan = Cauayan,
+Cebu City = cebu, 
+Cotabato City = Cotabato,
+Davao City = Davao,
+Davao de Norte = Davao,
+Davao del Norte = Davao,
+Davao del Sur = Davao,
+Dipolog City = Dipolog,
+Dumaguete City = Dumaguete,
+Escalante City = Escalante,
+Gapan City = gapan,
+Gingoog City = gingoog,
+Himamaylan City = Himamaylan,
+Iligan City = Iligan,
+Ilocos Norte = Ilocos,
+Ilocos Sur = Ilocos,
+Iloilo City = Iloilo,
+Jolo Town = jolo,
+Kidapawan City = Kidapawan,
+Koronadal City = Koronadal,
+Lapu-lapu City = lapu-lapu,
+Legazpi City = legazpi,
+Ligao City = Ligao,
+Lucena City = Lucena,
+Lipa City = lipa,
+Malabon City = Malabon,
+Malaybalay City = Malaybalay,
+Mandaluyong City = Mandaluyong,
+Mandaue City = Mandaue,
+Manila Makati = Manila,
+Manilla = Manila,
+Marawi City = Marawi City,
+Moliney village = Moliney,
+Naga City = naga,
+Ormoc City = ormoc,
+Ozamis City = ozamis,
+Pagadian City = Pagadian,
+Palayan City = Palayan,
+Paranaque City = Paranaque,
+Pasig City = pasig,
+polomoloc = polomolok,
+Quezon City = Quezon,
+roxas city = roxas,
+Sagay City = Sagay,
+San Carlos City = San Carlos,
+San Pablo City = San Pablo,
+Silay City = Silay,
+Sipalay City = Sipalay,
+Surigao City = Surigao,
+Surigao del Sur = Surigao,
+Tacloban City = Tacloban,
+Tacurong City = Tacurong,
+Tagaytay City = Tagaytay,
+Taguig City = Taguig,
+Talisay City = Talisay,
+Tandag City = Tandag,
+Tangub City = Tangub,
+Tibao village in M'lang town = Tibao,
+Trece Martires City = Trece Martires,
+Tuguegarao City = Tuguegarao,
+Ungkaya Puka = Ungkaya Pukan,
+Ungkaya Puyan = Ungkaya Pukan,
+Valencia City = Valencia,
+Valenzuela city = Valenzuela,
+Victorias City = Victorias,
+Zamboanga City = Zamboanga,
+Zamboanga del Norte = zamboanga,
+Zamboanga del Norte Province = zamboanga,
+Zamboanga del Sur = zamboanga,
+Zamboanga del Sur Province = zamboanga,
+Zamboanga Del Sur, Josefinatown = zamboanga,
+Zamboanga Province = zamboanga,
+Zamboange del Norte Prov. = zamboanga,
+Zenboanga del Sur Province = zamboanga,
+Palo Seco (San Juan) = San Juan,
+Binondo = Manila,
+Pandacan = Manila,
+Quiapo = Manila,
+Sampaloc = Manila,
+Salibury = Salisbury,
+st. petersburg = saint petersburg,
+Free = freetown, 
+Mogasishu = mogadishu,
+Mitchells Plain = cape town,
+Mitchell's Plain = cape town,
+Khayalitsha = cape town,
+Khayelitsha = cape town,
+Khayelitsha Township = cape town,
+Khayelitsha Township, Cape Town area = cape town,
+Blue downs = cape town,
+Bellville = cape town,
+Elsies River = cape town,
+Milnerton = cape town,
+Guguletu = cape town,
+Brackenfell = cape town,
+Parow = cape town,
+Somerset West = cape town,
+Nyanga = cape town,
+Kraaifontein = cape town,
+Umlazi = durban,
+Chatsworth = durban,
+Kwa-Mashu = durban,
+Phoenix = durban,
+Inanda = durban,
+Ntuzuma = durban,
+Pinetown = durban,
+Mpumalanga = durban,
+Sobonakhona = durban,
+Clermont = durban,
+Verulam = durban,
+Kwadabeka = durban,
+Iqadi = durban,
+KwaMakhutha = durban,
+Tongaat = durban,
+Mawothi = durban,
+Westville = durban,
+Newlands West = durban,
+Kloof = durban,
+Ximba = durban,
+Lamontville = durban,
+Durban Area = durban,
+Durban South Beach = durban,
+Ventersdorp = Ventersdorf,
+Randburg = johannesburg,
+Roodepoort = johannesburg,
+Sandton = johannesburg,
+Alexandra = johannesburg,
+Diepsloot = johannesburg,
+Lenasia = johannesburg,
+Midrand = johannesburg,
+Ennerdale = johannesburg,
+Stretford = johannesburg,
+Tshepisong = johannesburg,
+Kaalfontein = johannesburg,
+Rabie ridgev = johannesburg,
+Lenasia Sout = johannesburg,h
+Drie Ziek = johannesburg,
+Lawley = johannesburg,
+Vlakfontein = johannesburg,
+Lakeside = johannesburg,
+Alexandira = johannesburg,
+Alexandria = johannesburg,
+Prutoria = Pretoria,
 
 
 
 
-Arrabeh = arraba
-Balaa = bala
-Bani Suheila = bani suhaylah
-Barkhan = barkan
-Bethelem = Bethlehem
-Bethlahem = Bethlehem
-Bidiya = biddya
-Buraig = bureij
-Burqin = buruqin
-Buruquin = buruqin
-
-Dogit = dugit
-El Arub = al-arroub
-Elon More = elon moreh
-Emanuel = Emmanuel
-Erez = erez crossing
-Gosh Qatif = gush katif
-Gush Khatif = gush katif
-Gush Qatif = gush katif
-Halhoul = halhul
-Heborn = hebron
-Hebon = hebron?
-Hussan Village = husan village
-
-Jabaliya = jabalia
-Jabalya = jabalia
-Jabalyah = jabalia
-Jebalia = jabalia
-Jebaliya = jabalia
-Jabaa = jaba
-
-Jaiyus village = jayus village
-Jayyus = jayus village
-
-Jerico-Jerusalem Rd(30 mi from Jerusalem) = jericho
-
-Kalandia airport* = kalandia
-Kalandiya = kalandia
-Karni = karnei shomron
-Katif settlement = gush katif
-Kerem shalom = kerem shalom crossing
-Kfar Darom Settlement = kfar darom
-Kefar = kfar
-Kefar Darom = kfar darom
-Kfar Tapuah = kfar tapuach
-Kfar Tapu'ah = kfar tapuach
-Khan Younes = khan yunis
-Khan Younis = khan yunis
-Khan Yunes = khan yunis
-Khan Yunus = khan yunis
-
-Kiryat Arba Settlement = kiryat arba
-Kiryat Arba/W.B. = kiryat arba
-
-Ma?ale Mikhmash = maale mikhmas
-Maaleh Michmash = maale mikhmas
-
-
-Nabulus = nablus
-Nabulus-Janin (Hwy between) = Nablus
-Neblus=nablus
-Nerzarim = netzarim
-Netzarim Gaza = netzarim
-Netzarim Junction = netzarim
-Netzarim/Gaza Strip = netzarim
-
-Neve Deqalim = neve dekalim
-Neveh Dekalim = neve dekalim
-Neveh Dekalim and Geni Tal = neve dekalim
-Neveh Dekhalim = neve dekalim
-
-Nezarim = netzarim
-Niv Dekalim Settlement = neve dekalim
-
-
-Nissanit = nisanit
-Ofrah = ofra
-Qabatiyah = qabatiya
-Qabatya = qabatiya
-Qabatyeh = qabatiya
-Qalqilia = qalqilya
-Qalqiliya = qalqilya
-Qalqilyah = qalqilya
-Qalqiya = qalqilya
-Qatif = gush katif
-Qatif Bloc, Gaza Strip = gush katif
-
-Rafeyah Yam = rafiah yam
-Rafiah = rafiah yam
-Rafiah Region of Sinai (Gaza) = rafiah yam
-
-Ramailah = ramallah
-Ramalla = ramallah
-
-Ramallah (West Bank) = ramallah
-Ramallah-Dolor Road = ramallah
-Ramalleh = ramallah
-Salfit = salfet
-Samiriyyah = samaria
 
 
 
@@ -277,43 +436,38 @@ Samiriyyah = samaria
 
 
 
-B”blingen = boblingen
-Boeblingen = boblingen
-H”henhaus = hohenhaus
-Ludwigshafen am Rhein = ludwigshafen
-Wadi abeeda = wadi abida
-Waoi Al-Dabaat = wadi al-dabaat
- 
-al-hirmil
 
 
-Fuuwah = fuwwah
-Ghail Bawazeer = ghail bawazir
-Ghayl ba Wazir = ghail bawazir
-Ghayl Bawazir = ghail bawazir
-Ghil Bawazir = ghail bawazir
-Khaulan = khawlan
-Khawaln = khawlan
-Khor Maksr = khor maksar
-Lowdar = lawdar
-Mafrak al-Saeed = mafraq al-saeed
-Mafraq al-Sa'id = mafraq al-saeed
-
-Radaa = rada
-Radaa district = rada
-Radah = rada
-Radda = rada
-Radda district = rada
 
 
-Saana = sanaa
-Sanah district = Sanaa
-Sanea = sanaa
-Shaher district = shahr
-Shahir = shahr
-Shehar = shahr
 
-Shiban = shibam
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -347,7 +501,6 @@ GTD$city <- sub(" +$", "", GTD$city)
 GTD$city <- substr(GTD$city, 1, 8)
 
 
-remove: Airfield, Air Fields, district, International Airport, Airport, suburbs, port, Municipality, Near, township, slum
 
 
 
