@@ -1,6 +1,7 @@
 Things to clean the city vector in the gtd
 
-1. Al-something and al-soemthing and al something and al-'something should both be alsomething 
+Step 1: Rename (District) -> District 
+Step 3: NA = (blank), blank, unknown, Unknown, not stated, na, NA, ns, NS, unk, not stated, Unkknown, (Leer), unk, unidentified
 
 Buenas Aires = buenos aires,
 Buenos Aiers = buenos aires,
@@ -59,9 +60,33 @@ Addis  Adaba = addis abeba,
 Addis Ababa = addis abeba,
 Adigale = addis abeba,
 Adis Ababa = addis abeba,
-Marseille
 Marseilles = marseille
-Marsielle = mmarseille
+Marsielle = marseille
+Athens and Salonica = athens,
+Banda Acech = banda aceh,
+Banda Aceh City = banda aceh,
+Lhokesumawe = lhokseumawe,
+Lhoksemaue = lhokseumawe,
+Lhokseumawe = lhokseumawe,
+Lhoksukon subdistrict = lhokseumawe,
+Pekanbaru City = pekanbaru,
+Isfahan = esfahan,
+I'sfahan = esfahan,
+Khomanshahr = khorramshahr,
+Khorramshahr = khorramshahr,
+Khorramshar = khorramshahr,
+Khorranmshar, Abadan  = khorramshahr,
+Khorrashahr = khorramshahr,
+Teberan = Tehran,
+Teheran = Tehran,
+Teherau = Tehran,
+Tehram = Tehran,
+petah tikva
+ 
+ 
+ 
+
+
 
 
 Mayfaah = mayfaa
@@ -91,7 +116,7 @@ GTD$city <- sub(" +$", "", GTD$city)
 ### If we want to select characters in the string and eliminate the rest ###
 GTD$city <- substr(GTD$city, 1, 8)
 
-NA = (blank), blank, unknown, Unknown, not stated, na, NA, ns, NS, unk, not stated, Unkknown
+
 remove: Airfield, Air Fields, district, International Airport, Airport, suburbs, port, Municipality, Near
 
 
