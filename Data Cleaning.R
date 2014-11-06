@@ -99,10 +99,17 @@ GTD$HUMscale <- as.numeric(GTD$HUMscale)
 
 # here: http://download.maxmind.com/download/worldcities/worldcitiespop.txt.gz and transformed into CSV
 worldcities2013 <- read.csv("City Data/worldcitiespop.csv")
+
+# introduce Tehran as it was missing in the original dataset
+worldcities2013 <- rbind(worldcities2013, data.frame(X=0,Country="ir", City="tehran", AccentCity="Tehran", 
+                                                     Region= 1, Latitude=35.67, Longitude=51.43,Population=7160094))
+
+# sorting by population
 worldcities2013 <- worldcities2013[order(-worldcities2013$Population, na.last=TRUE) , ]
 
-### cities with a known population with more than 100.000 inhabitants
-worldcities2013_over_100k <- subset(worldcities2013, select = c(Country, City, AccentCity, Region, Latitude, Longitude, Population), Population > 100000)
+### select cities with a known population with more than 100.000 inhabitants
+worldcities2013_over_100k <- subset(worldcities2013, select = c(Country, City, AccentCity, Region, Latitude, Longitude, 
+                                                                Population), Population > 100000)
 
 
 ### list the world capital cities
