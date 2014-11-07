@@ -1,0 +1,51 @@
+ipak <- function(pkg){
+  new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+  if (length(new.pkg))
+    install.packages(new.pkg, dependencies = TRUE)
+  sapply(pkg, require, character.only = TRUE)
+}
+
+# usage
+packages <- c("foreign", "car", "RCurl", "ggplot2", "WDI", "httr", "dplyr", "XML", "maps")
+ipak(packages)
+rm(packages)
+rm(ipak)
+
+### list the world capital cities
+data(world.cities)
+world.cities$name <- tolower(world.cities$name)
+world.cities2009 <- world.cities[order(-world.cities$pop, na.last=TRUE) , ]
+rm(world.cities)
+capitals <- subset(world.cities2009, select = c(name, country.etc, pop), capital == 1)
+
+
+
+#########################################
+########## URBAN CENTERS DATA ###########
+#########################################
+
+# Scrap Wiki on urban Centers
+URL <- 'http://en.wikipedia.org/w/index.php?title=List_of_urban_areas_by_population&section=2'
+
+
+#clean up the Urban Centers name in order to align with City Names
+table <- readHTMLTable(URL, encoding = "UTF-16")
+UrbanCenters <- table [[2]] 
+UrbanCenters$City <- gsub("\\[.+?\\]","", UrbanCenters$City)
+
+
+UrbanCenters$City <- gsub("\\(.+?\\)","", UrbanCenters$City)
+UrbanCenters$City <- gsub("[[:digit:]]", "", UrbanCenters$City)
+UrbanCenters$City <- enc2native(UrbanCenters$City)
+UrbanCenters$City <- gsub("\\–.*","",UrbanCenters$City)
+
+Encoding(UrbanCenters$City)
+
+
+rm(table)
+rm(URL)
+UrbanCenters$City <- gsub("\\[.+?\\]","", UrbanCenters$City)
+UrbanCenters$City <- gsub("\\(.+?\\)","", UrbanCenters$City)
+UrbanCenters$City <- gsub("[[:digit:]]", "", UrbanCenters$City)
+UrbanCenters$City <- gsub("[[:punct:]]", "", UrbanCenters$City)
+UrbanCenters$City <- tolower(UrbanCenters$City)
