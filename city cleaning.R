@@ -600,6 +600,7 @@ X <- gsub("Near ","", X, ignore.case=TRUE)
 X <- gsub("township","", X, ignore.case=TRUE)
 X <- gsub("slum","", X, ignore.case=TRUE)
 X <- gsub("village","", X, ignore.case=TRUE)
+X <- gsub("Settlement","", X, ignore.case=TRUE)
 
 X <- gsub("\\,.*","",X)
 X <- gsub("\\\\.*", "", X)
