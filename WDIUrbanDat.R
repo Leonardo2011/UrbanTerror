@@ -11,15 +11,20 @@
 #extra argument, which adds information that is typically presented together with the urban indicators. Next we order the data
 #first by country, then by year.
 
-WDIUrbanDat <- WDI(indicator=c('EN.URB.LCTY.UR.ZS',
+WDIData <- WDI(indicator=c('EN.URB.LCTY.UR.ZS',
                               'EN.URB.MCTY',
                               'EN.URB.MCTY.TL.ZS',
                               'SP.URB.GROW', 
                               'SP.URB.TOTL', 
-                              'SP.URB.TOTL.IN.ZS'),
-                              country="all", start=1970, end=2013, extra=TRUE,
+                              'SP.URB.TOTL.IN.ZS',
+                              'EN.POP.DNST',
+                              'EN.RUR.DNST',
+                              'SP.RUR.TOTL',
+                              'SP.RUR.TOTL.ZG',
+                              'SP.RUR.TOTL.ZS'),
+                              country="all", start=1970, end=2013, extra=FALSE,
                     )
-WDIUrbanDat <- WDIUrbanDat[order(WDIUrbanDat$country, WDIUrbanDat$year), ]
+WDIData <- WDIData[order(WDIData$country, WDIData$year), ]
 
 #We leave the World Bank codings of the indicators unchanged. Though they would be easier human-readable if we used their full
 #names, the codes are easier to google. They directly link to exact the definitions used by the World Bank. The codes stand for:
@@ -28,7 +33,12 @@ WDIUrbanDat <- WDIUrbanDat[order(WDIUrbanDat$country, WDIUrbanDat$year), ]
 #EN.URB.MCTY.TL.ZS = Population in urban agglomerations of more than 1 million (% of total population)
 #SP.URB.GROW = Urban population growth (annual %)
 #SP.URB.TOTL = Urban population
-#SP.URB.TOTL.IN.ZS = Urban population (% of total)
+#SP.URB.TOTL.IN.ZS = Urban population (% of total
+#EN.POP.DNST = Population density (people per sq. km of land area)
+#EN.RUR.DNST = Rural population density (rural population per sq. km of arable land)
+#SP.RUR.TOTL = Rural population                                                         
+#SP.RUR.TOTL.ZG = Rural population growth (annual %)                                       
+#SP.RUR.TOTL.ZS = Rural population (% of total population)
 
 # Additional Info: We counted the amount of NAs across all dataframes.
 #> sum(is.na(WDIUrbanDat$EN.URB.LCTY.UR.ZS))
@@ -43,6 +53,18 @@ WDIUrbanDat <- WDIUrbanDat[order(WDIUrbanDat$country, WDIUrbanDat$year), ]
 #[1] 671
 #> sum(is.na(WDIUrbanDat$SP.URB.TOTL.IN.ZS))
 #[1] 612
+#> sum(is.na(WDIData$SP.URB.TOTL))
+#[1] 886
+#> sum(is.na(WDIData$EN.POP.DNST))
+#[1] 986
+#> sum(is.na(WDIData$EN.RUR.DNST))
+#[1] 9112
+#> sum(is.na(WDIData$SP.RUR.TOTL))
+#[1] 886
+#> sum(is.na(WDIData$SP.RUR.TOTL.ZG))
+#[1] 1119
+#> sum(is.na(WDIData$SP.RUR.TOTL.ZS))
+#[1] 827
 
 #While for some of the variables we have pretty much complete information (or at least enough to extrapolate), 
 #it does not look that good for other variables. We decided to drag them along for the time being anyway.
