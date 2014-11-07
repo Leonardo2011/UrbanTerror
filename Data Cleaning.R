@@ -26,9 +26,10 @@ ipak <- function(pkg){
 }
 
 # usage
-packages <- c("foreign", "car", "RCurl", "ggplot2", "WDI", "httr", "dplyr", "XML", "maps")
+packages <- c("foreign", "car", "RCurl", "ggplot2", "WDI", "httr", "dplyr", "XML", "maps", "gsubfn")
 ipak(packages)
-
+rm(packages)
+rm(ipak)
 
 ########################################################################################
 ########################################################################################
@@ -57,8 +58,11 @@ rawGTD <- read.csv("Terror Data/globalterrorismdb_0814dist.csv", header=TRUE)
 GTD <- subset(rawGTD, select = c(eventid, iyear, imonth, iday, country, country_txt, region, region_txt, city, attacktype1, targtype1, targsubtype1,
                                 weaptype1, weapsubtype1, propextent, nkill, nwound), 
                                 iyear >= 1970 & success == 1, na.strings = c("", " "))
+rm(rawGTD)
+
 #Next we order the GTD)
 GTD <- GTD[order (GTD$country_txt, GTD$iyear, GTD$imonth, GTD$iday, GTD$city), ]
+
 ############################################
 #We introduce our first scale: "Targets Urbanity Potential Scale (TUPscale)"
 
@@ -104,6 +108,11 @@ worldcities2013 <- read.csv("City Data/worldcitiespop.csv")
 worldcities2013 <- rbind(worldcities2013, data.frame(X=0,Country="ir", City="tehran", AccentCity="Tehran", 
                                                      Region= 1, Latitude=35.67, Longitude=51.43,Population=7160094))
 
+# introduce Akkaraipattu as it was missing in the original dataset
+worldcities2013 <- rbind(worldcities2013, data.frame(X=0,Country="lk", City="Akkaraipattu", AccentCity="Akkaraipattu", 
+                                                     Region= 31, Latitude=7.227862, Longitude=81.850551,Population=35000))
+, 
+
 # sorting by population
 worldcities2013 <- worldcities2013[order(-worldcities2013$Population, na.last=TRUE) , ]
 
@@ -132,6 +141,8 @@ URL <- 'http://en.wikipedia.org/w/index.php?title=List_of_urban_areas_by_populat
 #clean up the Urban Centers name in order to align with City Names
 table <- readHTMLTable(URL)
 UrbanCenters <- table [[2]] 
+rm(table)
+rm(URL)
 UrbanCenters$City <- gsub("\\[.+?\\]","", UrbanCenters$City)
 UrbanCenters$City <- gsub("\\(.+?\\)","", UrbanCenters$City)
 UrbanCenters$City <- gsub("[[:digit:]]", "", UrbanCenters$City)
@@ -139,7 +150,25 @@ UrbanCenters$City <- gsub("[[:punct:]]", "", UrbanCenters$City)
 UrbanCenters$City <- tolower(UrbanCenters$City)
 
 
-#Ruhrgebiet: Bochum DortmundDuisburg Essen Gelsenkirchen Hagen Hamm
+#Ruhrgebiet: Bochum, DortmundDuisburg, Essen, Gelsenkirchen, Hagen, Hamm,
+
+#Tel Aviv: Cities in the Gush Dan: Tel Aviv, Rishon Leziyyon, Ashdod, Petah Tikva, Netanya, Holon, Bnei Brak,
+# Ramat Gan, Bat Yam, Rehovot, Herzliya, Kfar Saba, Modi'in-Maccabim-Re'ut, Lod, Ra'anana, Ramla, Giv'atayim
+# Achrafieh, Dar El Mreisse, Bachoura, Mazraa, Medawar, Minet El Hosn, Moussaitbeh, Port Beirut, Ras Beirut, Rmeil, Saifi, Zuqaq al-Blat
+
+# Katmandu, Lalitpur, Bhaktapur
+
+# johannesburg, = + soweto
+
+# Colombo:  Modera, Bambalapitiya, Battaramulla, Boralesgamuwa, Borella, Cinnamon, Gardens, Dehiwala, Dematagoda, 
+# Ethulkotte, Grandpass, Havelock Town, Hokandara, Hultsdorf, Ja Ela, Kadawatha, Kaduwela, Kandana, Kelaniya, 
+# Kiribathgoda, Kirilapone, Kollupitiya, Kolonnawa, Kotahena, Kotikawatta, Kottawa, Madampitiya, Maharagama, Malabe,
+# Maradana, Mattakkuliya, Moratuwa, Mount Lavinia, Mutwal, Narahenpita, Nawala, Nugegoda, Pamankada, Panchikawatte, 
+# Peliyagoda, Pettah, Piliyandala, Pitakotte, Ragama, Rajagiriya, Ratmalana, Thalawathugoda, Wattala, Wellawatte, , 
+
+#Bangkok: Nonthaburi, Samut Prakan, Pathum Thani, Samut Sakhon, Nakhon Pathom
+
+
 
 
 ############################################
