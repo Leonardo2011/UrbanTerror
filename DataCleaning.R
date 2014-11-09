@@ -136,39 +136,44 @@ capitals <- subset(world.cities2009, select = c(name, country.etc, pop), capital
 
 # Scrap Wiki on urban Centers
 URL <- 'http://en.wikipedia.org/w/index.php?title=List_of_urban_areas_by_population&section=2'
+table <- readHTMLTable(URL, encoding = "UTF-16")
+UrbanCenters <- table [[2]]
+UrbanCenters$City <- as.character(UrbanCenters$City)
 
-
-#clean up the Urban Centers name in order to align with City Names
-table <- readHTMLTable(URL)
-UrbanCenters <- table [[2]] 
-rm(table)
-rm(URL)
+#clean up the Urban Centers name in order to allow google.maps API to find them
+UrbanCenters$City <- gsub("\\xc3\xb3","o", perl=TRUE, UrbanCenters$City)
+UrbanCenters$City <- gsub("\\(.*","", UrbanCenters$City)
 UrbanCenters$City <- gsub("\\[.+?\\]","", UrbanCenters$City)
 UrbanCenters$City <- gsub("\\(.+?\\)","", UrbanCenters$City)
 UrbanCenters$City <- gsub("[[:digit:]]", "", UrbanCenters$City)
-UrbanCenters$City <- gsub("[[:punct:]]", "", UrbanCenters$City)
-UrbanCenters$City <- tolower(UrbanCenters$City)
+UrbanCenters$City <- gsub("\\xe2\x80\x93.*","", perl=TRUE, UrbanCenters$City)
+UrbanCenters$City <- gsub("Region", "", UrbanCenters$City)
+UrbanCenters$City <- gsub("Greater ", "", UrbanCenters$City)
 
+# put together a string with "Country, City" to allow google.maps API to find them
+b <-data.frame(paste(UrbanCenters$Country, UrbanCenters$City, sep=", "), row.names = NULL)
+b["loc"] <- b
+b$loc <- as.character(b$loc)
+b$loc <- gsub("^..", "", b$loc)
+b$loc <- gsub(". $", "", b$loc)
+a<-(b$loc)
 
-#Ruhrgebiet: Bochum, DortmundDuisburg, Essen, Gelsenkirchen, Hagen, Hamm,
+# look up lon lat data via google maps / the geocode function of the package maps
+UrbanLoc <- geocode(a, output = c("latlon", "latlona", "more", "all"),messaging = FALSE, sensor = FALSE, override_limit = FALSE)
 
-#Tel Aviv: Cities in the Gush Dan: Tel Aviv, Rishon Leziyyon, Ashdod, Petah Tikva, Netanya, Holon, Bnei Brak,
-# Ramat Gan, Bat Yam, Rehovot, Herzliya, Kfar Saba, Modi'in-Maccabim-Re'ut, Lod, Ra'anana, Ramla, Giv'atayim
-# Achrafieh, Dar El Mreisse, Bachoura, Mazraa, Medawar, Minet El Hosn, Moussaitbeh, Port Beirut, Ras Beirut, Rmeil, Saifi, Zuqaq al-Blat
+# bring the geo data back in the original data frame of urban centers
+UrbanCenters["lon"] <- UrbanLoc$lon
+UrbanCenters["lat"] <- UrbanLoc$lat
+UrbanCenters["full name"] <- a
 
-# Katmandu, Lalitpur, Bhaktapur
+# delete whats not needed anymore
+rm(UrbanLoc)
+rm(table)
+rm(URL)
+rm(b)
+rm(a)
 
-# johannesburg, = + soweto
-
-# Colombo:  Modera, Bambalapitiya, Battaramulla, Boralesgamuwa, Borella, Cinnamon, Gardens, Dehiwala, Dematagoda, 
-# Ethulkotte, Grandpass, Havelock Town, Hokandara, Hultsdorf, Ja Ela, Kadawatha, Kaduwela, Kandana, Kelaniya, 
-# Kiribathgoda, Kirilapone, Kollupitiya, Kolonnawa, Kotahena, Kotikawatta, Kottawa, Madampitiya, Maharagama, Malabe,
-# Maradana, Mattakkuliya, Moratuwa, Mount Lavinia, Mutwal, Narahenpita, Nawala, Nugegoda, Pamankada, Panchikawatte, 
-# Peliyagoda, Pettah, Piliyandala, Pitakotte, Ragama, Rajagiriya, Ratmalana, Thalawathugoda, Wattala, Wellawatte, , 
-
-#Bangkok: Nonthaburi, Samut Prakan, Pathum Thani, Samut Sakhon, Nakhon Pathom
-
-
+# done
 
 
 ############################################
