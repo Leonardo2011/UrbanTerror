@@ -155,15 +155,14 @@ b <-data.frame(paste(UrbanCenters$Country, UrbanCenters$City, sep=", "), row.nam
 b["loc"] <- b
 b$loc <- as.character(b$loc)
 b$loc <- gsub("^..", "", b$loc)
-b$loc <- gsub(". $", "", b$loc)
 a<-(b$loc)
 
 # look up lon lat data via google maps / the geocode function of the package maps
 UrbanLoc <- geocode(a, output = c("latlon", "latlona", "more", "all"),messaging = FALSE, sensor = FALSE, override_limit = FALSE)
 
 # bring the geo data back in the original data frame of urban centers
-UrbanCenters["lon"] <- UrbanLoc$lon
 UrbanCenters["lat"] <- UrbanLoc$lat
+UrbanCenters["lon"] <- UrbanLoc$lon
 UrbanCenters["full name"] <- a
 
 # delete whats not needed anymore
