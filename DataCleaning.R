@@ -125,6 +125,9 @@ worldcities2013_over_100k <- subset(worldcities2013, select = c(Country, City, A
 ### list the world capital cities
 data(world.cities)
 world.cities$name <- tolower(world.cities$name)
+#The dataframe wrongly lists dehli as not being the capital of india, which we recode.
+world.cities2009$capital[world.cities2009$name == "delhi" & world.cities2009$country.etc == "India"] <- "1"
+world.cities2009$name[world.cities2009$name == "soul" & world.cities2009$country.etc == "Korea South"] <- "seoul"
 world.cities2009 <- world.cities[order(-world.cities$pop, na.last=TRUE) , ]
 rm(world.cities)
 capitals <- subset(world.cities2009, select = c(name, country.etc, pop), capital == 1)
