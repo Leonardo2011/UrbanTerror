@@ -26,7 +26,8 @@ ipak <- function(pkg){
 }
 
 # usage
-packages <- c("foreign", "car", "RCurl", "ggplot2", "WDI", "httr", "dplyr", "XML", "maps")
+packages <- c("foreign", "car", "RCurl", "ggplot2", "WDI", "httr", "iterators", "dplyr", 
+              "XML", "maps", "ggmap", "Imap", "geosphere", "maptools", "rgeos", "foreach")
 ipak(packages)
 rm(packages)
 rm(ipak)
@@ -124,6 +125,9 @@ worldcities2013_over_100k <- subset(worldcities2013, select = c(Country, City, A
 ### list the world capital cities
 data(world.cities)
 world.cities$name <- tolower(world.cities$name)
+#The dataframe wrongly lists dehli as not being the capital of india, which we recode.
+world.cities2009$capital[world.cities2009$name == "delhi" & world.cities2009$country.etc == "India"] <- "1"
+world.cities2009$name[world.cities2009$name == "soul" & world.cities2009$country.etc == "Korea South"] <- "seoul"
 world.cities2009 <- world.cities[order(-world.cities$pop, na.last=TRUE) , ]
 rm(world.cities)
 capitals <- subset(world.cities2009, select = c(name, country.etc, pop), capital == 1)
@@ -172,7 +176,20 @@ rm(URL)
 rm(b)
 rm(a)
 
-# done
+# done--coastal megacities
+UrbanCenters$costalMC[UrbanCenters$City == "tokyo"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "jakarta"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "seoul"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "shanghai"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "manila"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "karachi"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "new york city"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "sao paolo"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == ""] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "shanghai"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "shanghai"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "shanghai"] <- "1"
+
 
 
 ############################################
