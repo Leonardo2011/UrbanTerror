@@ -7,6 +7,10 @@
 GTD2$country_txt[GTD2$country_txt == "East Germany (GDR)"] <- "Germany"
 GTD2$country_txt[GTD2$country_txt == "West Germany (FRG)"] <- "Germany"
 
+GTD2$country_txt[GTD2$country_txt == "North Yemen"] <- "Yemen"
+GTD2$country_txt[GTD2$country_txt == "South Yemen"] <- "Yemen"
+
+
   # 2. Splitting up formerly united countries 
 
   #Since we have WDI data going back 1970 on a per country scale also for countries
@@ -71,6 +75,7 @@ GTD2$country_txt[GTD2$country_txt == "Soviet Union" & GTD2$city =="Stepanakert" 
 GTD2$country_txt[GTD2$country_txt == "Soviet Union" & GTD2$city =="Kazakh" ] <- "Azerbaijan"
 
 #These are two attacks in the early 1990s that seem to have targeted the Ararat Region outside of any city.
+as.character
 GTD2$country_txt[GTD2$country_txt == "Soviet Union" & GTD2$city =="Unknown" & GTD$provstate == "Armenia" ] <- "Armenia"
 
 #It is on Crimea. We make a judgement call here and go for the country currently in charge.
