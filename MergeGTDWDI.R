@@ -8,5 +8,4 @@ WDIData$country <- NULL
 WDIData["iyear"] <- WDIData$year
 WDIData$year <- NULL
 
-GTDWDI <-merge(GTD, WDIData, by=c("country_txt", "iyear"), all.x = TRUE , sort=TRUE, suffixes=c(".G", ".W"))
-
+GTDWDI <-merge(GTD, WDIData, by=c("country_txt", "iyear"), arbindll.x = TRUE , sort=TRUE, suffixes=c(".G", ".W"))
