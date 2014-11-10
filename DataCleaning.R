@@ -26,7 +26,8 @@ ipak <- function(pkg){
 }
 
 # usage
-packages <- c("foreign", "car", "RCurl", "ggplot2", "WDI", "httr", "dplyr", "XML", "maps")
+packages <- c("foreign", "car", "RCurl", "ggplot2", "WDI", "httr", "iterators", "dplyr", 
+              "XML", "maps", "ggmap", "Imap", "geosphere", "maptools", "rgeos", "foreach")
 ipak(packages)
 rm(packages)
 rm(ipak)
