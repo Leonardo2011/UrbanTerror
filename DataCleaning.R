@@ -26,7 +26,7 @@ ipak <- function(pkg){
 }
 
 # usage
-packages <- c("foreign", "car", "RCurl", "ggplot2", "WDI", "httr", "iterators", "dplyr", 
+packages <- c("foreign", "car", "RCurl", "ggplot2", "WDI", "httr", "iterators", "dplyr", "plyr",
               "XML", "maps", "ggmap", "Imap", "geosphere", "maptools", "rgeos", "foreach")
 ipak(packages)
 rm(packages)
@@ -112,7 +112,6 @@ worldcities2013 <- rbind(worldcities2013, data.frame(X=0,Country="ir", City="teh
 # introduce Akkaraipattu as it was missing in the original dataset
 worldcities2013 <- rbind(worldcities2013, data.frame(X=0,Country="lk", City="Akkaraipattu", AccentCity="Akkaraipattu", 
                                                      Region= 31, Latitude=7.227862, Longitude=81.850551,Population=35000))
-, 
 
 # sorting by population
 worldcities2013 <- worldcities2013[order(-worldcities2013$Population, na.last=TRUE) , ]
@@ -125,11 +124,13 @@ worldcities2013_over_100k <- subset(worldcities2013, select = c(Country, City, A
 ### list the world capital cities
 data(world.cities)
 world.cities$name <- tolower(world.cities$name)
-#The dataframe wrongly lists dehli as not being the capital of india, which we recode.
-world.cities2009$capital[world.cities2009$name == "delhi" & world.cities2009$country.etc == "India"] <- "1"
-world.cities2009$name[world.cities2009$name == "soul" & world.cities2009$country.etc == "Korea South"] <- "seoul"
 world.cities2009 <- world.cities[order(-world.cities$pop, na.last=TRUE) , ]
 rm(world.cities)
+
+#The dataframe wrongly lists dehli as not being the capital of india, plus had a typo in seoul, which both we recode.
+world.cities2009$capital[world.cities2009$name == "delhi" & world.cities2009$country.etc == "India"] <- "1"
+world.cities2009$name[world.cities2009$name == "soul" & world.cities2009$country.etc == "Korea South"] <- "seoul"
+
 capitals <- subset(world.cities2009, select = c(name, country.etc, pop), capital == 1)
 
 
@@ -176,7 +177,7 @@ rm(URL)
 rm(b)
 rm(a)
 
-# done
+
 
 
 ############################################
@@ -197,6 +198,49 @@ WB_Urban_Pop = WDI(indicator='SP.URB.TOTL', country='all', start=1970, end=2013)
 ########################################################################################
 
 
-#### try to merge, not leading anywhere but if city names in UrbanCenters are cleaned, it could lead somewhere
-#UrbanCenters["AccentCity"] <- UrbanCenters$City
-#try <- merge(Cities_over_50k, UrbanCenters, by=c("AccentCity"))
+############################################
+# Merging Urban Centers with world.cities2009 with respective distance of each City to closes Urban Censter
+
+# renaming colums and select sub-sets for merging over fake variable to find each distance (~2million)
+colnames(UrbanCenters)[5] <- "Area"
+colnames(UrbanCenters)[6] <- "Density"
+UCmerge <- subset(UrbanCenters, select = c("lon", "lat", "full name", "Population", "Area", "Density", "costalMC"))
+UCmerge$fake=1
+WCmerge <-subset(world.cities2009, select = c("long", "lat"))
+WCmerge["CityID"] <- rownames(world.cities2009)
+WCmerge$fake=1
+Zillion <-merge(UCmerge, WCmerge, by=c("fake"))
+
+#function for distance
+distance.UC <- function(data, logA, latA, logUC, latUC){
+  gdist(data[, logA], data[, latA], data[, lonUC], data[, latUC], 
+        units = "km", a = 6378137.0, b = 6356752.3142, verbose = FALSE)
+}
+
+# find all ~2million distances
+Zillion["DISTkm"] <- gdist(Zillion$lon, Zillion$lat.x, Zillion$long, Zillion$lat.y, units = "km", a = 6378137.0, b = 6356752.3142, verbose = FALSE)
+
+# reduce to only the closest urban center for each and every city in world.cities2009
+Zillion.min <- aggregate(DISTkm ~ CityID, Zillion, function(x) min(x))
+Zillion.fullmin <- merge(Zillion.min, Zillion, by=c("CityID", "DISTkm"))
+Zillion.fullmin["CityID"] <- Zillion.fullmin$"CityID"
+Zillion.fullmin["Closest.Uran.Center"] <- Zillion.fullmin$"full name"
+Zillion.fullmin["CUC.dist.km"] <- Zillion.fullmin$"DISTkm"
+
+# bring information on closest urban center and the respective distance back into world.cities2009 
+UR.WC.merger <- subset(Zillion.fullmin, select = c("CityID", "Closest.Uran.Center", "CUC.dist.km", "Population", "Area", "Density", "costalMC"))
+
+# new dataset WC09.UCdist!
+world.cities2009["CityID"] <-rownames(world.cities2009)
+WC09.UCdist <- merge(world.cities2009, UR.WC.merger, by="CityID")
+
+#remove rest
+rm(distance.UC)
+rm(WCmerge)
+rm(UCmerge)
+rm(Zillion)
+rm(Zillion.min)
+rm(Zillion.fullmin)
+
+############################################
+# Merging Urban Centers with world.cities2009 with respective distance of each City to closes Urban Censter
