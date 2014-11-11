@@ -102,6 +102,10 @@ GTD$HUMscale <- as.numeric(GTD$HUMscale)
 ############## BIG CITY DATA ##############
 ###########################################
 
+###########################################
+# WORLD CITY DATASET 1/2 (worldcities2013)
+
+
 # here: http://download.maxmind.com/download/worldcities/worldcitiespop.txt.gz and transformed into CSV
 worldcities2013 <- read.csv("City Data/worldcitiespop.csv")
 
@@ -116,12 +120,14 @@ worldcities2013 <- rbind(worldcities2013, data.frame(X=0,Country="lk", City="Akk
 # sorting by population
 worldcities2013 <- worldcities2013[order(-worldcities2013$Population, na.last=TRUE) , ]
 
+# replace 2digit coountry names by the names used in the secon city dataset 
 source('SmallScripts/2digit2ctry.R')
 worldcities2013$City <- gsub(" ", "", worldcities2013$City)
 worldcities2013$City <- tolower(worldcities2013$City)
 
 
-
+##########################################
+# WORLD CITY DATASET 2/2 (world.cities2009)
 
 
 ### list the world capital cities
@@ -134,6 +140,7 @@ rm(world.cities)
 world.cities2009$capital[world.cities2009$name == "delhi" & world.cities2009$country.etc == "India"] <- "1"
 world.cities2009$name[world.cities2009$name == "soul" & world.cities2009$country.etc == "Korea South"] <- "seoul"
 
+# remane some countries so they match the first city dataset better
 world.cities2009$country.etc <- gsub("Russia","Russian Federation", world.cities2009$country.etc)
 world.cities2009$country.etc <- gsub("UK","United Kingdom", world.cities2009$country.etc)
 world.cities2009$country.etc <- gsub("USA","United States of America", world.cities2009$country.etc)
@@ -147,22 +154,30 @@ world.cities2009$country.etc <- gsub("Madiera","Portugal", world.cities2009$coun
 
 ##############################################################################################
 # merge the two sets: cities 2013 and cities 2009 to world.cities
+
+#some cleaning
 world.cities2009$name <- gsub(" ", "", world.cities2009$name)
 world.cities2009$name <- tolower(world.cities2009$name)
 world.cities2009$country.etc<-gsub(" ", "",world.cities2009$country.etc, ignore.case=TRUE)
+world.cities2009$country.etc<-gsub("\\,", "",world.cities2009$country.etc, ignore.case=TRUE)
 world.cities2009$country.etc <- tolower(world.cities2009$country.etc)
 worldcities2013$Country <- tolower(worldcities2013$Country)
+
+# subsets and renaming so the two datasets match in their columns
 worldcities2013 <- subset(worldcities2013, select =c("City", "Country", "Population", "Latitude", "Longitude", "Region"))
 colnames(worldcities2013)[1] <- "name"
 colnames(worldcities2013)[2] <- "country.etc"
 colnames(worldcities2013)[3] <- "pop"
 colnames(worldcities2013)[4] <- "lat"
 colnames(worldcities2013)[5] <- "long"
-world.cities2009$country.etc<-gsub("\\,", "",world.cities2009$country.etc, ignore.case=TRUE)
+
+#create a column to merge over: countrycity
 world.cities2009$merge <- paste(world.cities2009$country.etc, world.cities2009$name, sep="")
 worldcities2013$merge <- paste(worldcities2013$country.etc, worldcities2013$name, sep="")
+
+#merge to new set: "world.cities"
 world.cities <- merge(world.cities2009, worldcities2013, by= c("merge", "name", "country.etc", "pop", "lat", "long"), all=TRUE)
-world.cities <- world.cities[order(world.cities$merge, world.cities$pop),]
+world.cities <- world.cities[order(world.cities$merge, world.cities$capital, world.cities$pop),]
 world.cities<-world.cities[!duplicated(world.cities$merge), ]
 world.cities$merge <-NULL
 world.cities <- world.cities[order(-world.cities$pop), ]
@@ -234,7 +249,7 @@ UrbanCenters$costalMC[UrbanCenters$City == "sao paolo"] <- "1"
 
 ############################################
 #Load the World Bank Data on the nominal Urban Population 
-WB_Urban_Pop = WDI(indicator='SP.URB.TOTL', country='all', start=1970, end=2013)
+#WB_Urban_Pop = WDI(indicator='SP.URB.TOTL', country='all', start=1970, end=2013)
 
 
 
@@ -243,10 +258,6 @@ WB_Urban_Pop = WDI(indicator='SP.URB.TOTL', country='all', start=1970, end=2013)
 ############################   MERGING  DATA    ########################################
 ########################################################################################
 ########################################################################################
-
-
-
-
 
 
 ############################################
@@ -288,4 +299,4 @@ WC09.UCdist$Area <- as.numeric(WC09.UCdist$Area)
 WC09.UCdist["attack.on.urban.center"] <- (WC09.UCdist$CUC.dist.km<=(3*(((WC09.UCdist$Area)/pi)**0.5)))
 
 #remove rest
-rm(distance.UC, WCmerge, UCmerge, Zillion, Zillion.min, Zillion.fullmin)
+rm(distance.UC, WCmerge, UCmerge, Zillion, Zillion.min, Zillion.fullmin, UR.WC.merger)

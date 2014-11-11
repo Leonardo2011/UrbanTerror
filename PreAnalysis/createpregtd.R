@@ -19,8 +19,6 @@ world.cities$CityID <- NULL
 Testframe <- GTD[1|2|9|11:20]
 Testframe["merge"] <-data.frame(paste(GTDcountry, GTDcity, sep=""))
 WC09.UCdist$merge <- paste(WC09.UCdist$country.etc, WC09.UCdist$name, sep="")
-WC09.UCdist$merge <- gsub("\\-","",t.world.cities$merge)
-WC09.UCdist$merge <- gsub("\\'","",t.world.cities$merge)
 PreGTD <- merge(Testframe, WC09.UCdist, by=c("merge"), all.x=TRUE)
 PreGTD$merge <- NULL
 PreGTD$iday <- NULL
@@ -36,3 +34,4 @@ PreGTD$long<- NULL
 PreGTD$Region<- NULL
 PreGTD$country.etc<- NULL
 write.csv(PreGTD, file="pregtd.csv")
+rm(Testframe, t.world.cities, GTDcity, GTDcountry, X, Y)
