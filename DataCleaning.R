@@ -131,6 +131,23 @@ rm(world.cities)
 world.cities2009$capital[world.cities2009$name == "delhi" & world.cities2009$country.etc == "India"] <- "1"
 world.cities2009$name[world.cities2009$name == "soul" & world.cities2009$country.etc == "Korea South"] <- "seoul"
 
+world.cities2009$country.etc <- gsub("Russia","Russian Federation", world.cities2009$country.etc)
+world.cities2009$country.etc <- gsub("UK","United Kingdom", world.cities2009$country.etc)
+world.cities2009$country.etc <- gsub("USA","United States of America", world.cities2009$country.etc)
+world.cities2009$country.etc <- gsub("Korea North","Korea, Democratic People's Republic of", world.cities2009$country.etc)
+world.cities2009$country.etc <- gsub("Korea South","Korea, Republic of", world.cities2009$country.etc)
+world.cities2009$country.etc <- gsub("Sicily","Italy", world.cities2009$country.etc)
+world.cities2009$country.etc <- gsub("East Timor","Timor-Leste", world.cities2009$country.etc)
+world.cities2009$country.etc <- gsub("Madeira","Portugal", world.cities2009$country.etc)
+world.cities2009$country.etc <- gsub("Madiera","Portugal", world.cities2009$country.etc)
+
+
+
+
+
+
+
+
 capitals <- subset(world.cities2009, select = c(name, country.etc, pop), capital == 1)
 
 
@@ -169,6 +186,7 @@ UrbanLoc <- geocode(a, output = c("latlon", "latlona", "more", "all"),messaging 
 UrbanCenters["lat"] <- UrbanLoc$lat
 UrbanCenters["lon"] <- UrbanLoc$lon
 UrbanCenters["full name"] <- a
+UrbanCenters$City <- tolower(UrbanCenters$City)
 
 # delete whats not needed anymore
 rm(UrbanLoc)
@@ -177,9 +195,9 @@ rm(URL)
 rm(b)
 rm(a)
 
-<<<<<<< HEAD
-=======
-# done--coastal megacities
+
+# put in costal megacities
+UrbanCenters$costalMC=0
 UrbanCenters$costalMC[UrbanCenters$City == "tokyo"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "jakarta"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "seoul"] <- "1"
@@ -192,7 +210,6 @@ UrbanCenters$costalMC[UrbanCenters$City == ""] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "shanghai"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "shanghai"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "shanghai"] <- "1"
->>>>>>> origin/master
 
 
 
@@ -212,6 +229,10 @@ WB_Urban_Pop = WDI(indicator='SP.URB.TOTL', country='all', start=1970, end=2013)
 ############################   MERGING  DATA    ########################################
 ########################################################################################
 ########################################################################################
+
+
+
+
 
 
 ############################################
@@ -249,6 +270,8 @@ UR.WC.merger <- subset(Zillion.fullmin, select = c("CityID", "Closest.Uran.Cente
 # new dataset WC09.UCdist!
 world.cities2009["CityID"] <-rownames(world.cities2009)
 WC09.UCdist <- merge(world.cities2009, UR.WC.merger, by="CityID")
+WC09.UCdist$Area <- as.numeric(WC09.UCdist$Area)
+WC09.UCdist["is.it"] <- (WC09.UCdist$CUC.dist.km<=(3*(((WC09.UCdist$Area)/pi)**0.5)))
 
 #remove rest
 rm(distance.UC)
@@ -257,6 +280,3 @@ rm(UCmerge)
 rm(Zillion)
 rm(Zillion.min)
 rm(Zillion.fullmin)
-
-############################################
-# Merging Urban Centers with world.cities2009 with respective distance of each City to closes Urban Censter
