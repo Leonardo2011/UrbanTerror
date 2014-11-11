@@ -275,11 +275,11 @@ Zillion["DISTkm"] <- gdist(Zillion$lon, Zillion$lat.x, Zillion$long, Zillion$lat
 Zillion.min <- aggregate(DISTkm ~ CityID, Zillion, function(x) min(x))
 Zillion.fullmin <- merge(Zillion.min, Zillion, by=c("CityID", "DISTkm"))
 Zillion.fullmin["CityID"] <- Zillion.fullmin$"CityID"
-Zillion.fullmin["Closest.Uran.Center"] <- Zillion.fullmin$"full name"
+Zillion.fullmin["Closest.Urban.Center"] <- Zillion.fullmin$"full name"
 Zillion.fullmin["CUC.dist.km"] <- Zillion.fullmin$"DISTkm"
 
 # bring information on closest urban center and the respective distance back into world.cities 
-UR.WC.merger <- subset(Zillion.fullmin, select = c("CityID", "Closest.Uran.Center", "CUC.dist.km", "Population", "Area", "Density", "costalMC"))
+UR.WC.merger <- subset(Zillion.fullmin, select = c("CityID", "Closest.Urban.Center", "CUC.dist.km", "Population", "Area", "Density", "costalMC"))
 
 # new dataset WC09.UCdist!
 world.cities["CityID"] <-rownames(world.cities)
