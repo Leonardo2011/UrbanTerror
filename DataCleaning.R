@@ -296,7 +296,8 @@ UR.WC.merger <- subset(Zillion.fullmin, select = c("CityID", "Closest.Urban.Cent
 world.cities["CityID"] <-rownames(world.cities)
 WC09.UCdist <- merge(world.cities, UR.WC.merger, by="CityID")
 WC09.UCdist$Area <- as.numeric(WC09.UCdist$Area)
-WC09.UCdist["attack.on.urban.center"] <- (WC09.UCdist$CUC.dist.km<=(3*(((WC09.UCdist$Area)/pi)**0.5)))
+WC09.UCdist["attack.on.urban.center"] <- (WC09.UCdist$CUC.dist.km<=(10+(2*(((WC09.UCdist$Area)/pi)**0.5))))
+WC09.UCdist["attack.on.urban.centers.environment"] <- (WC09.UCdist$CUC.dist.km<=(33+(3*(((WC09.UCdist$Area)/pi)**0.5))))
 
 #remove rest
 rm(distance.UC, WCmerge, UCmerge, Zillion, Zillion.min, Zillion.fullmin, UR.WC.merger)

@@ -23,7 +23,6 @@ PreGTD <- merge(Testframe, WC09.UCdist, by=c("merge"), all.x=TRUE)
 PreGTD$merge <- NULL
 PreGTD$iday <- NULL
 PreGTD$country <- NULL
-PreGTD$country_txt <- NULL
 PreGTD$region <- NULL
 PreGTD$provstate <- NULL
 PreGTD$imonth<- NULL
