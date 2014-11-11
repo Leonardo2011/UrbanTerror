@@ -116,9 +116,12 @@ worldcities2013 <- rbind(worldcities2013, data.frame(X=0,Country="lk", City="Akk
 # sorting by population
 worldcities2013 <- worldcities2013[order(-worldcities2013$Population, na.last=TRUE) , ]
 
-### select cities with a known population with more than 100.000 inhabitants
-worldcities2013_over_100k <- subset(worldcities2013, select = c(Country, City, AccentCity, Region, Latitude, Longitude, 
-                                                                Population), Population > 100000)
+source('SmallScripts/2digit2ctry.R')
+worldcities2013$City <- gsub(" ", "", worldcities2013$City)
+worldcities2013$City <- tolower(worldcities2013$City)
+
+
+
 
 
 ### list the world capital cities
@@ -142,14 +145,28 @@ world.cities2009$country.etc <- gsub("Madeira","Portugal", world.cities2009$coun
 world.cities2009$country.etc <- gsub("Madiera","Portugal", world.cities2009$country.etc)
 
 
-
-
-
-
-
-
-capitals <- subset(world.cities2009, select = c(name, country.etc, pop), capital == 1)
-
+##############################################################################################
+# merge the two sets: cities 2013 and cities 2009 to world.cities
+world.cities2009$name <- gsub(" ", "", world.cities2009$name)
+world.cities2009$name <- tolower(world.cities2009$name)
+world.cities2009$country.etc<-gsub(" ", "",world.cities2009$country.etc, ignore.case=TRUE)
+world.cities2009$country.etc <- tolower(world.cities2009$country.etc)
+worldcities2013$Country <- tolower(worldcities2013$Country)
+worldcities2013 <- subset(worldcities2013, select =c("City", "Country", "Population", "Latitude", "Longitude", "Region"))
+colnames(worldcities2013)[1] <- "name"
+colnames(worldcities2013)[2] <- "country.etc"
+colnames(worldcities2013)[3] <- "pop"
+colnames(worldcities2013)[4] <- "lat"
+colnames(worldcities2013)[5] <- "long"
+world.cities2009$country.etc<-gsub("\\,", "",world.cities2009$country.etc, ignore.case=TRUE)
+world.cities2009$merge <- paste(world.cities2009$country.etc, world.cities2009$name, sep="")
+worldcities2013$merge <- paste(worldcities2013$country.etc, worldcities2013$name, sep="")
+world.cities <- merge(world.cities2009, worldcities2013, by= c("merge", "name", "country.etc", "pop", "lat", "long"), all=TRUE)
+world.cities <- world.cities[order(world.cities$merge, world.cities$pop),]
+world.cities<-world.cities[!duplicated(world.cities$merge), ]
+world.cities$merge <-NULL
+world.cities <- world.cities[order(-world.cities$pop), ]
+rm(worldcities2013, world.cities2009)
 
 
 #########################################
@@ -206,10 +223,7 @@ UrbanCenters$costalMC[UrbanCenters$City == "manila"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "karachi"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "new york city"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "sao paolo"] <- "1"
-UrbanCenters$costalMC[UrbanCenters$City == ""] <- "1"
-UrbanCenters$costalMC[UrbanCenters$City == "shanghai"] <- "1"
-UrbanCenters$costalMC[UrbanCenters$City == "shanghai"] <- "1"
-UrbanCenters$costalMC[UrbanCenters$City == "shanghai"] <- "1"
+
 
 
 
@@ -236,15 +250,15 @@ WB_Urban_Pop = WDI(indicator='SP.URB.TOTL', country='all', start=1970, end=2013)
 
 
 ############################################
-# Merging Urban Centers with world.cities2009 with respective distance of each City to closes Urban Censter
+# Merging Urban Centers with world.cities with respective distance of each City to closes Urban Censter
 
 # renaming colums and select sub-sets for merging over fake variable to find each distance (~2million)
 colnames(UrbanCenters)[5] <- "Area"
 colnames(UrbanCenters)[6] <- "Density"
 UCmerge <- subset(UrbanCenters, select = c("lon", "lat", "full name", "Population", "Area", "Density", "costalMC"))
 UCmerge$fake=1
-WCmerge <-subset(world.cities2009, select = c("long", "lat"))
-WCmerge["CityID"] <- rownames(world.cities2009)
+WCmerge <-subset(world.cities, select = c("long", "lat"))
+WCmerge["CityID"] <- rownames(world.cities)
 WCmerge$fake=1
 Zillion <-merge(UCmerge, WCmerge, by=c("fake"))
 
@@ -257,26 +271,21 @@ distance.UC <- function(data, logA, latA, logUC, latUC){
 # find all ~2million distances
 Zillion["DISTkm"] <- gdist(Zillion$lon, Zillion$lat.x, Zillion$long, Zillion$lat.y, units = "km", a = 6378137.0, b = 6356752.3142, verbose = FALSE)
 
-# reduce to only the closest urban center for each and every city in world.cities2009
+# reduce to only the closest urban center for each and every city in world.cities
 Zillion.min <- aggregate(DISTkm ~ CityID, Zillion, function(x) min(x))
 Zillion.fullmin <- merge(Zillion.min, Zillion, by=c("CityID", "DISTkm"))
 Zillion.fullmin["CityID"] <- Zillion.fullmin$"CityID"
 Zillion.fullmin["Closest.Uran.Center"] <- Zillion.fullmin$"full name"
 Zillion.fullmin["CUC.dist.km"] <- Zillion.fullmin$"DISTkm"
 
-# bring information on closest urban center and the respective distance back into world.cities2009 
+# bring information on closest urban center and the respective distance back into world.cities 
 UR.WC.merger <- subset(Zillion.fullmin, select = c("CityID", "Closest.Uran.Center", "CUC.dist.km", "Population", "Area", "Density", "costalMC"))
 
 # new dataset WC09.UCdist!
-world.cities2009["CityID"] <-rownames(world.cities2009)
-WC09.UCdist <- merge(world.cities2009, UR.WC.merger, by="CityID")
+world.cities["CityID"] <-rownames(world.cities)
+WC09.UCdist <- merge(world.cities, UR.WC.merger, by="CityID")
 WC09.UCdist$Area <- as.numeric(WC09.UCdist$Area)
-WC09.UCdist["is.it"] <- (WC09.UCdist$CUC.dist.km<=(3*(((WC09.UCdist$Area)/pi)**0.5)))
+WC09.UCdist["attack.on.urban.center"] <- (WC09.UCdist$CUC.dist.km<=(3*(((WC09.UCdist$Area)/pi)**0.5)))
 
 #remove rest
-rm(distance.UC)
-rm(WCmerge)
-rm(UCmerge)
-rm(Zillion)
-rm(Zillion.min)
-rm(Zillion.fullmin)
+rm(distance.UC, WCmerge, UCmerge, Zillion, Zillion.min, Zillion.fullmin)
