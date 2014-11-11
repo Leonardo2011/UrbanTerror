@@ -85,34 +85,52 @@ GTD2$country_txt[GTD2$country_txt == "Serbia-Montenegro" & GTD2$city =="Novi Paz
 GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Bogicevica" ] <- "Albania"
 
 
-GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Belgrade" ] <- "Serbia"
 GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Banjica" ] <- "Serbia"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Belgrade" ] <- "Serbia"
 GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Blace" ] <- "Serbia"
 GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Borovica" ] <- "Serbia"
 GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Bujanovac" ] <- "Serbia"
 GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Bujic" ] <- "Serbia"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Cacak" ] <- "Serbia"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Cerevajka" ] <- "Serbia"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Dolovo" ] <- "Serbia"
 
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Celopek" ] <- "Macedonia, FYR"
 GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Skopje" ] <- "Macedonia, FYR"
 
 GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Berane" ] <- "Montenegro"
 GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Budva" ] <- "Montenegro"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Cetinje" ] <- "Montenegro"
 
 
 GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Ljubljana" ] <- "Slovenia"
 
-
-GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Dubrovnik" ] <- "Croatia"
-GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Osijek" ] <- "Croatia"
 GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Benkovac" ] <- "Croatia"
 GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Borovac" ] <- "Croatia"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Dolac"] <- "Croatia"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Dubrovnik" ] <- "Croatia"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Dvor na Uni" ] <- "Croatia"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Osijek" ] <- "Croatia"
 
-GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Pristina" ] <- "Kosovo"
-GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Suva Reka" ] <- "Kosovo"
-GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Podujeva" ] <- "Kosovo"
-GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Titova Mitrovica" ] <- "Kosovo"
 GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Batlava" ] <- "Kosovo"
 GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Besinje" ] <- "Kosovo"
 GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Bradas" ] <- "Kosovo"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Careva Cesma" ] <- "Kosovo"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Decani" ] <- "Kosovo"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Djakovica" ] <- "Kosovo"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Donje Ljupce" ] <- "Kosovo"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Donje Prekaze" ] <- "Kosovo"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Donji Crnobreg" ] <- "Kosovo"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Dulje" ] <- "Kosovo"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Glogovac" ] <- "Kosovo"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Gornja Klina" ] <- "Kosovo"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Grabanic‰" ] <- "Kosovo"  ######## This may be an encoding problem
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Grabc" ] <- "Kosovo"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Istinic" ] <- "Kosovo"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Podujeva" ] <- "Kosovo"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Pristina" ] <- "Kosovo"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Suva Reka" ] <- "Kosovo"
+GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Titova Mitrovica" ] <- "Kosovo"
 
 GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Banja Luka" ] <- "Bosnia and Herzegovina"
 GTD2$country_txt[GTD2$country_txt == "Yugoslavia" & GTD2$city =="Bijelina" ] <- "Bosnia and Herzegovina"
