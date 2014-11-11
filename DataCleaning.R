@@ -177,6 +177,22 @@ rm(URL)
 rm(b)
 rm(a)
 
+<<<<<<< HEAD
+=======
+# done--coastal megacities
+UrbanCenters$costalMC[UrbanCenters$City == "tokyo"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "jakarta"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "seoul"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "shanghai"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "manila"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "karachi"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "new york city"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "sao paolo"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == ""] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "shanghai"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "shanghai"] <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "shanghai"] <- "1"
+>>>>>>> origin/master
 
 
 
