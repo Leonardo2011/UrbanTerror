@@ -155,7 +155,7 @@ world.cities2009$country.etc[world.cities2009$country.etc == "Madiera"] <- "Port
 ##############################################################################################
 # merge the two sets: cities 2013 and cities 2009 to world.cities
 
-#some cleaning
+#some preliminary cleaning before merging 
 world.cities2009$name <- gsub(" ", "", world.cities2009$name)
 world.cities2009$name <- tolower(world.cities2009$name)
 world.cities2009$country.etc<-gsub(" ", "",world.cities2009$country.etc, ignore.case=TRUE)
@@ -178,79 +178,19 @@ worldcities2013$merge <- paste(worldcities2013$country.etc, worldcities2013$name
 #merge to new set: "world.cities"
 world.cities <- merge(world.cities2009, worldcities2013, by= c("merge", "name", "country.etc", "pop", "lat", "long"), all=TRUE)
 world.cities <- world.cities[order(world.cities$merge, world.cities$capital, world.cities$pop),]
-world.cities<-world.cities[!duplicated(world.cities$merge), ]
+world.cities <- world.cities[!duplicated(world.cities$merge), ]
 world.cities$merge <-NULL
 world.cities <- world.cities[order(-world.cities$pop), ]
 rm(worldcities2013, world.cities2009)
 
-# bring country name to WDI coding, with removed spaces and commas
-world.cities$country.etc[world.cities$name == "berane"] <- "Montenegro"
-world.cities$country.etc[world.cities$name == "podgorica"] <- "Montenegro"
-world.cities$country.etc[world.cities$name == "niksic"] <- "Montenegro"
-world.cities$country.etc[world.cities$name == "pljevlja"] <- "Montenegro"
-world.cities$country.etc[world.cities$country.etc == "serbiaandmontenegro"] <- "serbia"
-world.cities$country.etc[world.cities$country.etc == "norfolkisland"] <- "australia"
-world.cities$country.etc[world.cities$country.etc == "bahamas"] <- "bahamasthe"
-world.cities$country.etc[world.cities$country.etc == "brunei"] <- "bruneidarussalam"
-world.cities$country.etc[world.cities$country.etc == "guernseyandalderney"] <- "channelislands"
-world.cities$country.etc[world.cities$country.etc == "jersey"] <- "channelislands"
-world.cities$country.etc[world.cities$country.etc == "easterisland"] <- "chile"
-world.cities$country.etc[world.cities$country.etc == "taiwan"] <- "china"
-world.cities$country.etc[world.cities$country.etc == "congodemocraticrepublic"] <- "congodemrep"
-world.cities$country.etc[world.cities$country.etc == "congo"] <- "congorep"
-world.cities$country.etc[world.cities$country.etc == "ivorycoast"] <- "cotedivoire"
-world.cities$country.etc[world.cities$country.etc == "faroeislands"] <- "denmark"
-world.cities$country.etc[world.cities$country.etc == "egypt"] <- "egyptarabrep"
-world.cities$country.etc[world.cities$country.etc == "frenchguiana"] <- "france"
-world.cities$country.etc[world.cities$country.etc == "frenchsouthernterritories"] <- "france"
-world.cities$country.etc[world.cities$country.etc == "guadeloupe"] <- "france"
-world.cities$country.etc[world.cities$country.etc == "martinique"] <- "france"
-world.cities$country.etc[world.cities$country.etc == "mayotte"] <- "france"
-world.cities$country.etc[world.cities$country.etc == "reunion"] <- "france"
-world.cities$country.etc[world.cities$country.etc == "saint-barthelemy"] <- "france"
-world.cities$country.etc[world.cities$country.etc == "saintpierreandmiquelon"] <- "france"
-world.cities$country.etc[world.cities$country.etc == "wallisandfutuna"] <- "france"
-world.cities$country.etc[world.cities$country.etc == "gambia"] <- "gambiathe"
-world.cities$country.etc[world.cities$country.etc == "iran"] <- "iranislamicrep"
-world.cities$country.etc[world.cities$country.etc == "koreademocraticpeople'srepublicof"] <- "koreademrep"
-world.cities$country.etc[world.cities$country.etc == "korearepublicof"] <- "korearep"
-world.cities$country.etc[world.cities$country.etc == "kyrgyzstan"] <- "kyrgyzrepublic"
-world.cities$country.etc[world.cities$country.etc == "laos"] <- "laopdr"
-world.cities$country.etc[world.cities$country.etc == "macedonia"] <- "macedoniafyr"
-world.cities$country.etc[world.cities$country.etc == "micronesia"] <- "micronesiafedsts"
-world.cities$country.etc[world.cities$country.etc == "netherlandsantilles"] <- "netherlands"
-world.cities$country.etc[world.cities$country.etc == "cookislands"] <- "newzealand"
-world.cities$country.etc[world.cities$country.etc == "niue"] <- "newzealand"
-world.cities$country.etc[world.cities$country.etc == "tokelau"] <- "newzealand"
-world.cities$country.etc[world.cities$country.etc == "svalbardandjanmayen"] <- "norway"
-world.cities$country.etc[world.cities$country.etc == "azores"] <- "portugal"
-world.cities$country.etc[world.cities$country.etc == "serbiaandmontenegro"] <- "serbia"
-world.cities$country.etc[world.cities$country.etc == "slovakia"] <- "slovakrepublic"
-world.cities$country.etc[world.cities$country.etc == "canaryislands"] <- "spain"
-world.cities$country.etc[world.cities$country.etc == "westernsahara"] <- "spain"
-world.cities$country.etc[world.cities$country.etc == "saintkittsandnevis"] <- "stkittsandnevis"
-world.cities$country.etc[world.cities$country.etc == "saintlucia"] <- "stlucia"
-world.cities$country.etc[world.cities$country.etc == "saint-martin"] <- "stmartinfrenchpart"
-world.cities$country.etc[world.cities$country.etc == "saintvincentandthegrenadines"] <- "stvincentandthegrenadines"
-world.cities$country.etc[world.cities$country.etc == "syria"] <- "syrianarabrepublic"
-world.cities$country.etc[world.cities$country.etc == "turksandcaicos"] <- "turksandcaicosislands"
-world.cities$country.etc[world.cities$country.etc == "anguilla"] <- "unitedkingdom"
-world.cities$country.etc[world.cities$country.etc == "britishvirginislands"] <- "unitedkingdom"
-world.cities$country.etc[world.cities$country.etc == "falklandislands"] <- "unitedkingdom"
-world.cities$country.etc[world.cities$country.etc == "gibraltar"] <- "unitedkingdom"
-world.cities$country.etc[world.cities$country.etc == "montserrat"] <- "unitedkingdom"
-world.cities$country.etc[world.cities$country.etc == "pitcairn"] <- "unitedkingdom"
-world.cities$country.etc[world.cities$country.etc == "sainthelena"] <- "unitedkingdom"
-world.cities$country.etc[world.cities$country.etc == "northernmarianaislands"] <- "unitedstates"
-world.cities$country.etc[world.cities$country.etc == "unitedstatesofamerica"] <- "unitedstates"
-world.cities$country.etc[world.cities$country.etc == "venezuela"] <- "venezuelarb"
-world.cities$country.etc[world.cities$country.etc == "usvirginislands"] <- "virginislandsus"
-world.cities$country.etc[world.cities$country.etc == "palestine"] <- "westbankandgaza"
-world.cities$country.etc[world.cities$country.etc == "yemen"] <- "yemenrep"
-world.cities$country.etc <- gsub(" ", "", world.cities$country.etc)
-world.cities$country.etc <- tolower(world.cities$country.etc)
+# bring country names in combined world.cities to WDi standart
+source('SmallScripts/bring_country_names_in_citydata_to_WDI.R')
 
-
+# create uniform country names in world.cities without special characters and lowcase
+X <- world.cities$country.etc
+source('SmallScripts/delete_country_special_characters.R')
+world.cities$country.etc <- X
+rm(X)
 
 
 #########################################

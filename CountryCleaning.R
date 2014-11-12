@@ -180,6 +180,10 @@ GTD2$country_txt[GTD2$country_txt == "Great Britain" ] <- "United Kingdom"
 GTD2$country_txt[GTD2$country_txt == "Macedonia" ] <- "Macedonia, FYR"
 
 #Just for testing whether we eliminated all.
-GTD.sub <- subset(GTD2, GTD2$country_txt == "Soviet Union")
+#GTD.sub <- subset(GTD2, GTD2$country_txt == "Soviet Union")
+#liste <- data.frame(c(unique(WDIData$country)), unique(GTD2$country_txt))
 
-liste <- data.frame(c(unique(WDIData$country)), unique(GTD2$country_txt))
+
+
+
+

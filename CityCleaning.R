@@ -607,7 +607,7 @@ X <- gsub("\\-","",X)
 X <- gsub("\\\\.*", "", X)
 X <- gsub("\\[.+?\\]","", X)
 X <- gsub("\\(.+?\\)","", X)
-#X <- gsub("[:digit:]", "", X)
+#X <- gsub("[:digit:]", "", X) # messed with the names
 X <- gsub(" ", "", X)
-#X <- gsub("[:punct:]", "", X)
+#X <- gsub("[:punct:]", "", X) # messed with the names
 X <- tolower(X)
