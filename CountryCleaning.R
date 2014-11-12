@@ -1,6 +1,8 @@
 #Here we clean the GTD's country data
 
-
+#prepare a GTD to rename countries
+GTD2 <- GTD
+GTD2$country_txt <- as.character(GTD2$country_txt)
 
   # 1. Combining formerly seperated countries
 
@@ -170,19 +172,48 @@ GTD2$country_txt[GTD2$country_txt == "Soviet Union" & GTD2$city =="Sukhumi" ] <-
 GTD2$country_txt[GTD2$country_txt == "International" ] <- "Yemen"
 
 # 4. Renaming Countries to make them match the WDIData
-GTD2$country_txt[GTD2$country_txt == "West Bank and Gaza Strip" ] <- "West Bank and Gaza"
-GTD2$country_txt[GTD2$country_txt == "Russia" ] <- "Russian Federation"
-GTD2$country_txt[GTD2$country_txt == "Rhodesia" ] <- "Zimbabwe"
-GTD2$country_txt[GTD2$country_txt == "Congo (Kinshasa)" ] <- "Congo, Dem. Rep."
-GTD2$country_txt[GTD2$country_txt == "Congo (Brazzaville)" ] <- "Congo, Rep."
-GTD2$country_txt[GTD2$country_txt == "Hong Kong" ] <- "Hong Kong SAR, China"
+
+GTD2$country_txt <- as.character(GTD2$country_txt)
+GTD2$country_txt[GTD2$country_txt == "Bahamas" ] <- "Bahamas, The"
+GTD2$country_txt[GTD2$country_txt == "Bosnia-Herzegovina" ] <- "Bosnia and Herzegovina"
+GTD2$country_txt[GTD2$country_txt == "Central African Republic" ] <- "Central African Republic"
+GTD2$country_txt[GTD2$country_txt == "Congo (Brazzaville)" ] <- "Congo, Dem. Rep."
+GTD2$country_txt[GTD2$country_txt == "Congo (Kinshasa)" ] <- "Congo, Rep."
+GTD2$country_txt[GTD2$country_txt == "Corsica" ] <- "France"
+GTD2$country_txt[GTD2$country_txt == "Czechoslovakia" ] <- ""
+GTD2$country_txt[GTD2$country_txt == "Egypt" ] <- "Egypt, Arab Rep."
+GTD2$country_txt[GTD2$country_txt == "French Guiana" ] <- "France"
+GTD2$country_txt[GTD2$country_txt == "Gambia" ] <- "Gambia, The"
 GTD2$country_txt[GTD2$country_txt == "Great Britain" ] <- "United Kingdom"
+GTD2$country_txt[GTD2$country_txt == "Guadeloupe" ] <- "France"
+GTD2$country_txt[GTD2$country_txt == "Hong Kong" ] <- "Hong Kong SAR, China"
+GTD2$country_txt[GTD2$country_txt == "Iran" ] <- "Iran, Islamic Rep."
+GTD2$country_txt[GTD2$country_txt == "Ivory Coast" ] <- "Cote d'Ivoire"
+GTD2$country_txt[GTD2$country_txt == "Kyrgyzstan" ] <- "Kyrgyz Republic"
+GTD2$country_txt[GTD2$country_txt == "Laos" ] <- "Lao PDR"
+GTD2$country_txt[GTD2$country_txt == "Macau" ] <- "Macao SAR, China"
 GTD2$country_txt[GTD2$country_txt == "Macedonia" ] <- "Macedonia, FYR"
+GTD2$country_txt[GTD2$country_txt == "Martinique" ] <- ""
+GTD2$country_txt[GTD2$country_txt == "North Korea" ] <- "Korea, Dem. Rep."
+GTD2$country_txt[GTD2$country_txt == "Northern Ireland" ] <- "United Kingdom"
+GTD2$country_txt[GTD2$country_txt == "Rhodesia" ] <- "Zimbabwe"
+GTD2$country_txt[GTD2$country_txt == "South Korea" ] <- "Korea, Rep."
+GTD2$country_txt[GTD2$country_txt == "Syria" ] <- "Syrian Arab Republic"
+GTD2$country_txt[GTD2$country_txt == "Taiwan" ] <- "China"
+GTD2$country_txt[GTD2$country_txt == "Venezuela" ] <- "Venezuela, RB"
+GTD2$country_txt[GTD2$country_txt == "Wallis and Futuna" ] <- "France"
+GTD2$country_txt[GTD2$country_txt == "West Bank and Gaza Strip" ] <- "West Bank and Gaza"
+GTD2$country_txt[GTD2$country_txt == "Western Sahara" ] <- "Spain"
+GTD2$country_txt[GTD2$country_txt == "Yemen" ] <- "Yemen, Rep."
 
-#Just for testing whether we eliminated all.
-#GTD.sub <- subset(GTD2, GTD2$country_txt == "Soviet Union")
-#liste <- data.frame(c(unique(WDIData$country)), unique(GTD2$country_txt))
 
+# create uniform country names like in the other datasets without special characters
+X <- GTD2$country_txt
+source('SmallScripts/delete_country_special_characters.R')
+GTD2$country_txt <- X
+rm(X)
+
+GTD <- GTD2
 
 
 

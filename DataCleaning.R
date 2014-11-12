@@ -311,3 +311,5 @@ WC.UC.dist["attack.on.urban.centers.environment"] <- (WC.UC.dist$CUC.dist.km<=(5
 
 #remove rest
 rm(distance.UC, WCmerge, UCmerge, Zillion, Zillion.min, Zillion.fullmin, UR.WC.merger)
+
+WC.UC.dist <- WC.UC.dist[order(-WC.UC.dist$pop, na.last=TRUE) , ]
