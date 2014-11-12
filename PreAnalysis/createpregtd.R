@@ -18,8 +18,8 @@ t.world.cities$name<-X
 world.cities$CityID <- NULL
 Testframe <- GTD[1|2|9|11:20]
 Testframe["merge"] <-data.frame(paste(GTDcountry, GTDcity, sep=""))
-WC09.UCdist$merge <- paste(WC09.UCdist$country.etc, WC09.UCdist$name, sep="")
-PreGTD <- merge(Testframe, WC09.UCdist, by=c("merge"), all.x=TRUE)
+WC.UC.dist$merge <- paste(WC.UC.dist$country.etc, WC.UC.dist$name, sep="")
+PreGTD <- merge(Testframe, WC.UC.dist, by=c("merge"), all.x=TRUE)
 PreGTD$merge <- NULL
 PreGTD$iday <- NULL
 PreGTD$country <- NULL

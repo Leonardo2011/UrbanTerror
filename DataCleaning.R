@@ -220,7 +220,7 @@ b$loc <- as.character(b$loc)
 b$loc <- gsub("^..", "", b$loc)
 a<-(b$loc)
 
-# look up lon lat data via google maps / the geocode function of the package maps
+# look up lon/lat data via google maps :: the geocode function of the package maps
 UrbanLoc <- geocode(a, output = c("latlon", "latlona", "more", "all"),messaging = FALSE, sensor = FALSE, override_limit = FALSE)
 
 # bring the geo data back in the original data frame of urban centers
@@ -235,7 +235,6 @@ rm(table)
 rm(URL)
 rm(b)
 rm(a)
-
 
 # put in costal megacities
 UrbanCenters$costalMC=0
@@ -268,11 +267,20 @@ UrbanCenters$costalMC[UrbanCenters$City == "sao paolo"] <- "1"
 ########################################################################################
 ########################################################################################
 
+#!!!!!!!!!!!!!!!!!!!!!!#
+#!!!!TIME CONSUMING!!!!#
+#!!!!!!!!!!!!!!!!!!!!!!#
 
 ############################################
 # Merging Urban Centers with world.cities with respective distance of each City to closes Urban Censter
 
-# renaming colums and select sub-sets for merging over fake variable to find each distance (~2million)
+#function for distance
+distance.UC <- function(data, logA, latA, logUC, latUC){
+  gdist(data[, logA], data[, latA], data[, lonUC], data[, latUC], 
+        units = "km", a = 6378137.0, b = 6356752.3142, verbose = FALSE)
+}
+
+# renaming colums and select sub-sets for merging over fake variable to create Matrix City X Urban (~ 60.000 Cities X ~ 500 urban Centers) 
 colnames(UrbanCenters)[5] <- "Area"
 colnames(UrbanCenters)[6] <- "Density"
 UCmerge <- subset(UrbanCenters, select = c("lon", "lat", "full name", "Population", "Area", "Density", "costalMC"))
@@ -282,31 +290,24 @@ WCmerge["CityID"] <- rownames(world.cities)
 WCmerge$fake=1
 Zillion <-merge(UCmerge, WCmerge, by=c("fake"))
 
-#function for distance
-distance.UC <- function(data, logA, latA, logUC, latUC){
-  gdist(data[, logA], data[, latA], data[, lonUC], data[, latUC], 
-        units = "km", a = 6378137.0, b = 6356752.3142, verbose = FALSE)
-}
-
-# find all ~2million distances
+# find each distance ( ~ 30 million individual distances will be found )
 Zillion["DISTkm"] <- gdist(Zillion$lon, Zillion$lat.x, Zillion$long, Zillion$lat.y, units = "km", a = 6378137.0, b = 6356752.3142, verbose = FALSE)
 
-# reduce to only the closest urban center for each and every city in world.cities
+# reduce to only the closest urban center for each and every city, 30 million distances to the ~ 60.000 minimal ones
 Zillion.min <- aggregate(DISTkm ~ CityID, Zillion, function(x) min(x))
 Zillion.fullmin <- merge(Zillion.min, Zillion, by=c("CityID", "DISTkm"))
 Zillion.fullmin["CityID"] <- Zillion.fullmin$"CityID"
 Zillion.fullmin["Closest.Urban.Center"] <- Zillion.fullmin$"full name"
 Zillion.fullmin["CUC.dist.km"] <- Zillion.fullmin$"DISTkm"
 
-# bring information on closest urban center and the respective distance back into world.cities 
+# bring information on closest urban center and the respective distance back into  'world.cities'
 UR.WC.merger <- subset(Zillion.fullmin, select = c("CityID", "Closest.Urban.Center", "CUC.dist.km", "Population", "Area", "Density", "costalMC"))
 
-# new dataset WC09.UCdist!
+# new dataset WC.UCdist! which stands for 
 world.cities["CityID"] <-rownames(world.cities)
-WC09.UCdist <- merge(world.cities, UR.WC.merger, by="CityID")
-WC09.UCdist$Area <- as.numeric(WC09.UCdist$Area)
-WC09.UCdist["attack.on.urban.center"] <- (WC09.UCdist$CUC.dist.km<=(10+(2*(((WC09.UCdist$Area)/pi)**0.5))))
-WC09.UCdist["attack.on.urban.centers.environment"] <- (WC09.UCdist$CUC.dist.km<=(33+(3*(((WC09.UCdist$Area)/pi)**0.5))))
+WC.UC.dist <- merge(world.cities, UR.WC.merger, by="CityID")
+WC.UC.dist["attack.on.urban.center"] <- (WC.UC.dist$CUC.dist.km<=(20+(2*(((WC.UC.dist$Area)/pi)**0.5))))
+WC.UC.dist["attack.on.urban.centers.environment"] <- (WC.UC.dist$CUC.dist.km<=(50+(3*(((WC.UC.dist$Area)/pi)**0.5))))
 
 #remove rest
 rm(distance.UC, WCmerge, UCmerge, Zillion, Zillion.min, Zillion.fullmin, UR.WC.merger)
