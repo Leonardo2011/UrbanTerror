@@ -25,7 +25,7 @@ Testframe <- GTD
 Testframe["merge"] <-data.frame(paste(GTDcountry, GTDcity, sep=""))
 
 PreGTD <- merge(Testframe, world.citiesUC, by=c("merge"), all.x=TRUE)
-PreGTD  <- PreGTD [order(-PreGTD$HUMscale, na.last=TRUE) , ]
+PreGTD  <- PreGTD [order(-PreGTD$nkill, na.last=TRUE) , ]
 
 
 

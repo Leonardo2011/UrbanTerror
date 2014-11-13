@@ -87,14 +87,17 @@ GTD["PROPscale"] <- GTD$propextent
 GTD$PROPscale <- as.numeric(GTD$PROPscale)
 
 #Bring the values to the $ values coded in the originally coded categories. 
-GTD$PROPscale <- recode(GTD$PROPscale, "1=1000000000; 2=1000000; 3=1000; 4=0; NA=NA")
+GTD$PROPscale <- recode(GTD$PROPscale, "1=1000000000; 2=1000000; 3=1000; 4=0; NA=0")
 
 
 ############################################
 # We introduce our third scale: "Extent of Human Damage (HUMscale)" which adds wounded and killed /and write it back into the GTD
 
+GTD$nkill <- recode(GTD$nkill, "NA=0")
+GTD$nkill <- recode(GTD$nwound, "NA=0")
 GTD["HUMscale"] <- GTD$nkill+GTD$nwound
 GTD$HUMscale <- as.numeric(GTD$HUMscale)
+
 
 # download Wold Bank counrty level data and merge over country and year
 source('WDIData.R')
@@ -103,7 +106,7 @@ source('MergeGTDWDI.R')
 #rename GTD back
 GTD.without.WDI <- GTD 
 GTD <- GTDWDI
-
+rm(GTDWDI)
 # run our cleaning code for bringing the GDT country code to World Bank levels
 source('SmallScripts/CountryCleaning.R')
 
@@ -150,6 +153,8 @@ rm(world.cities)
 world.cities2009$capital[world.cities2009$name == "delhi" & world.cities2009$country.etc == "India"] <- "1"
 world.cities2009$name[world.cities2009$name == "soul" & world.cities2009$country.etc == "Korea South"] <- "seoul"
 world.cities2009$name[world.cities2009$name == "bombay" &  world.cities2009$country.etc  == "India"] <- "mumbai"
+world.cities2009$name[world.cities2009$name == "newyork" &  world.cities2009$country.etc  == "USA "] <- "newyorkcity"
+
 
 # remane some countries so they match the first city dataset better
 world.cities2009$country.etc[world.cities2009$country.etc == "Russia"] <- "Russian Federation"
@@ -306,8 +311,8 @@ WC.UC.dist$Area <- as.numeric(WC.UC.dist$Area)
 WC.UC.dist$capital <- as.numeric(WC.UC.dist$capital)
 
 
-WC.UC.dist["attack.on.urban.center"] <- (WC.UC.dist$CUC.dist.km <= (20+(2*(((WC.UC.dist$Area)/pi)**0.5))))
-WC.UC.dist["attack.on.urban.centers.environment"] <- (WC.UC.dist$CUC.dist.km<=(100+(3*(((WC.UC.dist$Area)/pi)**0.5))))
+WC.UC.dist["part.of.urban.center"] <- (WC.UC.dist$CUC.dist.km <= (20+(2*(((WC.UC.dist$Area)/pi)**0.5))))
+WC.UC.dist["in.urban.centers.environment"] <- (WC.UC.dist$CUC.dist.km<=(100+(3*(((WC.UC.dist$Area)/pi)**0.5))))
 WC.UC.dist <- WC.UC.dist[order(-WC.UC.dist$pop, na.last=TRUE) , ]
 
 # minor repairs
