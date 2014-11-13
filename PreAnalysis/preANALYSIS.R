@@ -20,3 +20,5 @@ rm(PreGTD_in_Memory)
 #Load the Pre-Analysis Global Terrorism Database
 PreGTD <- read.csv("Pre.GTD.csv", header=TRUE)
 PreGTD <-PreGTD[order(-PreGTD$eventid, na.last=TRUE) , ]
+PreGTD$X <- NULL
+

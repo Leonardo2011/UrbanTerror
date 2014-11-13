@@ -264,7 +264,7 @@ source('SmallScripts/coastalcities.R')
 
 # renaming colums and select sub-sets for merging over fake variable to create Matrix City X Urban (~ 60.000 Cities X ~ 500 urban Centers) 
 
-UCmerge <- subset(UrbanCenters, select = c("lon", "lat", "full name","Population", "Area"))
+UCmerge <- subset(UrbanCenters, select = c("lon", "lat", "full name","Population", "Area", "costalMC"))
 UCmerge$fake=1
 WCmerge <-subset(world.cities, select = c("long", "lat"))
 WCmerge["CityID"] <- rownames(world.cities)
@@ -282,7 +282,7 @@ Zillion.fullmin["Closest.Urban.Center"] <- Zillion.fullmin$"full name"
 Zillion.fullmin["CUC.dist.km"] <- Zillion.fullmin$"DISTkm"
 
 # bring information on closest urban center and the respective distance back into  'world.cities'
-UC.WC.merger <- subset(Zillion.fullmin, select = c("CityID", "Closest.Urban.Center", "CUC.dist.km", "Area"))
+UC.WC.merger <- subset(Zillion.fullmin, select = c("CityID", "Closest.Urban.Center", "CUC.dist.km", "Area", "costalMC"))
 
 # new dataset WC.UCdist! which stands for a merged dataset including distance and estimate if the respective city is part of an urban center
 world.cities["CityID"] <-rownames(world.cities)
@@ -291,7 +291,7 @@ WC.UC.dist$CUC.dist.km <- as.numeric(WC.UC.dist$CUC.dist.km)
 WC.UC.dist$Area <- as.numeric(WC.UC.dist$Area) 
 WC.UC.dist$capital <- as.numeric(WC.UC.dist$capital)
 
-
+# ask the question: close to an urban center?
 WC.UC.dist["part.of.urban.center"] <- (WC.UC.dist$CUC.dist.km <= (20+(2*(((WC.UC.dist$Area)/pi)**0.5))))
 WC.UC.dist["in.urban.centers.environment"] <- (WC.UC.dist$CUC.dist.km<=(40+(3*(((WC.UC.dist$Area)/pi)**0.5))))
 WC.UC.dist <- WC.UC.dist[order(-WC.UC.dist$pop, na.last=TRUE) , ]

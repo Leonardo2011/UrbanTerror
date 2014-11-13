@@ -27,12 +27,12 @@ Testframe["merge"] <-data.frame(paste(GTDcountry, GTDcity, sep=""))
 PreGTD <- merge(Testframe, world.citiesUC, by=c("merge"), all.x=TRUE)
 PreGTD  <- PreGTD [order(-PreGTD$eventid, na.last=TRUE) , ]
 
-PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, region_txt, city, pop, capital, Closest.Urban.Center, 
+PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, region_txt, city, pop, capital, Closest.Urban.Center, costalMC
                                   CUC.dist.km, part.of.urban.center, in.urban.centers.environment, attacktype1, 
                                   targtype1, targsubtype1, weaptype1, weapsubtype1, TUPscale, PROPscale, HUMscale,
                                   EN.URB.LCTY.UR.ZS, EN.URB.MCTY, EN.URB.MCTY.TL.ZS, SP.URB.GROW, SP.URB.TOTL, 
-                                  SP.URB.TOTL.IN.ZS, EN.POP.DNST, EN.RUR.DNST, SP.RUR.TOTL, SP.RUR.TOTL.ZG, SP.RUR.TOTL.ZS))
-
+                                  SP.URB.TOTL.IN.ZS, EN.POP.DNST, EN.RUR.DNST, SP.RUR.TOTL, SP.RUR.TOTL.ZG, 
+                                  SP.RUR.TOTL.ZS, MAX.URB.TOTL, MAX.URB.MCTY, MAX.URB.LCTY.UR))
 
 PreGTD$capital <- recode(PreGTD$capital, "NA=0")
 

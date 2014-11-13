@@ -16,6 +16,7 @@ WDIData <- WDI(indicator=c('EN.URB.LCTY.UR.ZS',
                               'EN.URB.MCTY.TL.ZS',
                               'SP.URB.GROW', 
                               'SP.URB.TOTL', 
+                              'SP.POP.TOTL', 
                               'SP.URB.TOTL.IN.ZS',
                               'EN.POP.DNST',
                               'EN.RUR.DNST',
@@ -26,6 +27,9 @@ WDIData <- WDI(indicator=c('EN.URB.LCTY.UR.ZS',
                     )
 WDIData <- WDIData[order(WDIData$country, WDIData$year), ]
 
+
+
+
 #We leave the World Bank codings of the indicators unchanged. Though they would be easier human-readable if we used their full
 #names, the codes are easier to google. They directly link to exact the definitions used by the World Bank. The codes stand for:
 #EN.URB.LCTY.UR.ZS = Population in the largest city (% of urban population)
@@ -33,12 +37,31 @@ WDIData <- WDIData[order(WDIData$country, WDIData$year), ]
 #EN.URB.MCTY.TL.ZS = Population in urban agglomerations of more than 1 million (% of total population)
 #SP.URB.GROW = Urban population growth (annual %)
 #SP.URB.TOTL = Urban population
-#SP.URB.TOTL.IN.ZS = Urban population (% of total
+#SP.POP.TOTL = Total population
+#SP.URB.TOTL.IN.ZS = Urban population (% of total)
 #EN.POP.DNST = Population density (people per sq. km of land area)
 #EN.RUR.DNST = Rural population density (rural population per sq. km of arable land)
 #SP.RUR.TOTL = Rural population                                                         
 #SP.RUR.TOTL.ZG = Rural population growth (annual %)                                       
 #SP.RUR.TOTL.ZS = Rural population (% of total population)
+
+#Introducing EN.URB.LCTY.UR = Population in the largest city
+WDIData["EN.URB.LCTY.UR"] <- (WDIData$SP.POP.TOTL*WDIData$EN.URB.LCTY.UR.ZS)
+
+# finding 3  maxima for each country (total Pop, Pop in Urban Cemters, Pop in largest City)
+Highs.URB.TOTL <- aggregate(as.numeric(WDIData$SP.URB.TOTL), list(country=WDIData$country),max)
+colnames(Highs.URB.TOTL)[2] <- "MAX.URB.TOTL"
+Highs.URB.MCTY <- aggregate(as.numeric(WDIData$EN.URB.MCTY), list(country=WDIData$country),max)
+colnames(Highs.URB.MCTY)[2] <- "MAX.URB.MCTY"
+Highs.URB.LCTY.UR <- aggregate(as.numeric(WDIData$EN.URB.LCTY.UR), list(country=WDIData$country),max)
+colnames(Highs.URB.LCTY.UR )[2] <- "MAX.URB.LCTY.UR"
+
+# bringing it back into the WDI Data
+WDIData <- merge(WDIData, Highs.URB.TOTL, by=("country"))
+WDIData <- merge(WDIData, Highs.URB.MCTY, by=("country"))
+WDIData <- merge(WDIData, Highs.URB.LCTY.UR, by=("country"))
+rm(Highs.URB.TOTL, Highs.URB.MCTY, Highs.URB.LCTY.UR)
+
 
 # Additional Info: We counted the amount of NAs across all dataframes.
 #> sum(is.na(WDIUrbanDat$EN.URB.LCTY.UR.ZS))
@@ -65,6 +88,8 @@ WDIData <- WDIData[order(WDIData$country, WDIData$year), ]
 #[1] 1119
 #> sum(is.na(WDIData$SP.RUR.TOTL.ZS))
 #[1] 827
+#> sum(is.na(WDIData$SP.POP.TOTL))
+#[1] 798
 
 #While for some of the variables we have pretty much complete information (or at least enough to extrapolate), 
 #it does not look that good for other variables. We decided to drag them along for the time being anyway.
