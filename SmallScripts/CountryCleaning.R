@@ -266,8 +266,7 @@ X <- GTD$country_txt
 source('SmallScripts/delete_country_special_characters.R')
 GTD$country_txt <- X
 rm(X)
-GTD2$HUMscale <- as.numeric(GTD2$HUMscale)
-GTD2 <- GTD2[order(-GTD2$HUMscale, na.last=TRUE) , ]
+
 
 
 
