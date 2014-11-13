@@ -21,7 +21,7 @@ source('SmallScripts/delete_country_special_characters.R')
 Countries <- X
 
 world.citiesUC["merge"] <- paste(Countries, Cities, sep="")
-Testframe <- GTD[1:21]
+Testframe <- GTD
 Testframe["merge"] <-data.frame(paste(GTDcountry, GTDcity, sep=""))
 
 PreGTD <- merge(Testframe, world.citiesUC, by=c("merge"), all.x=TRUE)
