@@ -96,7 +96,8 @@ GTD$PROPscale <- recode(GTD$PROPscale, "1=1000000000; 2=1000000; 3=1000; 4=0; NA
 GTD["HUMscale"] <- GTD$nkill+GTD$nwound
 GTD$HUMscale <- as.numeric(GTD$HUMscale)
 
-
+# run our cleaning code for bringing the GDT country code to World Bank levels
+source('SmallScripts/CountryCleaning.R')
 
 ###########################################
 ################ CITY DATA ################
