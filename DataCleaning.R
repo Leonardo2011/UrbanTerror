@@ -328,3 +328,6 @@ WC.UC.dist$capital[WC.UC.dist$name == "guatemalacity" &  WC.UC.dist$country  == 
 
 #remove rest
 rm(distance.UC, WCmerge, UCmerge, Zillion, Zillion.min, Zillion.fullmin, UR.WC.merger)
+
+# try to create a PreGTD
+source('PreAnalysis/createpregtd.R') 

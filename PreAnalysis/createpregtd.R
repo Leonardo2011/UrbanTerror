@@ -28,18 +28,18 @@ PreGTD <- merge(Testframe, world.citiesUC, by=c("merge"), all.x=TRUE)
 PreGTD  <- PreGTD [order(-PreGTD$HUMscale, na.last=TRUE) , ]
 
 
-TTT <- subset(PreGTD , select = c("merge", "city", "HUMscale", "name"), na.strings = c("", " "))
 
-PreGTD$iday <- NULL
-PreGTD$country <- NULL
-PreGTD$region <- NULL
-PreGTD$provstate <- NULL
-PreGTD$imonth<- NULL
-PreGTD$name<- NULL
-PreGTD$country.etc<- NULL
-PreGTD$lat<- NULL
-PreGTD$long<- NULL
-PreGTD$Region<- NULL
-PreGTD$country.etc<- NULL
-write.csv(PreGTD, file="pregtd.csv")
+
+#PreGTD$iday <- NULL
+#PreGTD$country <- NULL
+#PreGTD$region <- NULL
+#PreGTD$provstate <- NULL
+#PreGTD$imonth<- NULL
+#PreGTD$name<- NULL
+#PreGTD$country.etc<- NULL
+#PreGTD$lat<- NULL
+#PreGTD$long<- NULL
+#PreGTD$Region<- NULL
+#PreGTD$country.etc<- NULL
+#write.csv(PreGTD, file="pregtd.csv")
 rm(Testframe, t.world.cities, GTDcity, GTDcountry, X, Y)
