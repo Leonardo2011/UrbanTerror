@@ -1,5 +1,4 @@
-# put in costal megacities
-# extracted from .Rhistory
+# put in costal variable for Urban Centers *Costal Megacities
 # to append to main file
 
 ###############If not sure, add here#########################
@@ -118,10 +117,6 @@ UrbanCenters$costalMC[UrbanCenters$City == "port harcourt"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "barranquilla"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "brisbane"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "portland"] <- "1"
-
-# this is spain
-# discrepancy -> valencia (venezuela not CMC, spain is CMC)
-UrbanCenters$costalMC[UrbanCenters$City == "valencia"] <- "1" 
 UrbanCenters$costalMC[UrbanCenters$City == "rabat"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "lome"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "semarang"] <- "1"
@@ -162,7 +157,7 @@ UrbanCenters$costalMC[UrbanCenters$City == "helsinki"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "putian"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "dublin"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "kollam"] <- "1"
-UrbanCenters$costalMC[UrbanCenters$City == "jacksonville" <- "1"
+UrbanCenters$costalMC[UrbanCenters$City == "jacksonville"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "ulsan"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "haifa"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "florianopolis"] <- "1"
@@ -177,3 +172,8 @@ UrbanCenters$costalMC[UrbanCenters$City == "hamamatsu"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "port elizabeth"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "changwon"] <- "1"
 UrbanCenters$costalMC[UrbanCenters$City == "monrovia"] <- "1"
+
+
+# this is spain
+# discrepancy -> valencia (venezuela not CMC, spain is CMC)
+UrbanCenters$costalMC[UrbanCenters$City == "valencia"] <- "1" 
