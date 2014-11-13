@@ -33,12 +33,11 @@ PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, region_txt, city, pop, 
                                   EN.URB.LCTY.UR.ZS, EN.URB.MCTY, EN.URB.MCTY.TL.ZS, SP.URB.GROW, SP.URB.TOTL, 
                                   SP.URB.TOTL.IN.ZS, EN.POP.DNST, EN.RUR.DNST, SP.RUR.TOTL, SP.RUR.TOTL.ZG, SP.RUR.TOTL.ZS))
 
-<<<<<<< HEAD
-PreGTD$capital <- recode(PreGTD$capital, "NA=0")
-=======
-#> sum(is.na(PreGTD$pop))
-#[1] 
 
->>>>>>> origin/master
+PreGTD$capital <- recode(PreGTD$capital, "NA=0")
+
+# > sum(is.na(PreGTD$pop))
+#[1] 50378         @ 13.11.2014 17:45h
+
 write.csv(PreGTD, file="PreAnalysis/pregtd.csv")
-rm(Testframe, GTDcity, GTDcountry, X, Cities, Countries)
+rm(Testframe, GTDcity, GTDcountry, X, Cities, Countries, world.citiesUC)

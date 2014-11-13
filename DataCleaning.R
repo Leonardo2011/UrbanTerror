@@ -104,9 +104,8 @@ source('WDIData.R')
 source('MergeGTDWDI.R')
 
 #rename GTD back
-GTD.without.WDI <- GTD 
 GTD <- GTDWDI
-rm(GTDWDI)
+rm(GTDWDI, WDIData)
 # run our cleaning code for bringing the GDT country code to World Bank levels
 source('SmallScripts/CountryCleaning.R')
 
@@ -243,7 +242,7 @@ UrbanCenters["full name"] <- a
 UrbanCenters$City <- tolower(UrbanCenters$City)
 
 # delete whats not needed anymore
-rm(table ,URL, b, a)
+rm(UrbanLoc, table ,URL, b, a)
 
 # put in costal megacities
 UrbanCenters$costalMC=0
