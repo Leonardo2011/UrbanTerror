@@ -1,7 +1,5 @@
 #testbed to write a pre-gtd
 
-
-
 X <- GTD$city
 source('CityCleaning.R')
 source('SmallScripts/delete_country_special_characters.R')
