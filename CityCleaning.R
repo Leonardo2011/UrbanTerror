@@ -745,11 +745,11 @@ X <- tolower(X)
 
 
 
-function for distance
-distance.UC <- function(data, logA, latA, logUC, latUC){
- gdist(data[, logA], data[, latA], data[, lonUC], data[, latUC], 
-         units = "km", a = 6378137.0, b = 6356752.3142, verbose = FALSE)
- }
+#function for distance
+#distance.UC <- function(data, logA, latA, logUC, latUC){
+# gdist(data[, logA], data[, latA], data[, lonUC], data[, latUC], 
+#         units = "km", a = 6378137.0, b = 6356752.3142, verbose = FALSE)
+# }
 #YY <- GTD[which(GTD$country_txt == "india"),]
 #Y <- unique(YY$city)
 #Y<- as.character(Y)

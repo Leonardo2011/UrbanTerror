@@ -9,22 +9,22 @@ X <- GTD$country_txt
 source('SmallScripts/delete_country_special_characters.R')
 GTDcountry <- X
 
-world.cities<-WC.UC.dist
-world.cities$CityID <- NULL
+world.citiesUC<-WC.UC.dist
+world.citiesUC$CityID <- NULL
 
-X<-world.cities$name
+X<-world.citiesUC$name
 source('SmallScripts/delete_country_special_characters.R')
 Cities <- X
 
-X<-world.cities$country.etc
+X<-world.citiesUC$country.etc
 source('SmallScripts/delete_country_special_characters.R')
 Countries <- X
 
-world.cities["merge"] <- paste(Countries, Cities, sep="")
+world.citiesUC["merge"] <- paste(Countries, Cities, sep="")
 Testframe <- GTD[1:21]
 Testframe["merge"] <-data.frame(paste(GTDcountry, GTDcity, sep=""))
 
-PreGTD <- merge(Testframe, world.cities, by=c("merge"), all.x=TRUE)
+PreGTD <- merge(Testframe, world.citiesUC, by=c("merge"), all.x=TRUE)
 PreGTD  <- PreGTD [order(-PreGTD$HUMscale, na.last=TRUE) , ]
 
 

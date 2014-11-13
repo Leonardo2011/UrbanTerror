@@ -99,6 +99,14 @@ GTD$HUMscale <- as.numeric(GTD$HUMscale)
 # run our cleaning code for bringing the GDT country code to World Bank levels
 source('SmallScripts/CountryCleaning.R')
 
+# download Wold Bank counrty level data and merge over country and year
+source('WDIData.R')
+source('MergeGTDWDI.R')
+
+#rename GTD back
+GTD <- GTDWDI
+
+
 ###########################################
 ################ CITY DATA ################
 ###########################################
@@ -140,7 +148,7 @@ rm(world.cities)
 #The dataframe wrongly lists dehli as not being the capital of india, plus had a typo in seoul, which both we recode.
 world.cities2009$capital[world.cities2009$name == "delhi" & world.cities2009$country.etc == "India"] <- "1"
 world.cities2009$name[world.cities2009$name == "soul" & world.cities2009$country.etc == "Korea South"] <- "seoul"
-world.cities2009$name[WC.UC.dist$name == "bombay" &  WC.UC.dist$country  == "India"] <- "mumbai"
+world.cities2009$name[world.cities2009$name == "bombay" &  world.cities2009$country.etc  == "India"] <- "mumbai"
 
 # remane some countries so they match the first city dataset better
 world.cities2009$country.etc[world.cities2009$country.etc == "Russia"] <- "Russian Federation"
