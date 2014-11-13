@@ -1,26 +1,37 @@
 #testbed to write a pre-gtd
+
+
+
 X <- GTD$city
 source('CityCleaning.R')
-X <-gsub("NA", NA, X)
+source('SmallScripts/delete_country_special_characters.R')
 GTDcity <- X
-Y <- gsub(" ", "", GTD$country_txt)
-Y <- tolower(Y)
-Y <-gsub("\\,", "",Y, ignore.case=TRUE)
-GTDcountry <- Y
-t.world.cities <-world.cities
-X<-t.world.cities$name
-X <- gsub("\\,.*","",X)
-X <- gsub("\\-","",X)
-X <- gsub("\\'","",X)
-X <- gsub("\\-","",X)
-t.world.cities$country.etc<- gsub("\\'","",t.world.cities$country.etc)
-t.world.cities$name<-X
+
+X <- GTD$country_txt
+source('SmallScripts/delete_country_special_characters.R')
+GTDcountry <- X
+
+world.cities<-WC.UC.dist
 world.cities$CityID <- NULL
-Testframe <- GTD[1|2|9|11:20]
+
+X<-world.cities$name
+source('SmallScripts/delete_country_special_characters.R')
+Cities <- X
+
+X<-world.cities$country.etc
+source('SmallScripts/delete_country_special_characters.R')
+Countries <- X
+
+world.cities["merge"] <- paste(Countries, Cities, sep="")
+Testframe <- GTD[1:21]
 Testframe["merge"] <-data.frame(paste(GTDcountry, GTDcity, sep=""))
-WC.UC.dist$merge <- paste(WC.UC.dist$country.etc, WC.UC.dist$name, sep="")
-PreGTD <- merge(Testframe, WC.UC.dist, by=c("merge"), all.x=TRUE)
-PreGTD$merge <- NULL
+
+PreGTD <- merge(Testframe, world.cities, by=c("merge"), all.x=TRUE)
+PreGTD  <- PreGTD [order(-PreGTD$HUMscale, na.last=TRUE) , ]
+
+
+TTT <- subset(PreGTD , select = c("merge", "city", "HUMscale", "name"), na.strings = c("", " "))
+
 PreGTD$iday <- NULL
 PreGTD$country <- NULL
 PreGTD$region <- NULL

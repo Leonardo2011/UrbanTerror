@@ -139,6 +139,7 @@ rm(world.cities)
 #The dataframe wrongly lists dehli as not being the capital of india, plus had a typo in seoul, which both we recode.
 world.cities2009$capital[world.cities2009$name == "delhi" & world.cities2009$country.etc == "India"] <- "1"
 world.cities2009$name[world.cities2009$name == "soul" & world.cities2009$country.etc == "Korea South"] <- "seoul"
+world.cities2009$name[WC.UC.dist$name == "bombay" &  WC.UC.dist$country  == "India"] <- "mumbai"
 
 # remane some countries so they match the first city dataset better
 world.cities2009$country.etc[world.cities2009$country.etc == "Russia"] <- "Russian Federation"
@@ -202,6 +203,8 @@ URL <- 'http://en.wikipedia.org/w/index.php?title=List_of_urban_areas_by_populat
 table <- readHTMLTable(URL, encoding = "UTF-16")
 UrbanCenters <- table [[2]]
 UrbanCenters$City <- as.character(UrbanCenters$City)
+colnames(UrbanCenters)[5] <- "Area"
+colnames(UrbanCenters)[6] <- "Density"
 
 #clean up the Urban Centers name in order to allow google.maps API to find them
 UrbanCenters$City <- gsub("\\xc3\xb3","o", perl=TRUE, UrbanCenters$City)
@@ -274,15 +277,8 @@ UrbanCenters$costalMC[UrbanCenters$City == "sao paolo"] <- "1"
 ############################################
 # Merging Urban Centers with world.cities with respective distance of each City to closes Urban Censter
 
-#function for distance
-distance.UC <- function(data, logA, latA, logUC, latUC){
-  gdist(data[, logA], data[, latA], data[, lonUC], data[, latUC], 
-        units = "km", a = 6378137.0, b = 6356752.3142, verbose = FALSE)
-}
-
 # renaming colums and select sub-sets for merging over fake variable to create Matrix City X Urban (~ 60.000 Cities X ~ 500 urban Centers) 
-colnames(UrbanCenters)[5] <- "Area"
-colnames(UrbanCenters)[6] <- "Density"
+
 UCmerge <- subset(UrbanCenters, select = c("lon", "lat", "full name", "Population", "Area", "Density", "costalMC"))
 UCmerge$fake=1
 WCmerge <-subset(world.cities, select = c("long", "lat"))
@@ -295,21 +291,31 @@ Zillion["DISTkm"] <- gdist(Zillion$lon, Zillion$lat.x, Zillion$long, Zillion$lat
 
 # reduce to only the closest urban center for each and every city, 30 million distances to the ~ 60.000 minimal ones
 Zillion.min <- aggregate(DISTkm ~ CityID, Zillion, function(x) min(x))
+
 Zillion.fullmin <- merge(Zillion.min, Zillion, by=c("CityID", "DISTkm"))
-Zillion.fullmin["CityID"] <- Zillion.fullmin$"CityID"
 Zillion.fullmin["Closest.Urban.Center"] <- Zillion.fullmin$"full name"
 Zillion.fullmin["CUC.dist.km"] <- Zillion.fullmin$"DISTkm"
 
 # bring information on closest urban center and the respective distance back into  'world.cities'
 UR.WC.merger <- subset(Zillion.fullmin, select = c("CityID", "Closest.Urban.Center", "CUC.dist.km", "Population", "Area", "Density", "costalMC"))
 
-# new dataset WC.UCdist! which stands for 
+# new dataset WC.UCdist! which stands for a merged dataset including distance and estimate if the respective city is part of an urban center
 world.cities["CityID"] <-rownames(world.cities)
 WC.UC.dist <- merge(world.cities, UR.WC.merger, by="CityID")
-WC.UC.dist["attack.on.urban.center"] <- (WC.UC.dist$CUC.dist.km<=(20+(2*(((WC.UC.dist$Area)/pi)**0.5))))
-WC.UC.dist["attack.on.urban.centers.environment"] <- (WC.UC.dist$CUC.dist.km<=(50+(3*(((WC.UC.dist$Area)/pi)**0.5))))
+WC.UC.dist$CUC.dist.km <- as.numeric(WC.UC.dist$CUC.dist.km) 
+WC.UC.dist$Area <- as.numeric(WC.UC.dist$Area) 
+WC.UC.dist$capital <- as.numeric(WC.UC.dist$capital)
+
+
+WC.UC.dist["attack.on.urban.center"] <- (WC.UC.dist$CUC.dist.km <= (20+(2*(((WC.UC.dist$Area)/pi)**0.5))))
+WC.UC.dist["attack.on.urban.centers.environment"] <- (WC.UC.dist$CUC.dist.km<=(100+(3*(((WC.UC.dist$Area)/pi)**0.5))))
+WC.UC.dist <- WC.UC.dist[order(-WC.UC.dist$pop, na.last=TRUE) , ]
+
+# minor repairs
+WC.UC.dist$capital[WC.UC.dist$name == "newdelhi" &  WC.UC.dist$country  == "india"] <- 1
+WC.UC.dist$capital[WC.UC.dist$name == "peking" &  WC.UC.dist$country  == "china"] <- 1
+WC.UC.dist$capital[WC.UC.dist$name == "beirut" &  WC.UC.dist$country  == "lebanon"] <- 1
+WC.UC.dist$capital[WC.UC.dist$name == "guatemalacity" &  WC.UC.dist$country  == "guatemala"] <- 1
 
 #remove rest
 rm(distance.UC, WCmerge, UCmerge, Zillion, Zillion.min, Zillion.fullmin, UR.WC.merger)
-
-WC.UC.dist <- WC.UC.dist[order(-WC.UC.dist$pop, na.last=TRUE) , ]
