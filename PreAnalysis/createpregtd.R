@@ -33,6 +33,6 @@ PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, region_txt, city, pop,c
                                   EN.URB.LCTY.UR.ZS, EN.URB.MCTY, EN.URB.MCTY.TL.ZS, SP.URB.GROW, SP.URB.TOTL, 
                                   SP.URB.TOTL.IN.ZS, EN.POP.DNST, EN.RUR.DNST, SP.RUR.TOTL, SP.RUR.TOTL.ZG, SP.RUR.TOTL.ZS))
 
-
+PreGTD$capital <- recode(PreGTD$capital, "NA=0")
 write.csv(PreGTD, file="PreAnalysis/pregtd.csv")
 rm(Testframe, GTDcity, GTDcountry, X, Cities, Countries)

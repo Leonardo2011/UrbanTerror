@@ -100,7 +100,7 @@ GTD$HUMscale <- as.numeric(GTD$HUMscale)
 
 
 # download Wold Bank counrty level data and merge over country and year
-#source('WDIData.R')
+source('WDIData.R')
 source('MergeGTDWDI.R')
 
 #rename GTD back
