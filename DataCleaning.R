@@ -96,15 +96,16 @@ GTD$PROPscale <- recode(GTD$PROPscale, "1=1000000000; 2=1000000; 3=1000; 4=0; NA
 GTD["HUMscale"] <- GTD$nkill+GTD$nwound
 GTD$HUMscale <- as.numeric(GTD$HUMscale)
 
-# run our cleaning code for bringing the GDT country code to World Bank levels
-source('SmallScripts/CountryCleaning.R')
-
 # download Wold Bank counrty level data and merge over country and year
 source('WDIData.R')
 source('MergeGTDWDI.R')
 
 #rename GTD back
+GTD.without.WDI <- GTD 
 GTD <- GTDWDI
+
+# run our cleaning code for bringing the GDT country code to World Bank levels
+source('SmallScripts/CountryCleaning.R')
 
 
 ###########################################
@@ -216,14 +217,7 @@ colnames(UrbanCenters)[5] <- "Area"
 colnames(UrbanCenters)[6] <- "Density"
 
 #clean up the Urban Centers name in order to allow google.maps API to find them
-UrbanCenters$City <- gsub("\\xc3\xb3","o", perl=TRUE, UrbanCenters$City)
-UrbanCenters$City <- gsub("\\(.*","", UrbanCenters$City)
-UrbanCenters$City <- gsub("\\[.+?\\]","", UrbanCenters$City)
-UrbanCenters$City <- gsub("\\(.+?\\)","", UrbanCenters$City)
-UrbanCenters$City <- gsub("[[:digit:]]", "", UrbanCenters$City)
-UrbanCenters$City <- gsub("\\xe2\x80\x93.*","", perl=TRUE, UrbanCenters$City)
-UrbanCenters$City <- gsub("Region", "", UrbanCenters$City)
-UrbanCenters$City <- gsub("Greater ", "", UrbanCenters$City)
+source('SmallScripts/UC_Cleaning.R')
 
 # put together a string with "Country, City" to allow google.maps API to find them
 b <-data.frame(paste(UrbanCenters$Country, UrbanCenters$City, sep=", "), row.names = NULL)
@@ -242,11 +236,7 @@ UrbanCenters["full name"] <- a
 UrbanCenters$City <- tolower(UrbanCenters$City)
 
 # delete whats not needed anymore
-rm(UrbanLoc)
-rm(table)
-rm(URL)
-rm(b)
-rm(a)
+rm(UrbanLoc, table ,URL, b, a)
 
 # put in costal megacities
 UrbanCenters$costalMC=0
@@ -288,7 +278,7 @@ UrbanCenters$costalMC[UrbanCenters$City == "sao paolo"] <- "1"
 
 # renaming colums and select sub-sets for merging over fake variable to create Matrix City X Urban (~ 60.000 Cities X ~ 500 urban Centers) 
 
-UCmerge <- subset(UrbanCenters, select = c("lon", "lat", "full name", "Population", "Area", "Density", "costalMC"))
+UCmerge <- subset(UrbanCenters, select = c("lon", "lat", "full name", "Area"))
 UCmerge$fake=1
 WCmerge <-subset(world.cities, select = c("long", "lat"))
 WCmerge["CityID"] <- rownames(world.cities)
@@ -306,11 +296,11 @@ Zillion.fullmin["Closest.Urban.Center"] <- Zillion.fullmin$"full name"
 Zillion.fullmin["CUC.dist.km"] <- Zillion.fullmin$"DISTkm"
 
 # bring information on closest urban center and the respective distance back into  'world.cities'
-UR.WC.merger <- subset(Zillion.fullmin, select = c("CityID", "Closest.Urban.Center", "CUC.dist.km", "Population", "Area", "Density", "costalMC"))
+UC.WC.merger <- subset(Zillion.fullmin, select = c("CityID", "Closest.Urban.Center", "CUC.dist.km", "Area"))
 
 # new dataset WC.UCdist! which stands for a merged dataset including distance and estimate if the respective city is part of an urban center
 world.cities["CityID"] <-rownames(world.cities)
-WC.UC.dist <- merge(world.cities, UR.WC.merger, by="CityID")
+WC.UC.dist <- merge(world.cities, UC.WC.merger, by="CityID")
 WC.UC.dist$CUC.dist.km <- as.numeric(WC.UC.dist$CUC.dist.km) 
 WC.UC.dist$Area <- as.numeric(WC.UC.dist$Area) 
 WC.UC.dist$capital <- as.numeric(WC.UC.dist$capital)
@@ -327,7 +317,7 @@ WC.UC.dist$capital[WC.UC.dist$name == "beirut" &  WC.UC.dist$country  == "lebano
 WC.UC.dist$capital[WC.UC.dist$name == "guatemalacity" &  WC.UC.dist$country  == "guatemala"] <- 1
 
 #remove rest
-rm(distance.UC, WCmerge, UCmerge, Zillion, Zillion.min, Zillion.fullmin, UR.WC.merger)
+rm(distance.UC, WCmerge, UCmerge, Zillion, Zillion.min, Zillion.fullmin, UC.WC.merger)
 
 # try to create a PreGTD
 source('PreAnalysis/createpregtd.R') 

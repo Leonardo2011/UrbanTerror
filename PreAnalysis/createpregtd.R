@@ -42,4 +42,4 @@ PreGTD  <- PreGTD [order(-PreGTD$HUMscale, na.last=TRUE) , ]
 #PreGTD$Region<- NULL
 #PreGTD$country.etc<- NULL
 #write.csv(PreGTD, file="pregtd.csv")
-rm(Testframe, t.world.cities, GTDcity, GTDcountry, X, Y)
+rm(Testframe, t.world.cities, GTDcity, GTDcountry, X, Y, Cities, Countries)
