@@ -94,13 +94,13 @@ GTD$PROPscale <- recode(GTD$PROPscale, "1=1000000000; 2=1000000; 3=1000; 4=0; NA
 # We introduce our third scale: "Extent of Human Damage (HUMscale)" which adds wounded and killed /and write it back into the GTD
 
 GTD$nkill <- recode(GTD$nkill, "NA=0")
-GTD$nkill <- recode(GTD$nwound, "NA=0")
+GTD$nwound <- recode(GTD$nwound, "NA=0")
 GTD["HUMscale"] <- GTD$nkill+GTD$nwound
 GTD$HUMscale <- as.numeric(GTD$HUMscale)
 
 
 # download Wold Bank counrty level data and merge over country and year
-source('WDIData.R')
+#source('WDIData.R')
 source('MergeGTDWDI.R')
 
 #rename GTD back
@@ -153,7 +153,7 @@ rm(world.cities)
 world.cities2009$capital[world.cities2009$name == "delhi" & world.cities2009$country.etc == "India"] <- "1"
 world.cities2009$name[world.cities2009$name == "soul" & world.cities2009$country.etc == "Korea South"] <- "seoul"
 world.cities2009$name[world.cities2009$name == "bombay" &  world.cities2009$country.etc  == "India"] <- "mumbai"
-world.cities2009$name[world.cities2009$name == "newyork" &  world.cities2009$country.etc  == "USA "] <- "newyorkcity"
+world.cities2009$name[world.cities2009$name == "new york" &  world.cities2009$country.etc  == "USA "] <- "newyorkcity"
 
 
 # remane some countries so they match the first city dataset better
@@ -232,7 +232,9 @@ b$loc <- gsub("^..", "", b$loc)
 a<-(b$loc)
 
 # look up lon/lat data via google maps :: the geocode function of the package maps
-UrbanLoc <- geocode(a, output = c("latlon", "latlona", "more", "all"),messaging = FALSE, sensor = FALSE, override_limit = FALSE)
+#!!  as this process is time consuming, we saved the result as csv for the moment !!
+#UrbanLoc <- geocode(a, output = c("latlon", "latlona", "more", "all"),messaging = FALSE, sensor = FALSE, override_limit = FALSE)
+UrbanLoc <- read.csv("City Data/UrbanLoc.csv")
 
 # bring the geo data back in the original data frame of urban centers
 UrbanCenters["lat"] <- UrbanLoc$lat
@@ -241,7 +243,7 @@ UrbanCenters["full name"] <- a
 UrbanCenters$City <- tolower(UrbanCenters$City)
 
 # delete whats not needed anymore
-rm(UrbanLoc, table ,URL, b, a)
+rm(table ,URL, b, a)
 
 # put in costal megacities
 UrbanCenters$costalMC=0
@@ -283,7 +285,7 @@ UrbanCenters$costalMC[UrbanCenters$City == "sao paolo"] <- "1"
 
 # renaming colums and select sub-sets for merging over fake variable to create Matrix City X Urban (~ 60.000 Cities X ~ 500 urban Centers) 
 
-UCmerge <- subset(UrbanCenters, select = c("lon", "lat", "full name", "Area"))
+UCmerge <- subset(UrbanCenters, select = c("lon", "lat", "full name","Population", "Area"))
 UCmerge$fake=1
 WCmerge <-subset(world.cities, select = c("long", "lat"))
 WCmerge["CityID"] <- rownames(world.cities)
@@ -312,7 +314,7 @@ WC.UC.dist$capital <- as.numeric(WC.UC.dist$capital)
 
 
 WC.UC.dist["part.of.urban.center"] <- (WC.UC.dist$CUC.dist.km <= (20+(2*(((WC.UC.dist$Area)/pi)**0.5))))
-WC.UC.dist["in.urban.centers.environment"] <- (WC.UC.dist$CUC.dist.km<=(100+(3*(((WC.UC.dist$Area)/pi)**0.5))))
+WC.UC.dist["in.urban.centers.environment"] <- (WC.UC.dist$CUC.dist.km<=(40+(3*(((WC.UC.dist$Area)/pi)**0.5))))
 WC.UC.dist <- WC.UC.dist[order(-WC.UC.dist$pop, na.last=TRUE) , ]
 
 # minor repairs
@@ -322,7 +324,7 @@ WC.UC.dist$capital[WC.UC.dist$name == "beirut" &  WC.UC.dist$country  == "lebano
 WC.UC.dist$capital[WC.UC.dist$name == "guatemalacity" &  WC.UC.dist$country  == "guatemala"] <- 1
 
 #remove rest
-rm(distance.UC, WCmerge, UCmerge, Zillion, Zillion.min, Zillion.fullmin, UC.WC.merger)
+rm(WCmerge, UCmerge, Zillion, Zillion.min, Zillion.fullmin, UC.WC.merger)
 
 # try to create a PreGTD
 source('PreAnalysis/createpregtd.R') 

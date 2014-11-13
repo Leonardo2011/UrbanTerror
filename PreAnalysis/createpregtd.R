@@ -25,7 +25,7 @@ Testframe <- GTD
 Testframe["merge"] <-data.frame(paste(GTDcountry, GTDcity, sep=""))
 
 PreGTD <- merge(Testframe, world.citiesUC, by=c("merge"), all.x=TRUE)
-PreGTD  <- PreGTD [order(-PreGTD$nkill, na.last=TRUE) , ]
+PreGTD  <- PreGTD [order(-PreGTD$HUMscale, na.last=TRUE) , ]
 
 
 
@@ -42,4 +42,4 @@ PreGTD  <- PreGTD [order(-PreGTD$nkill, na.last=TRUE) , ]
 #PreGTD$Region<- NULL
 #PreGTD$country.etc<- NULL
 #write.csv(PreGTD, file="pregtd.csv")
-rm(Testframe, t.world.cities, GTDcity, GTDcountry, X, Y, Cities, Countries)
+rm(Testframe, GTDcity, GTDcountry, X, Cities, Countries)

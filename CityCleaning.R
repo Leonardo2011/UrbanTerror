@@ -730,6 +730,7 @@ X <- gsub("\\-","",X)
 X <- gsub("\\'","",X)
 X <- gsub("\\-","",X)
 X <- gsub("\\\\.*", "", X)
+X <- gsub("\\/.*", "", X)
 X <- gsub("\\[.+?\\]","", X)
 X <- gsub("\\(.+?\\)","", X)
 #X <- gsub("[:digit:]", "", X) # messed with the names
