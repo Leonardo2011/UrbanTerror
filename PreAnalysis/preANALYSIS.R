@@ -35,7 +35,9 @@ RegGTD["year"] <- as.numeric(PreGTD$iyear-1970)
 RegGTD["city.population_2013"] <- PreGTD$pop
 RegGTD["city.population_at.attack.time_liniear.grown"] <- ((PreGTD$pop)*(PreGTD$SP.URB.TOTL)/(PreGTD$MAX.URB.TOTL))
 RegGTD["relative.city.population_to.largest.city" ] <- (PreGTD$pop*PreGTD$SP.URB.TOTL/PreGTD$MAX.URB.TOTL/
-                                                          ((PreGTD$SP.URB.TOTL+PreGTD$SP.RUR.TOTL)*(100/PreGTD$EN.URB.LCTY.UR.ZS))
+                                                          ((PreGTD$SP.URB.TOTL+PreGTD$SP.RUR.TOTL)*(100/PreGTD$EN.URB.LCTY.UR.ZS)))
+
+RegGTD$relative.city.population_to.largest.city[is.na(RegGTD$relative.city.population_to.largest.city)] <- 0
 
 # test für eine lineare regression
 Linear1 <- lm((relative.city.population_to.largest.city*100) ~ year, data = RegGTD)
