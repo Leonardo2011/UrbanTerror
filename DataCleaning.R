@@ -1,23 +1,19 @@
-### MPP-E1180: Introduction to Collaborative Social Science Data Analysis
+# MPP-E1180: Introduction to Collaborative Social Science Data Analysis
 ### Fall 2014
 ### Instructor: Christopher Gandrud
 
-#######################################
-#######################################
-####### URBAN TERROR ##################
-#######################################
-###### Part 1: Data   #################
-#######################################
-#Lukas B Cameron R Sascha S############
-#######################################
-#######################################
+############################
+####### URBAN TERROR #######
+############################
+###### Part 1: Data   ######
+############################
+#Lukas B Cameron R Sascha S#
+############################
+###### Cleaning Data  ######
+############################
 
-########################################################################################
-#########################  1.1. Package Installation  ##################################
-########################################################################################
 
-#Loading required and dependent R packages using @stevenworthington's ipak.R gist from 
-#https://gist.github.com/stevenworthington/3178163.
+#Loading R packages using @stevenworthington's ipak.R gist from https://gist.github.com/stevenworthington/3178163.
 
 # ipak function: install and load multiple R packages.
 # check to see if packages are installed. Install them if they are not, then load them into the R session.
@@ -29,29 +25,35 @@ ipak <- function(pkg){
   sapply(pkg, require, character.only = TRUE)
 }
 
-# Put all required packages in here.
+# usage
 packages <- c("foreign", "car", "RCurl", "ggplot2", "WDI", "httr", "iterators", "dplyr", "plyr",
               "XML", "maps", "ggmap", "Imap", "geosphere", "maptools", "rgeos", "foreach")
 ipak(packages)
 rm(packages)
 rm(ipak)
 
+########################################################################################
+########################################################################################
+############################   GATHERING  DATA    ######################################
+########################################################################################
+########################################################################################
 
-########################################################################################
-##########################  1.2. GATHERING  DATA  ######################################
-########################################################################################
+
 
 ############################################
 ###### The Global Terrorism Database  ######
 ############################################
 
+
+############################################
 #Load the Global Terrorism Database (GTD). It is open souce and can be downloaded after registration at 
-#http://www.start.umd.edu/gtd/contact/
+# http://www.start.umd.edu/gtd/contact/
 
 rawGTD <- read.csv("Terror Data/globalterrorismdb_0814dist.csv", header=TRUE)
 
-#The GTD contains observations on over 120k Terrorist attacks on more than 120 variables.  
-#We subset the GTD to only that variables useful for our analysis. 
+
+#The (GTD) contains over a 120k observations on more than 120 variables. We don't need them all. 
+#We therefore filter the database to make it fit our needs, erasing over a 100 variables. 
 #We only want to look at successfull terror attacks and include basic data on time, location and target.
 
 GTD <- subset(rawGTD, select = c(eventid, iyear, imonth, iday, country, country_txt, region, provstate, region_txt, city, attacktype1, targtype1, targsubtype1,
@@ -85,17 +87,17 @@ GTD["PROPscale"] <- GTD$propextent
 GTD$PROPscale <- as.numeric(GTD$PROPscale)
 
 #Bring the values to the $ values coded in the originally coded categories. 
-GTD$PROPscale <- recode(GTD$PROPscale, "1=1000000000; 2=1000000; 3=1000; 4=0; NA=NA")
+GTD$PROPscale <- recode(GTD$PROPscale, "1=1000000000; 2=1000000; 3=1000; 4=0; NA=0")
 
 
 ############################################
 # We introduce our third scale: "Extent of Human Damage (HUMscale)" which adds wounded and killed /and write it back into the GTD
 
+GTD$nkill <- recode(GTD$nkill, "NA=0")
+GTD$nwound <- recode(GTD$nwound, "NA=0")
 GTD["HUMscale"] <- GTD$nkill+GTD$nwound
 GTD$HUMscale <- as.numeric(GTD$HUMscale)
 
-# run our cleaning code for bringing the GDT country code to World Bank levels
-source('SmallScripts/CountryCleaning.R')
 
 # download Wold Bank counrty level data and merge over country and year
 source('WDIData.R')
@@ -103,6 +105,9 @@ source('MergeGTDWDI.R')
 
 #rename GTD back
 GTD <- GTDWDI
+rm(GTDWDI, WDIData)
+# run our cleaning code for bringing the GDT country code to World Bank levels
+source('SmallScripts/CountryCleaning.R')
 
 
 ###########################################
@@ -147,6 +152,8 @@ rm(world.cities)
 world.cities2009$capital[world.cities2009$name == "delhi" & world.cities2009$country.etc == "India"] <- "1"
 world.cities2009$name[world.cities2009$name == "soul" & world.cities2009$country.etc == "Korea South"] <- "seoul"
 world.cities2009$name[world.cities2009$name == "bombay" &  world.cities2009$country.etc  == "India"] <- "mumbai"
+world.cities2009$name[world.cities2009$name == "new york" &  world.cities2009$country.etc  == "USA "] <- "newyorkcity"
+
 
 # remane some countries so they match the first city dataset better
 world.cities2009$country.etc[world.cities2009$country.etc == "Russia"] <- "Russian Federation"
@@ -214,14 +221,7 @@ colnames(UrbanCenters)[5] <- "Area"
 colnames(UrbanCenters)[6] <- "Density"
 
 #clean up the Urban Centers name in order to allow google.maps API to find them
-UrbanCenters$City <- gsub("\\xc3\xb3","o", perl=TRUE, UrbanCenters$City)
-UrbanCenters$City <- gsub("\\(.*","", UrbanCenters$City)
-UrbanCenters$City <- gsub("\\[.+?\\]","", UrbanCenters$City)
-UrbanCenters$City <- gsub("\\(.+?\\)","", UrbanCenters$City)
-UrbanCenters$City <- gsub("[[:digit:]]", "", UrbanCenters$City)
-UrbanCenters$City <- gsub("\\xe2\x80\x93.*","", perl=TRUE, UrbanCenters$City)
-UrbanCenters$City <- gsub("Region", "", UrbanCenters$City)
-UrbanCenters$City <- gsub("Greater ", "", UrbanCenters$City)
+source('SmallScripts/UC_Cleaning.R')
 
 # put together a string with "Country, City" to allow google.maps API to find them
 b <-data.frame(paste(UrbanCenters$Country, UrbanCenters$City, sep=", "), row.names = NULL)
@@ -231,7 +231,9 @@ b$loc <- gsub("^..", "", b$loc)
 a<-(b$loc)
 
 # look up lon/lat data via google maps :: the geocode function of the package maps
-UrbanLoc <- geocode(a, output = c("latlon", "latlona", "more", "all"),messaging = FALSE, sensor = FALSE, override_limit = FALSE)
+#!!  as this process is time consuming, we saved the result as csv for the moment !!
+#UrbanLoc <- geocode(a, output = c("latlon", "latlona", "more", "all"),messaging = FALSE, sensor = FALSE, override_limit = FALSE)
+UrbanLoc <- read.csv("City Data/UrbanLoc.csv")
 
 # bring the geo data back in the original data frame of urban centers
 UrbanCenters["lat"] <- UrbanLoc$lat
@@ -240,40 +242,16 @@ UrbanCenters["full name"] <- a
 UrbanCenters$City <- tolower(UrbanCenters$City)
 
 # delete whats not needed anymore
-rm(UrbanLoc)
-rm(table)
-rm(URL)
-rm(b)
-rm(a)
+rm(UrbanLoc, table ,URL, b, a)
 
 # put in costal megacities
-UrbanCenters$costalMC=0
-UrbanCenters$costalMC[UrbanCenters$City == "tokyo"] <- "1"
-UrbanCenters$costalMC[UrbanCenters$City == "jakarta"] <- "1"
-UrbanCenters$costalMC[UrbanCenters$City == "seoul"] <- "1"
-UrbanCenters$costalMC[UrbanCenters$City == "shanghai"] <- "1"
-UrbanCenters$costalMC[UrbanCenters$City == "manila"] <- "1"
-UrbanCenters$costalMC[UrbanCenters$City == "karachi"] <- "1"
-UrbanCenters$costalMC[UrbanCenters$City == "new york city"] <- "1"
-UrbanCenters$costalMC[UrbanCenters$City == "sao paolo"] <- "1"
-
-
-
-
-############################################
-############# World Bank Data  #############
-############################################
-
-
-############################################
-#Load the World Bank Data on the nominal Urban Population 
-#WB_Urban_Pop = WDI(indicator='SP.URB.TOTL', country='all', start=1970, end=2013)
+source('SmallScripts/coastalcities.R')
 
 
 
 ########################################################################################
 ########################################################################################
-############################   MERGING  DATA    ########################################
+##########################   MERGING  CITY DATA    #####################################
 ########################################################################################
 ########################################################################################
 
@@ -286,7 +264,7 @@ UrbanCenters$costalMC[UrbanCenters$City == "sao paolo"] <- "1"
 
 # renaming colums and select sub-sets for merging over fake variable to create Matrix City X Urban (~ 60.000 Cities X ~ 500 urban Centers) 
 
-UCmerge <- subset(UrbanCenters, select = c("lon", "lat", "full name", "Population", "Area", "Density", "costalMC"))
+UCmerge <- subset(UrbanCenters, select = c("lon", "lat", "full name","Population", "Area"))
 UCmerge$fake=1
 WCmerge <-subset(world.cities, select = c("long", "lat"))
 WCmerge["CityID"] <- rownames(world.cities)
@@ -304,18 +282,18 @@ Zillion.fullmin["Closest.Urban.Center"] <- Zillion.fullmin$"full name"
 Zillion.fullmin["CUC.dist.km"] <- Zillion.fullmin$"DISTkm"
 
 # bring information on closest urban center and the respective distance back into  'world.cities'
-UR.WC.merger <- subset(Zillion.fullmin, select = c("CityID", "Closest.Urban.Center", "CUC.dist.km", "Population", "Area", "Density", "costalMC"))
+UC.WC.merger <- subset(Zillion.fullmin, select = c("CityID", "Closest.Urban.Center", "CUC.dist.km", "Area"))
 
 # new dataset WC.UCdist! which stands for a merged dataset including distance and estimate if the respective city is part of an urban center
 world.cities["CityID"] <-rownames(world.cities)
-WC.UC.dist <- merge(world.cities, UR.WC.merger, by="CityID")
+WC.UC.dist <- merge(world.cities, UC.WC.merger, by="CityID")
 WC.UC.dist$CUC.dist.km <- as.numeric(WC.UC.dist$CUC.dist.km) 
 WC.UC.dist$Area <- as.numeric(WC.UC.dist$Area) 
 WC.UC.dist$capital <- as.numeric(WC.UC.dist$capital)
 
 
-WC.UC.dist["attack.on.urban.center"] <- (WC.UC.dist$CUC.dist.km <= (20+(2*(((WC.UC.dist$Area)/pi)**0.5))))
-WC.UC.dist["attack.on.urban.centers.environment"] <- (WC.UC.dist$CUC.dist.km<=(100+(3*(((WC.UC.dist$Area)/pi)**0.5))))
+WC.UC.dist["part.of.urban.center"] <- (WC.UC.dist$CUC.dist.km <= (20+(2*(((WC.UC.dist$Area)/pi)**0.5))))
+WC.UC.dist["in.urban.centers.environment"] <- (WC.UC.dist$CUC.dist.km<=(40+(3*(((WC.UC.dist$Area)/pi)**0.5))))
 WC.UC.dist <- WC.UC.dist[order(-WC.UC.dist$pop, na.last=TRUE) , ]
 
 # minor repairs
@@ -325,7 +303,7 @@ WC.UC.dist$capital[WC.UC.dist$name == "beirut" &  WC.UC.dist$country  == "lebano
 WC.UC.dist$capital[WC.UC.dist$name == "guatemalacity" &  WC.UC.dist$country  == "guatemala"] <- 1
 
 #remove rest
-rm(distance.UC, WCmerge, UCmerge, Zillion, Zillion.min, Zillion.fullmin, UR.WC.merger)
+rm(WCmerge, UCmerge, Zillion, Zillion.min, Zillion.fullmin, UC.WC.merger)
 
 # try to create a PreGTD
 source('PreAnalysis/createpregtd.R') 
