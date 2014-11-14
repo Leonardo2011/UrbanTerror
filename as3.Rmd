@@ -1,0 +1,47 @@
+---
+title: "A Turn Toward Urban Attacks? Descriptive Evidence from the GTD"
+author: "Cameron Reed, Sascha Schuster, Lukas Bretzinger"
+date: "November 14, 2014"
+output: html_document
+---
+
+
+```{r, echo=FALSE}
+#Start up PreGTD
+
+ipak <- function(pkg){
+  new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+  if (length(new.pkg))
+    install.packages(new.pkg, dependencies = TRUE)
+  sapply(pkg, require, character.only = TRUE)
+}
+
+# usage
+packages <- c("foreign", "car", "RCurl", "ggplot2", "WDI", "httr", "iterators", "dplyr", "plyr",
+              "XML", "maps", "ggmap", "Imap", "geosphere", "maptools", "rgeos", "foreach")
+ipak(packages)
+rm(packages)
+rm(ipak)
+
+#download a limited GTD we created for this assignment
+PreGTD_in_Memory <- getURL("https://rawgit.com/LBRETZIN/UrbanTerror/master/PreAnalysis/pregtd.csv", ssl.verifypeer=0L, followlocation=1L)
+writeLines(PreGTD_in_Memory,'Pre.GTD.csv')
+rm(PreGTD_in_Memory)
+
+#Load the Pre-Analysis Global Terrorism Database
+PreGTD <- read.csv("Pre.GTD.csv", header=TRUE)
+PreGTD <-PreGTD[order(-PreGTD$eventid, na.last=TRUE) , ]
+PreGTD$X <- NULL
+
+# make numeric what we need
+PreGTD$EN.URB.LCTY.UR.ZS <- as.numeric(PreGTD$EN.URB.LCTY.UR.ZS)
+PreGTD$SP.URB.TOTL <- as.numeric(PreGTD$SP.URB.TOTL)
+PreGTD$SP.RUR.TOTL <- as.numeric(PreGTD$SP.RUR.TOTL)
+PreGTD$MAX.URB.TOTL <- as.numeric(PreGTD$MAX.URB.TOTL)
+PreGTD$pop <- as.numeric(PreGTD$pop)
+```
+
+```{r}
+library(plyr)
+count(PreGTD, c("iyear", "region_txt"))
+```
