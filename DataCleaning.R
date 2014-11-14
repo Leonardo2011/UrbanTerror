@@ -56,7 +56,8 @@ rawGTD <- read.csv("Terror Data/globalterrorismdb_0814dist.csv", header=TRUE)
 #We therefore filter the database to make it fit our needs, erasing over a 100 variables. 
 #We only want to look at successfull terror attacks and include basic data on time, location and target.
 
-GTD <- subset(rawGTD, select = c(eventid, iyear, imonth, iday, country, country_txt, region, provstate, region_txt, city, attacktype1, targtype1, targsubtype1,
+GTD <- subset(rawGTD, select = c(eventid, iyear, imonth, iday, country, country_txt, region, provstate, 
+                                 region_txt, city, attacktype1, targtype1, targsubtype1,
                                 weaptype1, weapsubtype1, propextent, nkill, nwound), 
                                 iyear >= 1970 & success == 1, na.strings = c("", " "))
 rm(rawGTD)
@@ -91,13 +92,12 @@ GTD$PROPscale <- recode(GTD$PROPscale, "1=1000000000; 2=1000000; 3=1000; 4=0; NA
 
 
 ############################################
-# We introduce our third scale: "Extent of Human Damage (HUMscale)" which adds wounded and killed /and write it back into the GTD
+# We introduce our third scale: "Extent of Human Damage (HUMscale)" which adds wounded and killed / and write it back into the GTD
 
 GTD$nkill <- recode(GTD$nkill, "NA=0")
 GTD$nwound <- recode(GTD$nwound, "NA=0")
 GTD["HUMscale"] <- GTD$nkill+GTD$nwound
 GTD$HUMscale <- as.numeric(GTD$HUMscale)
-
 
 # download Wold Bank counrty level data and merge over country and year
 source('WDIData.R')
