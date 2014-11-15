@@ -1,7 +1,7 @@
 UrbanTerror
 ===========
 
-Lukas B, Cameron R, Sascha S
+Lukas Bretzinger, Cameron Reed, Sascha Schuster
 
 
 **DataCleaning.R**	is the main script for cleaning and merging data sets
