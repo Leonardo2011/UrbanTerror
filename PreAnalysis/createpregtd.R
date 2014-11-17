@@ -32,11 +32,11 @@ Countries <- WC.UC.dist$country.etc
 
 
 
-world.citiesUC["merge"] <- paste(Countries, Cities, sep="")
-Testframe <- GTD
+WC.UC.dist["merge"] <- paste(Countries, Cities, sep="")
+Testframe <- GTDWDI
 Testframe["merge"] <-data.frame(paste(GTDcountry, GTDcity, sep=""))
 
-PreGTD <- merge(Testframe, world.citiesUC, by=c("merge"), all.x=TRUE)
+PreGTD <- merge(Testframe, WC.UC.dist, by=c("merge"), all.x=TRUE)
 PreGTD  <- PreGTD [order(-PreGTD$eventid, na.last=TRUE) , ]
 
 PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, region_txt, city, pop, capital, Closest.Urban.Center, 
