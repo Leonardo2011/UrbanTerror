@@ -296,8 +296,14 @@ GTD$country_txt[GTD$country_txt == "Yemen" ] <- "Yemen, Rep."
 
 # Run a small script to eliminate special characters and standardize coding representations.
 X <- GTD$country_txt
-source('SmallScripts/delete_country_special_characters.R')
+source('SmallScripts/CleanSpecialCharacters.R')
 GTD$country_txt <- X
+rm(X)
+
+X <- GTD$city
+source('SmallScripts/CityCleaning.R')
+source('SmallScripts/CleanSpecialCharacters.R')
+GTD$city <- X
 rm(X)
 
 

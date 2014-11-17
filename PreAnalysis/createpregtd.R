@@ -1,24 +1,36 @@
-#testbed to write a pre-gtd
+if(file.exists("Cache/WC.UC.dist.csv"))
+{UrbanCenters <- read.csv("Cache/WC.UC.dist.csv")
+} else
+{
+  source("CityData/WC.UC.dist.R")
+}
 
-X <- GTD$city
-source('CityCleaning.R')
-source('SmallScripts/delete_country_special_characters.R')
-GTDcity <- X
+if(file.exists("Cache/GTD.csv"))
+{world.cities <- read.csv("Cache/GTD.csv")
+} else
+{
+  source("TerrorData/GTD.R")
+}
+if(file.exists("Cache/WDIData.csv"))
+{UrbanCenters <- read.csv("Cache/WDIData.csv")
+} else
+{
+  source("CountryData/WDIData.R")
+}
 
-X <- GTD$country_txt
-source('SmallScripts/delete_country_special_characters.R')
-GTDcountry <- X
 
-world.citiesUC<-WC.UC.dist
-world.citiesUC$CityID <- NULL
+#Interim: Merge GTD and WDI
+GTDWDI <-merge(GTD, WDIData, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
+#write a pre-gtd
 
-X<-world.citiesUC$name
-source('SmallScripts/delete_country_special_characters.R')
-Cities <- X
 
-X<-world.citiesUC$country.etc
-source('SmallScripts/delete_country_special_characters.R')
-Countries <- X
+
+GTDcity <- GTD$city
+GTDcountry <- GTD$country_txt
+Cities <- WC.UC.dist$name
+Countries <- WC.UC.dist$country.etc
+
+
 
 world.citiesUC["merge"] <- paste(Countries, Cities, sep="")
 Testframe <- GTD
@@ -36,8 +48,7 @@ PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, region_txt, city, pop, 
 
 PreGTD$capital <- recode(PreGTD$capital, "NA=0")
 
-# > sum(is.na(PreGTD$pop))
-#[1] 50378         @ 13.11.2014 17:45h
+
 
 write.csv(PreGTD, file="PreAnalysis/pregtd.csv")
 rm(Testframe, GTDcity, GTDcountry, X, Cities, Countries, world.citiesUC)

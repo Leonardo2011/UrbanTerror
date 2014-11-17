@@ -109,7 +109,7 @@ WDIData <- subset(WDIData,
 )
 
 X <- WDIData$country
-source('SmallScripts/delete_country_special_characters.R')
+source('SmallScripts/CleanSpecialCharacters.R')
 WDIData$country <- X
 rm(X)
 
