@@ -114,7 +114,6 @@ source('MergeGTDWDI.R')
 GTD <- GTDWDI
 rm(GTDWDI, WDI_n_WAR, WDIData)
 
-source('PreAnalysis/createpregtd.R') 
 
 
 ###########################################
