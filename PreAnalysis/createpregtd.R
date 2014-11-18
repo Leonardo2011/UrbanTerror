@@ -1,40 +1,49 @@
-if(file.exists("Cache/WC.UC.dist.csv"))
-{UrbanCenters <- read.csv("Cache/WC.UC.dist.csv")
-} else
-{
-  source("CityData/WC.UC.dist.R")
-}
+############# URBAN TERROR #############
+########################################
+########### Part II: Merging ###########
+########################################
+#######Lukas B Cameron R Sascha S#######
+########################################
 
-if(file.exists("Cache/GTD.csv"))
-{world.cities <- read.csv("Cache/GTD.csv")
+#In this script we combine all our previously established databases into one, bringing together terror data, country level data
+#and city level data into one database ready for analysis.
+
+
+###### Loading Datasets  ######
+(if(file.exists("Cache/GTD.csv"))
+{GTD <- read.csv("Cache/GTD.csv")
 } else
 {
   source("TerrorData/GTD.R")
 }
 if(file.exists("Cache/WDIData.csv"))
-{UrbanCenters <- read.csv("Cache/WDIData.csv")
+{WDIData <- read.csv("Cache/WDIData.csv")
 } else
 {
   source("CountryData/WDIData.R")
 }
+if(file.exists("Cache/WC.UC.dist.csv"))
+{WC.UC.dist <- read.csv("Cache/WC.UC.dist.csv")
+} else
+{
+  source("CityData/WC.UC.dist.R")
+}
 
+###### GTD & WDI ######
 
-#Interim: Merge GTD and WDI
 GTDWDI <-merge(GTD, WDIData, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
-#write a pre-gtd
+write.csv(GTDWDI, "Cache/GTDWDI.csv")
 
 
-
-GTDcity <- GTD$city
-GTDcountry <- GTD$country_txt
+##### GTDWDI & City #####
+GTDWDIcity <- GTDWDI$city
+GTDWDIcountry <- GTDWDI$country_txt
 Cities <- WC.UC.dist$name
 Countries <- WC.UC.dist$country.etc
 
-
-
 WC.UC.dist["merge"] <- paste(Countries, Cities, sep="")
 Testframe <- GTDWDI
-Testframe["merge"] <-data.frame(paste(GTDcountry, GTDcity, sep=""))
+Testframe["merge"] <-data.frame(paste(GTDWDIcountry, GTDWDIcity, sep=""))
 
 PreGTD <- merge(Testframe, WC.UC.dist, by=c("merge"), all.x=TRUE)
 PreGTD  <- PreGTD [order(-PreGTD$eventid, na.last=TRUE) , ]
@@ -51,4 +60,4 @@ PreGTD$capital <- recode(PreGTD$capital, "NA=0")
 
 
 write.csv(PreGTD, file="PreAnalysis/pregtd.csv")
-rm(Testframe, GTDcity, GTDcountry, X, Cities, Countries, world.citiesUC)
+rm(Testframe, GTDWDIcity, GTDWDIcountry, X, Cities, Countries, WC.UC.dist, GTDWDI, GTD, WDIData)
