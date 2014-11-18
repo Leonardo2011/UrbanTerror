@@ -5,4 +5,4 @@
 #we add a new column and delete the old one.
 
 
-GTDWDI <-merge(GTD, WDIData, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
+GTDWDI <-merge(GTD, WDI_n_WAR, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)

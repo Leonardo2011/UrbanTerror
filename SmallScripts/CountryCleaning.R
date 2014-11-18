@@ -260,12 +260,7 @@ GTD$country_txt[GTD$country_txt == "Wallis and Futuna" ] <- "France"
 GTD$country_txt[GTD$country_txt == "West Bank and Gaza Strip" ] <- "West Bank and Gaza"
 GTD$country_txt[GTD$country_txt == "Western Sahara" ] <- "Spain"
 GTD$country_txt[GTD$country_txt == "Yemen" ] <- "Yemen, Rep."
-
-# create uniform country names like in the other datasets without special characters
-X <- GTD$country_txt
-source('SmallScripts/delete_country_special_characters.R')
-GTD$country_txt <- X
-rm(X)
+GTD$country_txt[GTD$country_txt == "Russia" ] <- "Russian Federation"
 
 
 
