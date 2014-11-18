@@ -99,15 +99,22 @@ GTD["HUMscale"] <- GTD$nkill+GTD$nwound
 GTD$HUMscale <- as.numeric(GTD$HUMscale)
 
 
+###########################################
+# Ad War and Wold Bank Data on Country level to the GTD
+
+
+# run our cleaning code for bringing the GDT country code to World Bank levels
+source('SmallScripts/CountryCleaning.R')
+
 # download Wold Bank counrty level data and merge over country and year
 source('WDIData.R')
 source('MergeGTDWDI.R')
 
 #rename GTD back
 GTD <- GTDWDI
-rm(GTDWDI, WDIData)
-# run our cleaning code for bringing the GDT country code to World Bank levels
-source('SmallScripts/CountryCleaning.R')
+rm(GTDWDI, WDI_n_WAR, WDIData)
+
+source('PreAnalysis/createpregtd.R') 
 
 
 ###########################################
@@ -282,7 +289,7 @@ Zillion.fullmin["Closest.Urban.Center"] <- Zillion.fullmin$"full name"
 Zillion.fullmin["CUC.dist.km"] <- Zillion.fullmin$"DISTkm"
 
 # bring information on closest urban center and the respective distance back into  'world.cities'
-UC.WC.merger <- subset(Zillion.fullmin, select = c("CityID", "Closest.Urban.Center", "CUC.dist.km", "Area"))
+UC.WC.merger <- subset(Zillion.fullmin, select = c("CityID", "Closest.Urban.Center", "CUC.dist.km", "Area", "costalMC"))
 
 # new dataset WC.UCdist! which stands for a merged dataset including distance and estimate if the respective city is part of an urban center
 world.cities["CityID"] <-rownames(world.cities)
