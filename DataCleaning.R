@@ -270,7 +270,7 @@ source('SmallScripts/coastalcities.R')
 
 # renaming colums and select sub-sets for merging over fake variable to create Matrix City X Urban (~ 60.000 Cities X ~ 500 urban Centers) 
 
-UCmerge <- subset(UrbanCenters, select = c("lon", "lat", "full name","Population", "Area"))
+UCmerge <- subset(UrbanCenters, select = c("lon", "lat", "full name","Population", "Area", "costalMC"))
 UCmerge$fake=1
 WCmerge <-subset(world.cities, select = c("long", "lat"))
 WCmerge["CityID"] <- rownames(world.cities)
