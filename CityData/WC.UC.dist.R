@@ -68,10 +68,12 @@ WC.UC.dist$CityID <- NULL
 #Housekeeping
 X<-WC.UC.dist$name
 source('SmallScripts/CleanSpecialCharacters.R')
+WC.UC.dist$name <- X
 rm(X)
 
 X<-WC.UC.dist$country.etc
 source('SmallScripts/CleanSpecialCharacters.R')
+WC.UC.dist$country.etc <- X
 rm(X)
 
 #Introducing logical variable that tells us whether a city is part of an Urban Center or close to one.
