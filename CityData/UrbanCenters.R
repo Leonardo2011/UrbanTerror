@@ -111,6 +111,7 @@ UrbanCenters["lon"] <- UrbanLoc$lon
 UrbanCenters["full name"] <- CoCiLoc
 UrbanCenters$City <- tolower(UrbanCenters$City)
 
+
 #Including dummy variables for coastal megacities
 
 ###############If not sure, add here#########################
