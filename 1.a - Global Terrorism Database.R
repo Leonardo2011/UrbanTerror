@@ -290,6 +290,7 @@ GTD$country_txt[GTD$country_txt == "Martinique" ] <- ""
 GTD$country_txt[GTD$country_txt == "North Korea" ] <- "Korea, Dem. Rep."
 GTD$country_txt[GTD$country_txt == "Northern Ireland" ] <- "United Kingdom"
 GTD$country_txt[GTD$country_txt == "Rhodesia" ] <- "Zimbabwe"
+GTD$country_txt[GTD$country_txt == "Russia" ] <- "Russian Federation"
 GTD$country_txt[GTD$country_txt == "South Korea" ] <- "Korea, Rep."
 GTD$country_txt[GTD$country_txt == "Syria" ] <- "Syrian Arab Republic"
 GTD$country_txt[GTD$country_txt == "Taiwan" ] <- "China"
@@ -298,6 +299,7 @@ GTD$country_txt[GTD$country_txt == "Wallis and Futuna" ] <- "France"
 GTD$country_txt[GTD$country_txt == "West Bank and Gaza Strip" ] <- "West Bank and Gaza"
 GTD$country_txt[GTD$country_txt == "Western Sahara" ] <- "Spain"
 GTD$country_txt[GTD$country_txt == "Yemen" ] <- "Yemen, Rep."
+
 
 
 # Run a small script to eliminate special characters and standardize coding representations.
