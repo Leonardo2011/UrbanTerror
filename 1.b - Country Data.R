@@ -118,13 +118,6 @@ WDIData <- subset(WDIData,
                     WDIData$country != "World"
 )
 
-X <- WDIData$country
-source('SmallScripts/CleanSpecialCharacters.R')
-WDIData$country <- X
-rm(X)
-
-
-
 
 #############################################################################################################
 ############################################## 2. War Data ##################################################
@@ -186,8 +179,10 @@ COWIS$SideB[COWIS$SideB == "United States of America"] <- "United States"
 COWIS$SideB[COWIS$SideB == "Yemen"] <- "Yemen, Rep."
 
 # Bring this War variable merging ready on 0-1 per country and year.
+
 COWIS$CountryA <- ifelse(COWIS$SideA %in% WDIData$country, COWIS$SideA, NA)
 COWIS$CountryB <- ifelse(COWIS$SideB %in% WDIData$country, COWIS$SideB, NA)
+
 COWIS.A <- COWIS[complete.cases(COWIS[,5]),]
 COWIS.A <- subset(COWIS.A, select= c(StartYear1, EndYear1, CountryA), EndYear1>=1970, rownames=FALSE)
 COWIS.B <- COWIS[complete.cases(COWIS[,6]),]
@@ -319,15 +314,18 @@ WDI_n_WAR <- merge(WDI_n_WAR, COWIS3.B, by=c("country", "year"), all.x=TRUE)
 WDI_n_WAR$Extra.WAR.Out <- recode(WDI_n_WAR$Extra.WAR.Out, "NA=0", as.numeric.result=TRUE)
 
 #rm
-rm(COWIS, COWIS.A, COWIS.B, COWIS3.A, COWIS3.B)
+rm(COWIS, COWIS.A, COWIS.B, COWIS3.A, COWIS3.B, COWIS1, COWIS2, COWIS3)
 
 
 
 
-###### Rename and write CSV ######
-
-
+###### Rename, form and write CSV ######
 CountryData <- WDI_n_WAR 
-rm(WDIData, WDI_n_WAR)
+
+X <- CountryData$country
+source('SmallScripts/CleanSpecialCharacters.R')
+CountryData$country <- X
+rm(X)
+
 #create cache WDIData.csv (last: 15.11.2014)
 write.csv(CountryData, "Cache/CountryData.csv")
