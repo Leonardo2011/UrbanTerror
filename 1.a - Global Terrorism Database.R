@@ -44,14 +44,10 @@ GTD$country_txt <- as.character(GTD$country_txt)
 
 GTD$country_txt[GTD$country_txt == "East Germany (GDR)"] <- "Germany"
 GTD$country_txt[GTD$country_txt == "West Germany (FRG)"] <- "Germany"
-
 GTD$country_txt[GTD$country_txt == "North Yemen"] <- "Yemen"
 GTD$country_txt[GTD$country_txt == "South Yemen"] <- "Yemen"
-
 GTD$country_txt[GTD$country_txt == "Falkland Islands" ] <- "United Kingdom"
-
 GTD$country_txt[GTD$country_txt == "New Hebrides" ] <- "Vanuatu"
-
 GTD$country_txt[GTD$country_txt == "South Vietnam" ] <- "Vietnam"
 
 # 2. Splitting up formerly united countries 
@@ -67,28 +63,21 @@ GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Aygepar" ] <- "A
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Erubuni" ] <- "Armenia"
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Charektar" ] <- "Armenia"
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Kirovakan" ] <- "Armenia"
-
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Yevlakh" ] <- "Azerbaijan"
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Aterk" ] <- "Azerbaijan"
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Gyandzha" ] <- "Azerbaijan"
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Tatli" ] <- "Azerbaijan"
-
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Tallinn" ] <- "Estonia"
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Ikla" ] <- "Estonia"
-
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Tbilisi" ] <- "Georgia"
-
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Osh" ] <- "Kyrgyzstan"
-
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Riga" ] <- "Latvia"
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Ainazi" ] <- "Latvia"
-
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Lavoriskes" ] <- "Lithuania"
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Birzai" ] <- "Lithuania"
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Vilnius" ] <- "Lithuania"
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Salociai" ] <- "Lithuania"
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Medininkai" ] <- "Lithuania"
-
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Moscow" ] <- "Russia"
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Buynaksk" ] <- "Russia"
 GTD$country_txt[GTD$country_txt == "Soviet Union" & GTD$city =="Kara-Su" ] <- "Russia"
@@ -106,7 +95,6 @@ GTD$country_txt[GTD$country_txt == "Czechoslovakia" & GTD$city =="Prague" ] <- "
 GTD$country_txt[GTD$country_txt == "Czechoslovakia" & GTD$city =="Usti Nad Labem" ] <- "Czech Republic"
 GTD$country_txt[GTD$country_txt == "Czechoslovakia" & GTD$city =="Halickuv Brod" ] <- "Czech Republic"
 GTD$country_txt[GTD$country_txt == "Czechoslovakia" & GTD$city =="Hradec Kralove" ] <- "Czech Republic"
-
 GTD$country_txt[GTD$country_txt == "Czechoslovakia" & GTD$city =="Bratislava" ] <- "Slovak Republic"
 
 # 2.3. Serbia-Montenegro
@@ -121,7 +109,6 @@ GTD$country_txt[GTD$country_txt == "Serbia-Montenegro" & GTD$city =="Novi Pazar"
 
 # 2.4. Yugoslavia
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Bogicevica" ] <- "Albania"
-
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Banjica" ] <- "Serbia"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Belgrade" ] <- "Serbia"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Blace" ] <- "Serbia"
@@ -149,20 +136,16 @@ GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Veliki Trnovac" ] 
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Velki Trnovac" ] <- "Serbia"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Vranje" ] <- "Serbia"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Zemun" ] <- "Serbia"
-
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Celopek" ] <- "Macedonia, FYR"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Prilep" ] <- "Macedonia, FYR"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Skopje" ] <- "Macedonia, FYR"
-
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Berane" ] <- "Montenegro"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Budva" ] <- "Montenegro"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Cetinje" ] <- "Montenegro"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Podgorica" ] <- "Montenegro"
-
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Ljubljana" ] <- "Slovenia"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Stari" ] <- "Slovenia"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Stari Trg" ] <- "Slovenia"
-
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Benkovac" ] <- "Croatia"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Borovac" ] <- "Croatia"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Dolac"] <- "Croatia"
@@ -178,7 +161,6 @@ GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Polaca" ] <- "Croa
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Pribudic" ] <- "Croatia"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Sotin" ] <- "Croatia"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Titova Korenica" ] <- "Croatia"
-
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Batlava" ] <- "Kosovo"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Besinje" ] <- "Kosovo"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Bradas" ] <- "Kosovo"
@@ -223,7 +205,6 @@ GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Tusuz" ] <- "Kosov
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Urosevac" ] <- "Kosovo"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Voksh" ] <- "Kosovo"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Vucitrn" ] <- "Kosovo"
-
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Banja Luka" ] <- "Bosnia and Herzegovina"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Bijelina" ] <- "Bosnia and Herzegovina"
 GTD$country_txt[GTD$country_txt == "Yugoslavia" & GTD$city =="Bosanski Brod" ] <- "Bosnia and Herzegovina"

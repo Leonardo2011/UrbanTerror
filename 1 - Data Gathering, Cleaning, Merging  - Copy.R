@@ -41,7 +41,6 @@ if(file.exists("Cache/WC.UC.dist.csv")) {WC.UC.dist <- read.csv("Cache/WC.UC.dis
 
 ###### Merge GTD & Country Level Data ######
 GTDWDI <- merge(GTD, CountryData, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
-write.csv(GTDWDI, "Cache/GTDWDI.csv")
 
 ###### Merge Combined set with & City Data ######
 GTDWDIcity <- GTDWDI$city
@@ -54,7 +53,7 @@ Testframe["merge"] <-data.frame(paste(GTDWDIcountry, GTDWDIcity, sep=""))
 PreGTD <- merge(Testframe, WC.UC.dist, by=c("merge"), all.x=TRUE)
 PreGTD  <- PreGTD [order(-PreGTD$eventid, na.last=TRUE) , ]
 
-PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, city, pop, capital, largestC, Closest.Urban.Center, 
+PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, city, pop, capital, region_txt, largestC, Closest.Urban.Center, 
                                   largest.UC, coastalMC, WC.UC.dist.km, part.of.urban.center, in.urban.centers.environment, attacktype1, 
                                   targtype1, targsubtype1, weaptype1, weapsubtype1, TUPscale, PROPscale, HUMscale, SP.POP.TOTL,
                                   EN.URB.LCTY.UR, MAX.URB.LCTY.UR, EN.URB.MCTY, MAX.URB.MCTY, SP.URB.TOTL, MAX.URB.TOTL,
