@@ -30,7 +30,7 @@ if(file.exists("Cache/CountryData.csv")){CountryData <- read.csv("Cache/CountryD
 
 
 # City level data froma number of sources, including web sraping
-if(file.exists("Cache/WC.UC.dist.csv")) {WC.UC.dist <- read.csv("Cache/WC.UC.dist.csv")} else{source("CityData/1.c - City Data.R")}
+if(file.exists("Cache/WC.UC.dist.csv")) {WC.UC.dist <- read.csv("Cache/WC.UC.dist.csv")} else{source("1.c - City Data.R")}
 
 
 
@@ -54,18 +54,25 @@ Testframe["merge"] <-data.frame(paste(GTDWDIcountry, GTDWDIcity, sep=""))
 PreGTD <- merge(Testframe, WC.UC.dist, by=c("merge"), all.x=TRUE)
 PreGTD  <- PreGTD [order(-PreGTD$eventid, na.last=TRUE) , ]
 
-PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, region_txt, city, pop, capital, Closest.Urban.Center, costalMC,
-                                  CUC.dist.km, part.of.urban.center, in.urban.centers.environment, attacktype1, 
+PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, city, pop, capital, largestC, Closest.Urban.Center, 
+                                  largest.UC, coastalMC, WC.UC.dist.km, part.of.urban.center, in.urban.centers.environment, attacktype1, 
                                   targtype1, targsubtype1, weaptype1, weapsubtype1, TUPscale, PROPscale, HUMscale,
                                   EN.URB.LCTY.UR.ZS, EN.URB.MCTY, EN.URB.MCTY.TL.ZS, SP.URB.GROW, SP.URB.TOTL, 
                                   SP.URB.TOTL.IN.ZS, EN.POP.DNST, EN.RUR.DNST, SP.RUR.TOTL, SP.RUR.TOTL.ZG, SP.RUR.TOTL.ZS,
                                   Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR))
 
 
-PreGTD$capital <- recode(PreGTD$capital, "NA=0")
+PreGTD$part.of.urban.center[is.na(PreGTD$part.of.urban.center)] <- FALSE
+PreGTD$in.urban.centers.environment[is.na(PreGTD$in.urban.centers.environment)] <- FALSE
+PreGTD$capital[is.na(PreGTD$capital)] <- 0 
+PreGTD$largestC[is.na(PreGTD$largestC)] <- 0 
+PreGTD$largest.UC[is.na(PreGTD$largest.UC)] <- 0 
+PreGTD$coastalMC[is.na(PreGTD$coastalMC)] <- 0 
+PreGTD$pop[is.na(PreGTD$pop)] <- 0 
+
 
 write.csv(PreGTD, file="TerrorData/Pregtd.csv")
-rm(Testframe, GTDWDIcity, GTDWDIcountry, X, Cities, Countries, WC.UC.dist, GTDWDI, GTD, WDIData)
+rm(Testframe, GTDWDIcity, GTDWDIcountry, X, Cities, Countries, GTDWDI, GTD, WDIData)
 
 
 

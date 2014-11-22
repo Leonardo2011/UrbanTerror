@@ -63,9 +63,14 @@ world.cities$country.etc[world.cities$country.etc == "venezuela"] <- "venezuelar
 world.cities$country.etc[world.cities$country.etc == "usvirginislands"] <- "virginislandsus"
 world.cities$country.etc[world.cities$country.etc == "palestine"] <- "westbankandgaza"
 world.cities$country.etc[world.cities$country.etc == "yemen"] <- "yemenrep"
+world.cities$country.etc[world.cities$country.etc == "russia"] <- "russianfederation"
 
 #On another checking process, we found other wrong information that needs correction.
 world.cities$capital[world.cities$name == "newdelhi" &  world.cities$country.etc  == "india"] <- 1
 world.cities$capital[world.cities$name == "peking" &  world.cities$country.etc  == "china"] <- 1
 world.cities$capital[world.cities$name == "beirut" &  world.cities$country.etc  == "lebanon"] <- 1
 world.cities$capital[world.cities$name == "guatemalacity" &  world.cities$country.etc  == "guatemala"] <- 1
+world.cities$largestC[world.cities$name == "bombay" &  world.cities$country.etc  == "india"] <- 1
+world.cities$largestC[world.cities$name == "mexicocity" &  world.cities$country.etc  == "mexico"] <- 1
+world.cities$capital[world.cities$name == "mexico" &  world.cities$country.etc  == "mexico"] <- 1
+

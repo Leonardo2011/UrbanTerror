@@ -68,14 +68,28 @@ if(file.exists("Cache/UrbanCenters.csv"))
   #Inlcuding geographic data into the original Urban Centers data frame
   UrbanCenters["lat"] <- UrbanLoc$lat
   UrbanCenters["lon"] <- UrbanLoc$lon
-  UrbanCenters["full name"] <- CoCiLoc
+  UrbanCenters["full.name"] <- CoCiLoc
   UrbanCenters$City <- tolower(UrbanCenters$City)
+  
+  # remove cpmmas
+  UrbanCenters$Population <- gsub("\\,","",UrbanCenters$Population)
+  UrbanCenters$Area <- gsub("\\,","",UrbanCenters$Area)
+  UrbanCenters$Density <- gsub("\\,","",UrbanCenters$Density)
+ 
+  # Assigning a 1 to all the largest urban centers in a country
+  UrbanCenters$Population <- as.numeric(UrbanCenters$Population)
+  LUC <- aggregate(Population ~ Country,UrbanCenters,max)
+  LUC["largest.UC"] <- 1
+  UrbanCenters <- merge(UrbanCenters, LUC, by=c("Population", "Country"), all.x=TRUE)
+  UrbanCenters <- UrbanCenters[order(-UrbanCenters$Population), ]
+  UrbanCenters$largest.UC <- recode(UrbanCenters$largest.UC, "NA=0")
+
   
   #Including dummy variables for coastal megacities
   source('SmallScripts/CostalMC.R')
   
   #Deleting what is not needed anymore
-  rm(UrbanLoc, table ,URL, CoCi, CoCiLoc)
+  rm(UrbanLoc, table ,URL, CoCi, CoCiLoc, LUC)
   
   #Caching the Urban Centers dataframe
   write.csv(UrbanCenters, "Cache/UrbanCenters.csv")
@@ -194,9 +208,19 @@ if(file.exists("Cache/world.cities.csv"))
   world.cities <- merge(worldcities2009, worldcities2013, by= c("merge", "name", "country.etc", "pop", "lat", "long"), all=TRUE)
   world.cities <- world.cities[order(world.cities$merge, world.cities$capital, world.cities$pop),]
   world.cities <- world.cities[!duplicated(world.cities$merge), ]
-  world.cities$merge <-NULL
+ 
   world.cities <- world.cities[order(-world.cities$pop), ]
   rm(worldcities2013, worldcities2009)
+  
+  # Assigning a 1 to all the largest cities in a country
+  LC <- aggregate(pop ~ country.etc,world.cities,max)
+  LC["largestC"] <- 1
+  world.cities <- merge(world.cities, LC, by=c("pop", "country.etc"), all.x=TRUE)
+  world.cities <- world.cities[order(-world.cities$pop), ]
+  world.cities$largestC <- recode(world.cities$largestC, "NA=0")
+  rm(LC)
+  world.cities$merge <-NULL
+  
   
   #Bringing country names in combined world.cities to WDI lowercase standard
   source('SmallScripts/CountryCleaninginCitySet.R')
@@ -222,34 +246,39 @@ if(file.exists("Cache/world.cities.csv"))
 
 #Renaming columns and select subsets for merging over fake variable to create a matrix 
 #with each City X each Urban Center (~ 60.000 Cities X ~ 500 urban Centers) 
-UCmerge <- subset(UrbanCenters, select = c("lon", "lat", "full name","Population", "Area", "costalMC"))
+UCmerge <- subset(UrbanCenters, select = c("lon", "lat", "full.name"))
 UCmerge$fake=1
 WCmerge <-subset(world.cities, select = c("long", "lat"))
 WCmerge["CityID"] <- rownames(world.cities)
 WCmerge$fake=1
 
-Zillion <-merge(UCmerge, WCmerge, by=c("fake"))
+ALLDIST <-merge(UCmerge, WCmerge, by=c("fake"))
 
 #Finding each distance ( ~ 30 million individual distances will be found )
-Zillion["DISTkm"] <- gdist(Zillion$lon, Zillion$lat.x, Zillion$long, Zillion$lat.y, units = "km",
-                           a = 6378137.0, b = 6356752.3142, verbose = FALSE)
+ALLDIST["DISTkm"] <- gdist(ALLDIST$lon, ALLDIST$lat.x, ALLDIST$long, ALLDIST$lat.y, units = "km",
+                           a = 6378137, b = 6356752, verbose = FALSE)
 
 #Reducing to only the closest Urban Center for each and every city, 30 million distances to the ~ 60.000 minimal ones
-Zillion.min <- aggregate(DISTkm ~ CityID, Zillion, function(x) min(x))
-
-Zillion.fullmin <- merge(Zillion.min, Zillion, by=c("CityID", "DISTkm"))
-Zillion.fullmin["Closest.Urban.Center"] <- Zillion.fullmin$"full.name"
-Zillion.fullmin["CUC.dist.km"] <- Zillion.fullmin$"DISTkm"
+ALLDIST.min <- aggregate(DISTkm ~ CityID, ALLDIST, function(x) min(x))
+ALLDIST$lon <- NULL
+ALLDIST$lat.x	<- NULL		
+ALLDIST$long <- NULL
+ALLDIST$lat.y <- NULL
+ALLDIST.fullmin <- merge(ALLDIST.min, ALLDIST, by=c("CityID", "DISTkm"))
+ALLDIST.fullmin <- merge(ALLDIST.fullmin, UrbanCenters, by=c("full.name"), all.x=TRUE)
+ALLDIST.fullmin["Closest.Urban.Center"] <- ALLDIST.fullmin$"full.name"
+ALLDIST.fullmin["WC.UC.dist.km"] <- ALLDIST.fullmin$"DISTkm"
 
 #Bringing information on closest Urban Center and the respective distance back into 'world.cities'
-UC.WC.merger <- subset(Zillion.fullmin, select = c("CityID", "Closest.Urban.Center", "CUC.dist.km", "Area", "costalMC"))
+UC.WC.merger <- subset(ALLDIST.fullmin, select = c("CityID", "Closest.Urban.Center", "WC.UC.dist.km", "Area", "Density", "coastalMC", "largest.UC"))
 
-#New dataset WC.UCdist! which stands for a merged dataset including distance and estimate if the respective city is part of an urban center
+#New dataset WC.UC.dist! which stands for a merged dataset including distance and estimate if the respective city is part of an urban center
 world.cities["CityID"] <-rownames(world.cities)
 WC.UC.dist <- merge(world.cities, UC.WC.merger, by="CityID")
-WC.UC.dist$CUC.dist.km <- as.numeric(WC.UC.dist$CUC.dist.km) 
+WC.UC.dist$WC.UC.dist.km <- as.numeric(WC.UC.dist$WC.UC.dist.km) 
 WC.UC.dist$Area <- as.numeric(WC.UC.dist$Area) 
 WC.UC.dist$capital <- as.numeric(WC.UC.dist$capital)
+
 #CityID is now not needed anymore.
 WC.UC.dist$CityID <- NULL
 
@@ -266,13 +295,13 @@ rm(X)
 
 #Introducing logical variable that tells us whether a city is part of an Urban Center or close to one.
 #We use a calculation that treates the middle of the city as the center of a circle.
-WC.UC.dist["part.of.urban.center"] <- (WC.UC.dist$CUC.dist.km <= (20+(2*(((WC.UC.dist$Area)/pi)**0.5))))
-WC.UC.dist["in.urban.centers.environment"] <- (WC.UC.dist$CUC.dist.km<=(40+(3*(((WC.UC.dist$Area)/pi)**0.5))))
+WC.UC.dist["part.of.urban.center"] <- (WC.UC.dist$WC.UC.dist.km <= (20+(2*(((WC.UC.dist$Area)/pi)**0.5))))
+WC.UC.dist["in.urban.centers.environment"] <- (WC.UC.dist$WC.UC.dist.km<=(40+(3*(((WC.UC.dist$Area)/pi)**0.5))))
 WC.UC.dist <- WC.UC.dist[order(-WC.UC.dist$pop, na.last=TRUE) , ]
 
 
 #remove rest
-rm(WCmerge, UCmerge, Zillion, Zillion.min, Zillion.fullmin, UC.WC.merger)
+rm(WCmerge, UCmerge, ALLDIST, ALLDIST.min, ALLDIST.fullmin, UC.WC.merger)
 
 #write csv
 write.csv(WC.UC.dist, "Cache/WC.UC.dist.csv")
