@@ -23,7 +23,7 @@
 #The World Bank offers large datasets on information about the distribution of population. Most importantly, these include urban 
 #population. The datasets are available for download on the World Banks Website (http://data.worldbank.org/). Though downloadable,
 #data there is not presented in a tidy way. Vincent Arel-Bundocks' WDI package (https://github.com/vincentarelbundock/WDI) offers
-#fuctions to scrape data from the World Bank's database in a tidy way. If not done yet, either install the WDI package or 
+#fuctions to download data through the World Bank's API in a tidy way. If not done yet, either install the WDI package or 
 #run Packages.R from our repository
 
 #With WDISearch(), we can look for a list of indicators we are interested in containing the character string specified as an 
@@ -37,6 +37,7 @@ WDIData <- WDI(indicator=c('EN.URB.LCTY.UR.ZS',
                               'EN.URB.MCTY.TL.ZS',
                               'SP.URB.GROW', 
                               'SP.URB.TOTL', 
+                              'SP.POP.TOTL', 
                               'SP.URB.TOTL.IN.ZS',
                               'EN.POP.DNST',
                               'EN.RUR.DNST',
@@ -60,7 +61,27 @@ WDIData <- WDIData[order(WDIData$country, WDIData$year), ]
 #SP.RUR.TOTL = Rural population                                                         
 #SP.RUR.TOTL.ZG = Rural population growth (annual %)                                       
 #SP.RUR.TOTL.ZS = Rural population (% of total population)
+WDIData["EN.URB.LCTY.UR"] <- (WDIData$SP.POP.TOTL*WDIData$EN.URB.LCTY.UR.ZS/100)
+#EN.URB.LCTY.UR = Population in the largest city
 
+
+# finding 3  maxima for each country (total Pop, Pop in Urban Cemters, Pop in largest City)
+Highs.URB.TOTL <- aggregate(as.numeric(WDIData$SP.URB.TOTL), list(country=WDIData$country),max)
+colnames(Highs.URB.TOTL)[2] <- "MAX.URB.TOTL"
+Highs.URB.MCTY <- aggregate(as.numeric(WDIData$EN.URB.MCTY), list(country=WDIData$country),max)
+colnames(Highs.URB.MCTY)[2] <- "MAX.URB.MCTY"
+Highs.URB.LCTY.UR <- aggregate(as.numeric(WDIData$EN.URB.LCTY.UR), list(country=WDIData$country),max)
+colnames(Highs.URB.LCTY.UR )[2] <- "MAX.URB.LCTY.UR"
+
+# bringing it back into the WDI Data
+WDIData <- merge(WDIData, Highs.URB.TOTL, by=("country"))
+WDIData <- merge(WDIData, Highs.URB.MCTY, by=("country"))
+WDIData <- merge(WDIData, Highs.URB.LCTY.UR, by=("country"))
+rm(Highs.URB.TOTL, Highs.URB.MCTY, Highs.URB.LCTY.UR)
+
+#MAX.URB.TOTL = Urban population at its hight for
+#MAX.URB.MCTY = Population in urban agglomerations of more than 1 million at its hight for
+#MAX.LCTY.UR = Population in the largest city
 
 
 ###### Cleaning Data  ######

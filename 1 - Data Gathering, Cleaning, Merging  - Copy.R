@@ -56,10 +56,9 @@ PreGTD  <- PreGTD [order(-PreGTD$eventid, na.last=TRUE) , ]
 
 PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, city, pop, capital, largestC, Closest.Urban.Center, 
                                   largest.UC, coastalMC, WC.UC.dist.km, part.of.urban.center, in.urban.centers.environment, attacktype1, 
-                                  targtype1, targsubtype1, weaptype1, weapsubtype1, TUPscale, PROPscale, HUMscale,
-                                  EN.URB.LCTY.UR.ZS, EN.URB.MCTY, EN.URB.MCTY.TL.ZS, SP.URB.GROW, SP.URB.TOTL, 
-                                  SP.URB.TOTL.IN.ZS, EN.POP.DNST, EN.RUR.DNST, SP.RUR.TOTL, SP.RUR.TOTL.ZG, SP.RUR.TOTL.ZS,
-                                  Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR))
+                                  targtype1, targsubtype1, weaptype1, weapsubtype1, TUPscale, PROPscale, HUMscale, SP.POP.TOTL,
+                                  EN.URB.LCTY.UR, MAX.URB.LCTY.UR, EN.URB.MCTY, MAX.URB.MCTY, SP.URB.TOTL, MAX.URB.TOTL,
+                                  EN.POP.DNST, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR))
 
 
 PreGTD$part.of.urban.center[is.na(PreGTD$part.of.urban.center)] <- FALSE
@@ -76,7 +75,7 @@ PreGTD$pop[is.na(PreGTD$pop)] <- 0
 
 
 write.csv(PreGTD, file="TerrorData/Pregtd.csv")
-rm(Testframe, GTDWDIcity, GTDWDIcountry, Cities, Countries, GTDWDI, GTD, WDIData)
+rm(Testframe, GTDWDIcity, GTDWDIcountry, Cities, GTD, Countries, GTDWDI, WDIData)
 
 
 
