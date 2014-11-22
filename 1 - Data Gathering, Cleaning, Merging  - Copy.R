@@ -64,6 +64,10 @@ PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, city, pop, capital, lar
 
 PreGTD$part.of.urban.center[is.na(PreGTD$part.of.urban.center)] <- FALSE
 PreGTD$in.urban.centers.environment[is.na(PreGTD$in.urban.centers.environment)] <- FALSE
+PreGTD$in.urban.centers.environment <- recode(PreGTD$in.urban.centers.environment, "TRUE=1")
+PreGTD$part.of.urban.center <- recode(PreGTD$part.of.urban.center, "TRUE=1")
+
+
 PreGTD$capital[is.na(PreGTD$capital)] <- 0 
 PreGTD$largestC[is.na(PreGTD$largestC)] <- 0 
 PreGTD$largest.UC[is.na(PreGTD$largest.UC)] <- 0 
@@ -72,7 +76,7 @@ PreGTD$pop[is.na(PreGTD$pop)] <- 0
 
 
 write.csv(PreGTD, file="TerrorData/Pregtd.csv")
-rm(Testframe, GTDWDIcity, GTDWDIcountry, X, Cities, Countries, GTDWDI, GTD, WDIData)
+rm(Testframe, GTDWDIcity, GTDWDIcountry, Cities, Countries, GTDWDI, GTD, WDIData)
 
 
 
