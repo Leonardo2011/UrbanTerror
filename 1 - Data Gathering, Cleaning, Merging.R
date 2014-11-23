@@ -74,7 +74,7 @@ PreGTD$pop[is.na(PreGTD$pop)] <- 0
 
 
 write.csv(PreGTD, file="TerrorData/Pregtd.csv")
-rm(Testframe, GTDWDIcity, GTDWDIcountry, Cities, GTD, Countries, GTDWDI, WDIData)
+rm(Testframe, GTDWDIcity, GTDWDIcountry, Cities, GTD, Countries, GTDWDI)
 
 
 

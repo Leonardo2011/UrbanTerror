@@ -270,7 +270,7 @@ ALLDIST.fullmin["Closest.Urban.Center"] <- ALLDIST.fullmin$"full.name"
 ALLDIST.fullmin["WC.UC.dist.km"] <- ALLDIST.fullmin$"DISTkm"
 
 #Bringing information on closest Urban Center and the respective distance back into 'world.cities'
-UC.WC.merger <- subset(ALLDIST.fullmin, select = c("CityID", "Closest.Urban.Center", "WC.UC.dist.km", "Area", "Density", "coastalMC", "largest.UC"))
+UC.WC.merger <- subset(ALLDIST.fullmin, select = c("CityID", "Closest.Urban.Center", "Population", "WC.UC.dist.km", "Area", "Density", "coastalMC", "largest.UC"))
 
 #New dataset WC.UC.dist! which stands for a merged dataset including distance and estimate if the respective city is part of an urban center
 world.cities["CityID"] <-rownames(world.cities)
