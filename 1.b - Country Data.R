@@ -61,7 +61,7 @@ WDIData <- WDIData[order(WDIData$country, WDIData$year), ]
 #SP.RUR.TOTL = Rural population                                                         
 #SP.RUR.TOTL.ZG = Rural population growth (annual %)                                       
 #SP.RUR.TOTL.ZS = Rural population (% of total population)
-WDIData["EN.URB.LCTY.UR"] <- (WDIData$SP.POP.TOTL*WDIData$EN.URB.LCTY.UR.ZS/100)
+WDIData["EN.URB.LCTY.UR"] <- (WDIData$SP.POP.TOTL*WDIData$SP.URB.TOTL.IN.ZS/100)
 #EN.URB.LCTY.UR = Population in the largest city
 
 
@@ -311,7 +311,7 @@ COWIS3.B <- rename(COWIS3.B , c("Country"="country", "Time"="year"))
 
 # prepare WDI
 WDIData$year <- as.numeric(WDIData$year)
-WDIData$country <- as.character(WDIData$countr)
+WDIData$country <- as.character(WDIData$country)
 
 # rename, just to make sure
 WDI_n_WAR <- WDIData
