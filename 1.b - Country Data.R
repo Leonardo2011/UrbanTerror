@@ -79,8 +79,8 @@ WDIData <- merge(WDIData, Highs.URB.MCTY, by=("country"))
 WDIData <- merge(WDIData, Highs.URB.LCTY.UR, by=("country"))
 rm(Highs.URB.TOTL, Highs.URB.MCTY, Highs.URB.LCTY.UR)
 
-#MAX.URB.TOTL = Urban population at its hight for
-#MAX.URB.MCTY = Population in urban agglomerations of more than 1 million at its hight for
+#MAX.URB.TOTL = Urban population at its highestt for
+#MAX.URB.MCTY = Population in urban agglomerations of more than 1 million at its highestt for
 #MAX.LCTY.UR = Population in the largest city
 
 
@@ -289,7 +289,7 @@ COWIS3.B <- TimeFill(COWIS3.B, GroupVar = 'Country', StartVar = 'StartYear1', En
 COWIS3.A <- rename(COWIS3.A , c("TimeFilled"="Extra.WAR.In")) 
 COWIS3.B <- rename(COWIS3.B , c("TimeFilled"="Extra.WAR.Out"))
 
-# old code brought them together int one, bot the 'receiver of an extra-terrirorrial war (Iraq)
+# old code brought them together int one, but the 'receiver of an extra-terrirorrial war (Iraq)
 # must be in anothe role as the 'donor' (USA, UK etc)
 #COWIS3 <- merge (COWIS3.A, COWIS3.B, by=c("StartYear1", "EndYear1", "Country"), all=TRUE)
 

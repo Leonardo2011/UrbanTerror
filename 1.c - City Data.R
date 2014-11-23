@@ -71,7 +71,7 @@ if(file.exists("Cache/UrbanCenters.csv"))
   UrbanCenters["full.name"] <- CoCiLoc
   UrbanCenters$City <- tolower(UrbanCenters$City)
   
-  # remove cpmmas
+  # remove commas
   UrbanCenters$Population <- gsub("\\,","",UrbanCenters$Population)
   UrbanCenters$Area <- gsub("\\,","",UrbanCenters$Area)
   UrbanCenters$Density <- gsub("\\,","",UrbanCenters$Density)
@@ -86,7 +86,7 @@ if(file.exists("Cache/UrbanCenters.csv"))
 
   
   #Including dummy variables for coastal megacities
-  source('SmallScripts/CostalMC.R')
+  source('SmallScripts/CoastalMC.R')
   
   #Deleting what is not needed anymore
   rm(UrbanLoc, table ,URL, CoCi, CoCiLoc, LUC)
@@ -229,7 +229,7 @@ if(file.exists("Cache/world.cities.csv"))
   world.cities$country.etc <- X
   rm(X)
   
-  #create cache worldcities.csv (last: 15.11.2014)
+  #create cache world.cities.csv
   write.csv(world.cities, "Cache/world.cities.csv")
     
 }

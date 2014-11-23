@@ -25,11 +25,11 @@
 if(file.exists("Cache/GTD.csv")) {GTD <- read.csv("Cache/GTD.csv")} else{source("1.a - Global Terrorism Database.R")}
 
 
-# Country level data from the World Bank Development Indicators and the The Correlates of War (COW) project data on wars.
+# Country level data from the World Bank Development Indicators (WDI) and the The Correlates of War (COW) project data on wars.
 if(file.exists("Cache/CountryData.csv")){CountryData <- read.csv("Cache/CountryData.csv")} else{source("1.b - Country Data.R")}
 
 
-# City level data froma number of sources, including web sraping
+# City level data from a number of sources, including web scraping
 if(file.exists("Cache/WC.UC.dist.csv")) {WC.UC.dist <- read.csv("Cache/WC.UC.dist.csv")} else{source("1.c - City Data.R")}
 
 
@@ -42,7 +42,7 @@ if(file.exists("Cache/WC.UC.dist.csv")) {WC.UC.dist <- read.csv("Cache/WC.UC.dis
 ###### Merge GTD & Country Level Data ######
 GTDWDI <- merge(GTD, CountryData, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
 
-###### Merge Combined set with & City Data ######
+###### Merge Combined set with City Data ######
 GTDWDIcity <- GTDWDI$city
 GTDWDIcountry <- GTDWDI$country_txt
 Cities <- WC.UC.dist$name
