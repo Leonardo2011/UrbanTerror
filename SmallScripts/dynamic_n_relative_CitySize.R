@@ -11,6 +11,10 @@ PreGTD$pop[is.na(PreGTD$pop)] <- 0
 PreGTD$HUMscale[is.na(PreGTD$HUMscale)] <- 0
 PreGTD$TUPscale[is.na(PreGTD$TUPscale)] <- 0
 
+##################################################################################################
+#Chaning the citz size along with respective WDI country level data
+
+# prep
 G2<-PreGTD
 G2$SP.URB.TOTL <- as.numeric(G2$SP.URB.TOTL )
 G2$MAX.URB.TOTL <- as.numeric(G2$MAX.URB.TOTL)
@@ -19,9 +23,6 @@ G2$MAX.URB.MCTY <- as.numeric(G2$MAX.URB.MCTY)
 G2$EN.URB.LCTY.UR <- as.numeric(G2$EN.URB.LCTY.UR)
 G2$MAX.URB.LCTY.UR <- as.numeric(G2$MAX.URB.LCTY.UR)
 G2$pop <- as.numeric(G2$pop)
-
-
-# prepare for regression
 G2["year"] <- as.numeric(G2$iyear)
 G2 <- G2[order(-G2$pop),]
 G2["pop.today"] <- G2$pop
@@ -69,7 +70,7 @@ G2$city.population_with_time <- ifelse(G2$city.population_with_time!=G2$EN.URB.L
                                                                    *G2$city.population_with_time), (G2$city.population_with_time))
 
 
-# some cleaning
+# some final cleaning of leftovers
 G2$city.population_with_time <- ifelse(is.na(G2$city.population_with_time)&(!is.na(G2$pop.today)), G2$pop.today, 
                                        G2$city.population_with_time)
 G2$EN.URB.LCTY.UR <- ifelse(is.na(G2$EN.URB.LCTY.UR)&(!is.na(G2$pop)), G2$pop, G2$EN.URB.LCTY.UR)
@@ -82,9 +83,13 @@ G2$city.population_with_time <- ifelse(is.infinite(G2$city.population_with_time)
 
 G2$pop <-  round(G2$city.population_with_time)
 G2$pop[which(is.na(G2$pop))] <- 0
+
+##################################################################################################
+# create variable for relative city size
 G2["Rel.CS"] <- G2$pop/G2$EN.URB.LCTY.UR
 G2$Rel.CS[which(is.na(G2$Rel.CS))] <- 0
 G2$Rel.CS <- ifelse(G2$Rel.CS>=1, 1,G2$Rel.CS)
 
+# end with bringing PreGTD back
 PreGTD <- G2
 rm(G2)

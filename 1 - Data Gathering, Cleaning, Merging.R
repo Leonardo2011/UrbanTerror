@@ -57,15 +57,14 @@ Testframe["merge"] <-data.frame(paste(GTDWDIcountry, GTDWDIcity, sep=""))
 PreGTD <- merge(Testframe, WC.UC.dist, by=c("merge"), all.x=TRUE)
 PreGTD  <- PreGTD [order(-PreGTD$HUMscale, na.last=TRUE) , ]
 
+###### Change City Size on yearly basis with WDi data and introduce relative city size (Rel.CS) ######
+
 source('SmallScripts/dynamic_n_relative_CitySize.R')
 
 # limit and order the new PreGTD
 PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, imonth, iday, city, old.name, pop, Rel.CS, EN.URB.LCTY.UR,  capital, largestC, part.of.urban.center,
                                   Closest.Urban.Center,largest.UC, coastalMC, WC.UC.dist.km, attacktype1,targtype1, targsubtype1, weaptype1, weapsubtype1,
                                   TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, old.pop, pop.today))
-
-
-
 
 # write a csv, just to be sure
 write.csv(PreGTD, file="TerrorData/Pregtd.csv")
