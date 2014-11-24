@@ -40,42 +40,37 @@ if(file.exists("Cache/WC.UC.dist.csv")) {WC.UC.dist <- read.csv("Cache/WC.UC.dis
 
 
 ###### Merge GTD & Country Level Data ######
+
 GTDWDI <- merge(GTD, CountryData, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
 
 ###### Merge Combined set with City Data ######
+
 GTDWDIcity <- GTDWDI$city
 GTDWDIcountry <- GTDWDI$country_txt
 Cities <- WC.UC.dist$old.name
 Countries <- WC.UC.dist$country.etc
 WC.UC.dist["merge"] <- paste(Countries, Cities, sep="")
-WC.UC.dist <- WC.UC.dist[order(WC.UC.dist$merge),]
+WC.UC.dist <- WC.UC.dist[order(WC.UC.dist$merge, WC.UC.dist$capital, -WC.UC.dist$pop),]
 WC.UC.dist <- WC.UC.dist[!duplicated(WC.UC.dist$merge), ]
 Testframe <- GTDWDI
 Testframe["merge"] <-data.frame(paste(GTDWDIcountry, GTDWDIcity, sep=""))
 PreGTD <- merge(Testframe, WC.UC.dist, by=c("merge"), all.x=TRUE)
 PreGTD  <- PreGTD [order(-PreGTD$HUMscale, na.last=TRUE) , ]
-WC.UC.dist <-
-PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, imonth, iday, city, old.name, pop, old.pop, capital, region_txt, largestC, 
-                                  Closest.Urban.Center,largest.UC, coastalMC, WC.UC.dist.km, part.of.urban.center, 
-                                  in.urban.centers.environment, attacktype1,targtype1, targsubtype1, weaptype1, weapsubtype1, TUPscale,
-                                  PROPscale, HUMscale, SP.POP.TOTL,EN.URB.LCTY.UR, MAX.URB.LCTY.UR, EN.URB.MCTY, MAX.URB.MCTY, 
-                                  SP.URB.TOTL, MAX.URB.TOTL,EN.POP.DNST, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR))
+
+source('SmallScripts/dynamic_n_relative_CitySize.R')
+
+# limit and order the new PreGTD
+PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, imonth, iday, city, old.name, pop, Rel.CS, EN.URB.LCTY.UR,  capital, largestC, part.of.urban.center,
+                                  Closest.Urban.Center,largest.UC, coastalMC, WC.UC.dist.km, attacktype1,targtype1, targsubtype1, weaptype1, weapsubtype1,
+                                  TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, old.pop, pop.today))
 
 
-PreGTD$part.of.urban.center[is.na(PreGTD$part.of.urban.center)] <- FALSE
-PreGTD$in.urban.centers.environment[is.na(PreGTD$in.urban.centers.environment)] <- FALSE
-PreGTD$in.urban.centers.environment <- recode(PreGTD$in.urban.centers.environment, "TRUE=1")
-PreGTD$part.of.urban.center <- recode(PreGTD$part.of.urban.center, "TRUE=1")
-
-PreGTD$capital[is.na(PreGTD$capital)] <- 0 
-PreGTD$largestC[is.na(PreGTD$largestC)] <- 0 
-PreGTD$largest.UC[is.na(PreGTD$largest.UC)] <- 0 
-PreGTD$coastalMC[is.na(PreGTD$coastalMC)] <- 0 
-PreGTD$pop[is.na(PreGTD$pop)] <- 0 
 
 
+# write a csv, just to be sure
 write.csv(PreGTD, file="TerrorData/Pregtd.csv")
 rm(Testframe, GTDWDIcity, GTDWDIcountry, Cities, GTD, Countries, GTDWDI)
+
 
 
 

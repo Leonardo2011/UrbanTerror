@@ -82,14 +82,15 @@ if(file.exists("Cache/UrbanCenters.csv"))
   LUC["largest.UC"] <- 1
   UrbanCenters <- merge(UrbanCenters, LUC, by=c("Population", "Country"), all.x=TRUE)
   UrbanCenters <- UrbanCenters[order(-UrbanCenters$Population), ]
-  UrbanCenters$largest.UC <- recode(UrbanCenters$largest.UC, "NA=0")
-
+  UrbanCenters$largest.UC[is.na(UrbanCenters$largest.UC)] <-0
+  rm(LUC)
+  
   
   #Including dummy variables for coastal megacities
   source('SmallScripts/CoastalMC.R')
   
   #Deleting what is not needed anymore
-  rm(UrbanLoc, table ,URL, CoCi, CoCiLoc, LUC)
+  rm(UrbanLoc, table ,URL, CoCi, CoCiLoc)
   
   #Caching the Urban Centers dataframe
   write.csv(UrbanCenters, "Cache/UrbanCenters.csv")
@@ -165,7 +166,7 @@ if(file.exists("Cache/world.cities.csv"))
   worldcities2009$capital[worldcities2009$name == "delhi" & worldcities2009$country.etc == "India"] <- "1"
   worldcities2009$name[worldcities2009$name == "soul" & worldcities2009$country.etc == "Korea South"] <- "seoul"
   worldcities2009$name[worldcities2009$name == "bombay" &  worldcities2009$country.etc  == "India"] <- "mumbai"
-  worldcities2009$name[worldcities2009$name == "new york" &  worldcities2009$country.etc  == "USA "] <- "newyorkcity"
+  worldcities2009$name[worldcities2009$name == "new york" &  worldcities2009$country.etc  == "USA"] <- "new york city"
   
   #Reaching/Defining country and city standard
   worldcities2009$country.etc[worldcities2009$country.etc == "Russia"] <- "Russian Federation"
@@ -212,13 +213,7 @@ if(file.exists("Cache/world.cities.csv"))
   world.cities <- world.cities[order(-world.cities$pop), ]
   rm(worldcities2013, worldcities2009)
   
-  # Assigning a 1 to all the largest cities in a country
-  LC <- aggregate(pop ~ country.etc,world.cities,max)
-  LC["largestC"] <- 1
-  world.cities <- merge(world.cities, LC, by=c("pop", "country.etc"), all.x=TRUE)
-  world.cities <- world.cities[order(-world.cities$pop), ]
-  world.cities$largestC <- recode(world.cities$largestC, "NA=0")
-  rm(LC)
+
   
   
   #Bringing country names in combined world.cities to WDI lowercase standard
@@ -269,7 +264,8 @@ ALLDIST.fullmin["Closest.Urban.Center"] <- ALLDIST.fullmin$"full.name"
 ALLDIST.fullmin["WC.UC.dist.km"] <- ALLDIST.fullmin$"DISTkm"
 
 #Bringing information on closest Urban Center and the respective distance back into 'world.cities'
-UC.WC.merger <- subset(ALLDIST.fullmin, select = c("CityID", "Closest.Urban.Center", "Population", "WC.UC.dist.km", "Area", "Density", "coastalMC", "largest.UC"))
+UC.WC.merger <- subset(ALLDIST.fullmin, select = c("CityID", "Closest.Urban.Center", "Population", "WC.UC.dist.km", 
+                                                   "Area", "Density", "coastalMC", "largest.UC"))
 
 #New dataset WC.UC.dist! which stands for a merged dataset including distance and estimate if the respective city is part of an urban center
 world.cities["CityID"] <-rownames(world.cities)
@@ -299,11 +295,23 @@ WC.UC.dist["part.of.urban.center"] <- (WC.UC.dist$WC.UC.dist.km <= (20+(2*(((WC.
 WC.UC.dist["in.urban.centers.environment"] <- (WC.UC.dist$WC.UC.dist.km<=(40+(3*(((WC.UC.dist$Area)/pi)**0.5))))
 WC.UC.dist <- WC.UC.dist[order(-WC.UC.dist$pop, na.last=TRUE) , ]
 
-
 #remove rest
 rm(WCmerge, UCmerge, ALLDIST, ALLDIST.min, ALLDIST.fullmin, UC.WC.merger)
 
+
+
+# Assigning a 1 to all the largest cities in a country
+LC <- aggregate(pop ~ country.etc,WC.UC.dist,max)
+LC["largestC"] <- 1
+WC.UC.dist <- merge(WC.UC.dist, LC, by=c("pop", "country.etc"), all.x=TRUE)
+WC.UC.dist <- WC.UC.dist[order(-WC.UC.dist$pop), ]
+WC.UC.dist$largestC[is.na(WC.UC.dist$largestC)] <-0
+WC.UC.dist$largestC[WC.UC.dist$name == "bombay" &  WC.UC.dist$country.etc  == "india"] <- 1
+WC.UC.dist$largestC[WC.UC.dist$name == "mexicocity" &  WC.UC.dist$country.etc  == "mexico"] <- 1
+rm(LC)
+
 write.csv(WC.UC.dist, "Cache/WC.UC.dist.old.csv")
+
 
 #############################################################################################################
 ################################################ 4. Manitulating  ###########################################
@@ -326,19 +334,14 @@ G <- subset(GM, select=c(realpop, country, name, capital, pop, largestC, part.of
 rm(GM)
 
 
-# At this point, it makes sense to bring UC name in the form of city-like name
-X <- G$Closest.Urban.Center
-X <- gsub(".*,","",X)
-source('SmallScripts/CleanSpecialCharacters.R')
-G["UC"] <- X
-rm(X)
+
 
 # if UC was attacked, we use the UC Population instead of the previous city population
 G$realpop <- ifelse(G$part.of.urban.center==TRUE, G$Population, G$realpop)
 
 # if largest City was attacked, we use the EN.URB.LCTY.UR 
 #(WDI for largest city population) instead of the old population
-G$realpop <- ifelse((G$part.of.urban.center==FALSE&(G$largestC==1)&(!is.na(G$EN.URB.LCTY))), 
+G$realpop <- ifelse((G$part.of.urban.center==FALSE)&(G$largestC==1)&(G$pop.today<=999999)&(!is.na(G$EN.URB.LCTY.UR)),
                     G$EN.URB.LCTY.UR, G$realpop)
 
 # if UC attacked & its the largest UC > use EN.URB.LCTY.UR
@@ -348,6 +351,13 @@ G$realpop <- ifelse((G$part.of.urban.center==TRUE&(!is.na(G$EN.URB.LCTY))),
 
 #################################
 # finding sums in the WC.UC Data  for the 3 categories (largest, UC and rest) we have WDI Data for
+
+# At this point, it makes sense to bring UC name in the form of city-like name
+X <- G$Closest.Urban.Center
+X <- gsub(".*,","",X)
+source('SmallScripts/CleanSpecialCharacters.R')
+G["UC"] <- X
+rm(X)
 
 # sum of the population living in urban conglomerates of over 1m, excluding the largest city
 G.UC.SUMS <- subset(G, select = c(realpop, country, name, pop, Population, EN.URB.LCTY.UR, EN.URB.MCTY, SP.URB.TOTL,
@@ -378,11 +388,11 @@ G["MCTYpop.WDI"]<- G$EN.URB.MCTY - G$EN.URB.LCTY.UR
 
 # chaning the size of all cities under 1m inhabitants so the county sum fits the WDI
 G$realpop <- ifelse((G$realpop!=G$EN.URB.LCTY)&(G$realpop<=999999)&(!is.na(G$EN.URB.LCTY))&(!is.na(G$SUM.fake.REST))&
-                      (!is.na(G$Restpop.WDI))&(G$SUM.fake.REST!=0), (G$realpop*G$Restpop.WDI/G$SUM.fake.REST), G$realpop)
+                      (!is.na(G$Restpop.WDI))&(G$Restpop.WDI!=0)&(G$SUM.fake.REST!=0), (G$realpop*G$Restpop.WDI/G$SUM.fake.REST), G$realpop)
 
 # chaning the size of all cities over 1m inhabitants so the county sum fits the WDI
 G$realpop <- ifelse((G$realpop!=G$EN.URB.LCTY)&(G$realpop>=999999)&(!is.na(G$EN.URB.LCTY))&(!is.na(G$SUM.fake.MCTY))&
-                      (!is.na(G$MCTYpop.WDI))&(G$SUM.fake.REST!=0), (G$realpop*G$MCTYpop.WDI/G$SUM.fake.MCTY), G$realpop)
+                      (!is.na(G$MCTYpop.WDI))&(G$MCTYpop.WDI!=0)&(G$SUM.fake.REST!=0), (G$realpop*G$MCTYpop.WDI/G$SUM.fake.MCTY), G$realpop)
 
 
 # bringing it back into the WC.UC.dist

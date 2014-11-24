@@ -70,7 +70,7 @@ world.cities$capital[world.cities$name == "newdelhi" &  world.cities$country.etc
 world.cities$capital[world.cities$name == "peking" &  world.cities$country.etc  == "china"] <- 1
 world.cities$capital[world.cities$name == "beirut" &  world.cities$country.etc  == "lebanon"] <- 1
 world.cities$capital[world.cities$name == "guatemalacity" &  world.cities$country.etc  == "guatemala"] <- 1
-world.cities$largestC[world.cities$name == "bombay" &  world.cities$country.etc  == "india"] <- 1
-world.cities$largestC[world.cities$name == "mexicocity" &  world.cities$country.etc  == "mexico"] <- 1
 world.cities$capital[world.cities$name == "mexico" &  world.cities$country.etc  == "mexico"] <- 1
-
+world.cities$capital[world.cities$capital=="2"] <- 0
+world.cities$capital[world.cities$capital=="3"] <- 0
+world.cities$capital[is.na(world.cities$capital)] <- 0
