@@ -45,26 +45,27 @@ GTDWDI <- merge(GTD, CountryData, by.x=c("country_txt", "iyear"), by.y=c("countr
 ###### Merge Combined set with City Data ######
 GTDWDIcity <- GTDWDI$city
 GTDWDIcountry <- GTDWDI$country_txt
-Cities <- WC.UC.dist$name
+Cities <- WC.UC.dist$old.name
 Countries <- WC.UC.dist$country.etc
 WC.UC.dist["merge"] <- paste(Countries, Cities, sep="")
+WC.UC.dist <- WC.UC.dist[order(WC.UC.dist$merge),]
+WC.UC.dist <- WC.UC.dist[!duplicated(WC.UC.dist$merge), ]
 Testframe <- GTDWDI
 Testframe["merge"] <-data.frame(paste(GTDWDIcountry, GTDWDIcity, sep=""))
 PreGTD <- merge(Testframe, WC.UC.dist, by=c("merge"), all.x=TRUE)
-PreGTD  <- PreGTD [order(-PreGTD$eventid, na.last=TRUE) , ]
-
-PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, city, pop, capital, region_txt, largestC, Closest.Urban.Center, Population,
-                                  largest.UC, coastalMC, WC.UC.dist.km, part.of.urban.center, in.urban.centers.environment, attacktype1, 
-                                  targtype1, targsubtype1, weaptype1, weapsubtype1, TUPscale, PROPscale, HUMscale, SP.POP.TOTL,
-                                  EN.URB.LCTY.UR, MAX.URB.LCTY.UR, EN.URB.MCTY, MAX.URB.MCTY, SP.URB.TOTL, MAX.URB.TOTL,
-                                  EN.POP.DNST, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR))
+PreGTD  <- PreGTD [order(-PreGTD$HUMscale, na.last=TRUE) , ]
+WC.UC.dist <-
+PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, imonth, iday, city, old.name, pop, old.pop, capital, region_txt, largestC, 
+                                  Closest.Urban.Center,largest.UC, coastalMC, WC.UC.dist.km, part.of.urban.center, 
+                                  in.urban.centers.environment, attacktype1,targtype1, targsubtype1, weaptype1, weapsubtype1, TUPscale,
+                                  PROPscale, HUMscale, SP.POP.TOTL,EN.URB.LCTY.UR, MAX.URB.LCTY.UR, EN.URB.MCTY, MAX.URB.MCTY, 
+                                  SP.URB.TOTL, MAX.URB.TOTL,EN.POP.DNST, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR))
 
 
 PreGTD$part.of.urban.center[is.na(PreGTD$part.of.urban.center)] <- FALSE
 PreGTD$in.urban.centers.environment[is.na(PreGTD$in.urban.centers.environment)] <- FALSE
 PreGTD$in.urban.centers.environment <- recode(PreGTD$in.urban.centers.environment, "TRUE=1")
 PreGTD$part.of.urban.center <- recode(PreGTD$part.of.urban.center, "TRUE=1")
-
 
 PreGTD$capital[is.na(PreGTD$capital)] <- 0 
 PreGTD$largestC[is.na(PreGTD$largestC)] <- 0 
