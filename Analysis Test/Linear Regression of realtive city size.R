@@ -5,7 +5,7 @@
 
 PreGTD$PROPscale<-as.numeric(PreGTD$PROPscale)
 PreGTD$HUMscale<-as.numeric(PreGTD$HUMscale)
-PreGTD["weightGTD"] <- as.numeric((PreGTD$HUMscale^(1/2))+(PreGTD$PROPscale/(PreGTD$PROPscale+1)+1))
+PreGTD["weightGTD"] <- as.numeric((PreGTD$HUMscale^(0.5))+(PreGTD$PROPscale^(0.2)))
 PreGTD$weightGTD[is.na(PreGTD$weightGTD)] <- 0
 PreGTD$Rel.CS<-as.numeric(PreGTD$Rel.CS)
 PreGTD$weightGTD<-as.numeric(PreGTD$weightGTD)
@@ -18,7 +18,7 @@ stargazer(Linear1, type="latex", out="Analysis Test/Linear Regression of realtiv
 
 
 #summary(Linear1)
-plot(Linear1, which = 4)
+plot(Linear1, which = 1)
 plot(PreGTD$iyear, 100*PreGTD$Rel.CS)
 
 
