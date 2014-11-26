@@ -1,3 +1,17 @@
+# Lukas Brainstrom, things to think about testing:
+
+# GDP, GDP Growth
+# Numer of Minorities or languages spoken 
+# Geographical Size, Population Density (Size/POP toal)
+# Total Pop, Population Growth 
+# Urban pop, Urban Pop Share
+# Telephone Acess, Energy Access, Transportation Acces
+# Infrastructure invenstment
+# Roads to Pop density (Length of contry roads (+ train?) divided by Pop Density)
+# Mil Expenditury 
+
+
+
 EconGov <- WDI(indicator=c('NY.GDP.MKTP.KD', 
                            'NY.GDP.MKTP.KD.ZG',
                            'NY.GDP.MKTP.PP.KD',
