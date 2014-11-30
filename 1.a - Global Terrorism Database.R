@@ -29,12 +29,17 @@ rawGTD <- read.csv("TerrorData/globalterrorismdb_0814dist.csv", header=TRUE)
 #Documentation on the variables we select can be found on: http://www.start.umd.edu/gtd/downloads/Codebook.pdf
 
 GTD <- subset(rawGTD, select = c(eventid, iyear, imonth, iday, country, country_txt, region, provstate, region_txt, city, attacktype1, targtype1, targsubtype1,
-                                 weaptype1, weapsubtype1, propextent, nkill, nwound), 
+                                 weaptype1, weapsubtype1, propextent, nkill, nwound, latitude, longitude), 
               iyear >= 1970 & success == 1, na.strings = c("", " "))
 rm(rawGTD)
 
 
 ###### Cleaning Data  ######
+
+# clean lat long data a little bit
+GTD$latitude[GTD$latitude=="" | GTD$latitude==" "]  <- NA
+GTD$longitude[GTD$longitude=="" | GTD$longitude==" "]  <- NA
+
 
 
 #Eliminating inconsistencies in the GTD's countr_txt column and bring to WDI standard.
