@@ -61,8 +61,16 @@ PreGTD  <- PreGTD [order(-PreGTD$HUMscale, na.last=TRUE) , ]
 
 source('SmallScripts/dynamic_n_relative_CitySize.R')
 
+
+# bring the lat lon data together from both the GTD and the city data sets
+PreGTD["latg"] <- as.numeric(PreGTD$lat)
+PreGTD$lat <- NULL
+PreGTD["lat"] <- ifelse(!is.na(PreGTD$latg), as.numeric(PreGTD$latg), (ifelse(!is.na(PreGTD$latitude), as.numeric(PreGTD$latitude), NA)))
+PreGTD["lon"] <- ifelse(!is.na(PreGTD$long), as.numeric(PreGTD$long), (ifelse(!is.na(PreGTD$longitude), as.numeric(PreGTD$longitude), NA)))             
+PreGTD$latg <- NULL
+
 # limit and order the new PreGTD
-PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, imonth, iday, city, region_txt, old.name, pop, Rel.CS, EN.URB.LCTY.UR,  capital, largestC, part.of.urban.center,
+PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, imonth, iday, city, region_txt, old.name, pop, lat, lon, Rel.CS, EN.URB.LCTY.UR,  capital, largestC, part.of.urban.center,
                                   Closest.Urban.Center,largest.UC, coastalMC, WC.UC.dist.km, attacktype1,targtype1, targsubtype1, weaptype1, weapsubtype1,
                                   TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, old.pop, pop.today))
 

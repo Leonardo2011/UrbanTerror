@@ -40,8 +40,6 @@ rm(rawGTD)
 GTD$latitude[GTD$latitude=="" | GTD$latitude==" "]  <- NA
 GTD$longitude[GTD$longitude=="" | GTD$longitude==" "]  <- NA
 
-
-
 #Eliminating inconsistencies in the GTD's countr_txt column and bring to WDI standard.
 GTD$country_txt <- as.character(GTD$country_txt)
 
