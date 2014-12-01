@@ -154,37 +154,37 @@ G2["pop.that.year"] <-  round(G2$city.population_with_time)
 G2 <- G2[order(G2$country.etc, G2$year, -G2$pop.that.year),]
 G2$RANK.Country <- unlist(with(G2, tapply(-pop.that.year, list(year, country.etc), function(x) rank(x, ties.method= "min"))))
 Rank.Country.MAX<-aggregate(G2$RANK.Country, by=list(G2$year, G2$country.etc), FUN=max)
-colnames(Rank.Country.MAX)[1] <- "year"
-colnames(Rank.Country.MAX)[2] <- "country.etc"
+colnames(Rank.Country.MAX)[1] <- "iyear"
+colnames(Rank.Country.MAX)[2] <- "country_txt"
 colnames(Rank.Country.MAX)[3] <- "Rank.Country.MAX"
-G2 <- merge(G2, Rank.Country.MAX, by=c("year", "country.etc"), all.x=TRUE)
+GTDr <- merge(GTD, Rank.Country.MAX, by=c("iyear", "country_txt"), all.x=TRUE)
 
 # introducing yearly population size rank of each city in the world comparasion  
 G2 <- G2[order(G2$year, -G2$pop.that.year),]
 G2$RANK.World <- unlist(with(G2, tapply(-pop.that.year, year, function(x) rank(x, ties.method= "min"))))
 Rank.World.MAX<-aggregate(G2$RANK.World, by=list(G2$year), FUN=max)
-colnames(Rank.World.MAX)[1] <- "year"
+colnames(Rank.World.MAX)[1] <- "iyear"
 colnames(Rank.World.MAX)[2] <- "Rank.World.MAX"
-G2 <- merge(G2, Rank.World.MAX, by=c("year"), all.x=TRUE)
-rm(Rank.World.MAX, Rank.Country.MAX)
-WC.UC.full<-G2
+GTDr <- merge(GTDr, Rank.World.MAX, by=c("iyear"), all.x=TRUE)
 
-rm(G2)
+WC.UC.full<-G2
+rm(G2, Rank.World.MAX, Rank.Country.MAX)
 
 ###### Merge combined set with GTD ######
 
 
 # merge
-GTD <- merge(GTD, CountryData, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
+GTD2 <- merge(GTDr, CountryData, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
+rm(GTDr)
 
 WC.UC.merge <- WC.UC.full$merge
 WC.UC.time <- WC.UC.full$Time
 WC.UC.full["merge2"] <- paste(WC.UC.merge, WC.UC.time, sep="")
-GTDcity <- GTD$city
-GTDcountry <- GTD$country_txt
-GTDyear <-GTD$iyear
-GTD["merge"] <-data.frame(paste(GTDcountry, GTDcity, sep=""))
-GTD["merge2"] <-data.frame(paste(GTDcountry, GTDcity, GTDyear, sep=""))
+GTDcity <- GTD2$city
+GTDcountry <- GTD2$country_txt
+GTDyear <-GTD2$iyear
+GTD2["merge"] <-data.frame(paste(GTDcountry, GTDcity, sep=""))
+GTD2["merge2"] <-data.frame(paste(GTDcountry, GTDcity, GTDyear, sep=""))
 
 WC.UC.full$Extra.WAR.In <- NULL
 WC.UC.full$Extra.WAR.Out <- NULL
@@ -215,25 +215,29 @@ WC.UC.full$SP.RUR.TOTL.ZG <- NULL
 WC.UC.full$SP.RUR.TOTL.ZS <- NULL
 WC.UC.full$EN.URB.LCTY.UR <- NULL
 
-PreGTD <- merge(GTD, WC.UC.full, by=c("merge2"), all.x=TRUE)
+PreGTD <- merge(GTD2, WC.UC.full, by=c("merge2"), all.x=TRUE)
 PreGTD  <- PreGTD [order(-PreGTD$HUMscale, na.last=TRUE) , ]
 
 # bring the lat lon data together from both the GTD and the city data sets
 PreGTD$latitude <- ifelse(is.na(PreGTD$latitude), as.numeric(PreGTD$lat), as.numeric(PreGTD$lat))
 PreGTD$longitude <- ifelse(is.na(PreGTD$longitude), as.numeric(PreGTD$long), as.numeric(PreGTD$long))
 
+# better names before subsetting
+
 PreGTD["GTD.city"] <- PreGTD$city
 PreGTD["WCUC.city.old"] <- PreGTD$old.name
 PreGTD["WCUC.city"] <- PreGTD$name
+PreGTD["merge"]<- PreGTD$merge.x
 
 
 # limit and order the new PreGTD
-PreGTD <- subset(PreGTD, select=c(eventid, merge2, iyear, imonth, iday, country_txt, region_txt, GTD.city, WCUC.city, WCUC.city.old, 
+PreGTD <- subset(PreGTD, select=c(eventid, iyear, imonth, iday, country_txt, region_txt, GTD.city, WCUC.city, WCUC.city.old, 
                                   latitude, longitude, pop.that.year, Rel.CS, inUC, aroundUC, RANK.Country, Rank.Country.MAX, RANK.World, 
                                   Rank.World.MAX, capital, largestC, Closest.Urban.Center,largest.UC, coastalMC, WC.UC.dist.km, 
                                   attacktype1, targtype1, targsubtype1, weaptype1, weapsubtype1, TUPscale, PROPscale, HUMscale, 
-                                  Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, old.pop))
+                                  Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, old.pop, merge, merge2))
 
+# fill rural atacks (= no city found) with respective data 
 PreGTD$coastalMC[is.na(PreGTD$coastalMC)] <- 0 
 PreGTD$capital[is.na(PreGTD$capital)] <- 0 
 PreGTD$largest.UC[is.na(PreGTD$largest.UC)] <- 0 
@@ -248,11 +252,12 @@ PreGTD$Inter.WAR[is.na(PreGTD$Inter.WAR)] <- 0
 PreGTD$Rel.CS[is.na(PreGTD$Rel.CS)] <- 0 
 PreGTD$inUC[is.na(PreGTD$inUC)] <- 0 
 PreGTD$aroundUC[is.na(PreGTD$aroundUC)] <- 0 
-
+PreGTD$RANK.Country <- ifelse(is.na(PreGTD$RANK.Country), as.numeric(PreGTD$Rank.Country.MAX), PreGTD$RANK.Country)
+PreGTD$RANK.World <- ifelse(is.na(PreGTD$RANK.World), as.numeric(PreGTD$Rank.World.MAX), PreGTD$RANK.World)
 
 # write a csv, just to be sure
 write.csv(PreGTD, file="TerrorData/Pregtd.csv")
-rm(WC.UC.merge, WC.UC.time, GTDcountry, GTDcity, GTDyear, GTD, Countries, GTDWDI, WC.UC.dist)
+rm(WC.UC.merge, WC.UC.time, GTDcountry, GTDcity, GTDyear, GTD2, WC.UC.dist)
 
 
 
