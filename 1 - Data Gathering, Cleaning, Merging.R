@@ -39,28 +39,154 @@ if(file.exists("Cache/WC.UC.dist.csv")) {WC.UC.dist <- read.csv("Cache/WC.UC.dis
 #############################################################################################################
 
 
-###### Merge GTD & Country Level Data ######
+###### Merge City and Country Data ######
 
-GTDWDI <- merge(GTD, CountryData, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
-
-###### Merge Combined set with City Data ######
-
-GTDWDIcity <- GTDWDI$city
-GTDWDIcountry <- GTDWDI$country_txt
-Cities <- WC.UC.dist$old.name
-Countries <- WC.UC.dist$country.etc
-WC.UC.dist["merge"] <- paste(Countries, Cities, sep="")
+# create merge variable
+WC.UC.dist["merge"] <- paste(WC.UC.dist$country.etc, WC.UC.dist$old.name, sep="")
 WC.UC.dist <- WC.UC.dist[order(WC.UC.dist$merge, WC.UC.dist$capital, -WC.UC.dist$pop),]
 WC.UC.dist <- WC.UC.dist[!duplicated(WC.UC.dist$merge), ]
-Testframe <- GTDWDI
-Testframe["merge"] <-data.frame(paste(GTDWDIcountry, GTDWDIcity, sep=""))
-PreGTD <- merge(Testframe, WC.UC.dist, by=c("merge"), all.x=TRUE)
-PreGTD  <- PreGTD [order(-PreGTD$HUMscale, na.last=TRUE) , ]
+X <- WC.UC.dist
+
+# create all missing years in the city data artificially
+X["start"] <- 1970
+X["end"] <- 2013
+X <- TimeFill(X, GroupVar = 'merge', StartVar = 'start', EndVar = 'end')
+X$TimeFilled <- NULL
+
+# merge city and country data 
+WC.UC.full<- merge(X, WC.UC.dist, by=c("merge"), all.x=TRUE)
+WC.UC.full <- merge(WC.UC.full, CountryData, by.x=c("country.etc", "Time"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
+rm(X)
+
+# minor cleanups 
+WC.UC.full$part.of.urban.center[is.na(WC.UC.full$part.of.urban.center)] <- FALSE
+WC.UC.full$in.urban.centers.environment[is.na(WC.UC.full$in.urban.centers.environment)] <- FALSE
+WC.UC.full$in.urban.centers.environment <- recode(WC.UC.full$in.urban.centers.environment, "TRUE=1")
+WC.UC.full$part.of.urban.center <- recode(WC.UC.full$part.of.urban.center, "TRUE=1")
+WC.UC.full$capital[is.na(WC.UC.full$capital)] <- 0 
+WC.UC.full$largestC[is.na(WC.UC.full$largestC)] <- 0 
+WC.UC.full$largest.UC[is.na(WC.UC.full$largest.UC)] <- 0 
+WC.UC.full$coastalMC[is.na(WC.UC.full$coastalMC)] <- 0 
+
 
 ###### Change City Size on yearly basis with WDi data and introduce relative city size (Rel.CS) ######
 
-source('SmallScripts/dynamic_n_relative_CitySize.R')
+# prepare
+G2<-WC.UC.full
+G2$SP.URB.TOTL <- as.numeric(G2$SP.URB.TOTL )
+G2$MAX.URB.TOTL <- as.numeric(G2$MAX.URB.TOTL)
+G2$EN.URB.MCTY <- as.numeric(G2$EN.URB.MCTY)
+G2$MAX.URB.MCTY <- as.numeric(G2$MAX.URB.MCTY)
+G2$EN.URB.LCTY.UR <- as.numeric(G2$EN.URB.LCTY.UR)
+G2$MAX.URB.LCTY.UR <- as.numeric(G2$MAX.URB.LCTY.UR)
+G2$WC.UC.dist.km <- as.numeric(G2$WC.UC.dist.km)
+G2$Area <- as.numeric(G2$Area)
+G2["year"] <- as.numeric(G2$Time)
+G2["pop.2013"] <- as.numeric(G2$pop)
+G2$old.pop <- G2$pop
+G2$pop <- NULL
 
+
+# Area Manipulation for UC's, in order to account for growing urban centers incorporating less in the past
+G2$Area <-ifelse(G2$largest.UC==1 & !is.na(G2$EN.URB.LCTY.UR), 
+                 (G2$EN.URB.LCTY.UR/G2$MAX.URB.LCTY.UR*G2$Area), G2$Area)
+G2$Area <-ifelse(G2$largest.UC==0 & !is.na(G2$EN.URB.MCTY)
+                 & !is.na(G2$EN.URB.LCTY.UR) & !is.na(G2$MAX.URB.MCTY) & !is.na(G2$MAX.URB.LCTY.UR)
+                 ,((G2$EN.URB.MCTY - G2$EN.URB.LCTY.UR)/(G2$MAX.URB.MCTY - G2$MAX.URB.LCTY.UR)*G2$Area), G2$Area)
+
+# re-answering the question again, if a city is part of an UC, now with new Area estimates of all UCs
+G2["inUC"] <- ifelse((G2$WC.UC.dist.km <= (15+(((G2$Area)/pi)**0.5))), 1, 0) # 20km + radius of UC as circle
+G2["aroundUC"] <- ifelse((G2$WC.UC.dist.km <= (30+(((G2$Area)/pi)**0.5))), 1, 0) # 40km + radius of UC as circle
+G2$inUC[is.na(G2$inUC)]<- 0 
+
+#in case we only have very limited numers on the country population, we put in some first assumptions based on total population
+# and UC population
+G2["city.population_with_time"] <- ifelse(G2$inUC==1, G2$Population, G2$pop.2013)
+G2$city.population_with_time <- ifelse(!is.na(G2$SP.POP.TOTL), G2$pop.2013*G2$SP.POP.TOTL/G2$MAX.POP.TOTL, G2$pop.2013)
+
+#in case we only have URB.POP numers, we assume that all cities grew with those numbers each year
+G2$city.population_with_time <- ifelse(!is.na(G2$SP.URB.TOTL), G2$pop.2013*G2$SP.URB.TOTL/G2$MAX.URB.TOTL, G2$pop.2013)
+
+# if it is the largest city, EN.URB.LCTY.UR is the size estimator for each year
+G2$city.population_with_time <-ifelse((G2$inUC==0 & G2$largestC==1 & !is.na(G2$EN.URB.LCTY.UR))|
+                                        (G2$inUC==1 & G2$largest.UC==1 & !is.na(G2$EN.URB.LCTY.UR)),
+                                      G2$EN.URB.LCTY.UR, G2$city.population_with_time)
+
+# if it is a city with less than 1mil, SP.URB.TOTL minus EN.URB.MCTY is the size estimator for each year
+G2$city.population_with_time <- ifelse(G2$city.population_with_time!=G2$EN.URB.LCTY.UR
+                                       & G2$pop.2013<=999999
+                                       & G2$EN.URB.MCTY <= G2$SP.URB.TOTL & G2$MAX.URB.MCTY <= G2$MAX.URB.TOTL
+                                       & !(((G2$SP.URB.TOTL-G2$EN.URB.MCTY)/(G2$MAX.URB.TOTL-G2$MAX.URB.MCTY)
+                                            *G2$city.population_with_time)>=G2$EN.URB.LCTY.UR)
+                                       & !(((G2$SP.URB.TOTL-G2$EN.URB.MCTY)/(G2$MAX.URB.TOTL-G2$MAX.URB.MCTY))<=0)
+                                       & !is.na(G2$EN.URB.MCTY) & G2$MAX.URB.TOTL!=0 & G2$MAX.URB.MCTY!=0
+                                       & !is.na(G2$EN.URB.LCTY.UR) & !is.na(G2$SP.URB.TOTL),
+                                       ((G2$SP.URB.TOTL-G2$EN.URB.MCTY)/(G2$MAX.URB.TOTL-G2$MAX.URB.MCTY)
+                                        *G2$city.population_with_time), (G2$city.population_with_time))
+
+# if it is a city with more than 1mil, EN.URB.MCTY minus EN.URB.LCTY.UR is the size estimator for each year
+G2$city.population_with_time <- ifelse(G2$city.population_with_time!=G2$EN.URB.LCTY.UR & G2$pop.2013>=999999
+                                       & !(((G2$EN.URB.MCTY-G2$EN.URB.LCTY.UR)/
+                                              (G2$MAX.URB.MCTY-G2$MAX.URB.LCTY.UR))<=0)
+                                       & !(((G2$EN.URB.MCTY-G2$EN.URB.LCTY.UR)/
+                                              (G2$MAX.URB.MCTY-G2$MAX.URB.LCTY.UR)
+                                            *G2$city.population_with_time)>=G2$EN.URB.LCTY.UR)
+                                       & !is.na(G2$EN.URB.MCTY) & !is.na(G2$EN.URB.LCTY.UR) & G2$MAX.URB.MCTY!=0, 
+                                       ((G2$EN.URB.MCTY-G2$EN.URB.LCTY.UR)/(G2$MAX.URB.MCTY-G2$MAX.URB.LCTY.UR)
+                                        *G2$city.population_with_time), G2$city.population_with_time)
+
+# some final cleaning of minor leftovers
+G2$city.population_with_time <- ifelse(!G2$city.population_with_time<=G2$EN.URB.LCTY.UR & G2$largestC==1, 
+                                       G2$EN.URB.LCTY.UR, G2$city.population_with_time)
+G2$city.population_with_time <- ifelse(!G2$city.population_with_time<=G2$EN.URB.LCTY.UR & G2$largestC==0, 
+                                       runif(1, (G2$EN.URB.LCTY.UR/10), G2$EN.URB.LCTY.UR), G2$city.population_with_time)
+
+
+###### introduce some new variable, because finally we can ######
+
+
+# introducing relative city size to countries largest city
+G2["Rel.CS"] <- G2$city.population_with_time/G2$EN.URB.LCTY.UR
+G2 <- G2[order(-G2$Rel.CS),]
+
+# rename the new population estimate
+G2["pop.year"] <-  round(G2$city.population_with_time)
+
+# introducing yearly population size rank of each city within its country 
+G2 <- G2[order(G2$country.etc, G2$year, -G2$pop.year),]
+G2$RANK.Country <- unlist(with(G2, tapply(-pop.year, list(year, country.etc), function(x) rank(x, ties.method= "min"))))
+Rank.Country.MAX<-aggregate(G2$RANK.Country, by=list(G2$year, G2$country.etc), FUN=max)
+colnames(Rank.Country.MAX)[1] <- "year"
+colnames(Rank.Country.MAX)[2] <- "country.etc"
+colnames(Rank.Country.MAX)[3] <- "Rank.Country.MAX"
+G2 <- merge(G2, Rank.Country.MAX, by=c("year", "country.etc"), all.x=TRUE)
+
+# introducing yearly population size rank of each city in the world comparasion  
+G2 <- G2[order(G2$year, -G2$pop.year),]
+G2$RANK.World <- unlist(with(G2, tapply(-pop.year, year, function(x) rank(x, ties.method= "min"))))
+Rank.World.MAX<-aggregate(G2$RANK.World, by=list(G2$year), FUN=max)
+colnames(Rank.World.MAX)[1] <- "year"
+colnames(Rank.World.MAX)[2] <- "Rank.World.MAX"
+G2 <- merge(G2, Rank.World.MAX, by=c("year"), all.x=TRUE)
+rm(Rank.World.MAX, Rank.Country.MAX)
+
+WC.UC.full<-G2
+
+
+###### Merge combined set with GTD ######
+
+
+# merge
+WC.UC.merge <- WC.UC.full$merge
+WC.UC.time <- WC.UC.full$Time
+WC.UC.full["merge2"] <- paste(WC.UC.merge, WC.UC.time, sep="")
+GTDcity <- GTD$city
+GTDcountry <- GTD$country_txt
+GTDyear <-GTD$iyear
+GTD["merge"] <-data.frame(paste(GTDcountry, GTDcity, sep=""))
+GTD["merge2"] <-data.frame(paste(GTDcountry, GTDcity, GTDyear, sep=""))
+PreGTD <- merge(GTD, WC.UC.full, by=c("merge2"), all.x=TRUE)
+PreGTD  <- PreGTD [order(-PreGTD$HUMscale, na.last=TRUE) , ]
 
 # bring the lat lon data together from both the GTD and the city data sets
 PreGTD["latg"] <- as.numeric(PreGTD$lat)
@@ -70,13 +196,16 @@ PreGTD["lon"] <- ifelse(!is.na(PreGTD$long), as.numeric(PreGTD$long), (ifelse(!i
 PreGTD$latg <- NULL
 
 # limit and order the new PreGTD
-PreGTD <- subset(PreGTD, select=c(eventid, merge, iyear, imonth, iday, city, region_txt, old.name, pop, lat, lon, Rel.CS, EN.URB.LCTY.UR,  capital, largestC, part.of.urban.center,
-                                  Closest.Urban.Center,largest.UC, coastalMC, WC.UC.dist.km, attacktype1,targtype1, targsubtype1, weaptype1, weapsubtype1,
-                                  TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, old.pop, pop.today))
+PreGTD <- subset(PreGTD, select=c(eventid, merge2, iyear, imonth, iday, city, old.name, lat, lon, pop.year, Rel.CS, 
+                                  inUC, aroundUC, RANK.Country, Rank.Country.MAX, RANK.World, Rank.World.MAX, capital, largestC, 
+                                  Closest.Urban.Center,largest.UC, coastalMC, WC.UC.dist.km, attacktype1, targtype1, targsubtype1,
+                                  weaptype1, weapsubtype1, TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, 
+                                  Inter.WAR, old.pop))
 
 # write a csv, just to be sure
 write.csv(PreGTD, file="TerrorData/Pregtd.csv")
-rm(Testframe, GTDWDIcity, GTDWDIcountry, Cities, GTD, Countries, GTDWDI)
+rm(WC.UC.merge, WC.UC.time, GTDWDIcountry, Cities, GTD, Countries, GTDWDI)
+
 
 
 

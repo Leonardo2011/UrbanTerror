@@ -13,6 +13,7 @@ world.cities$country.etc[world.cities$country.etc == "jersey"] <- "channelisland
 world.cities$country.etc[world.cities$country.etc == "easterisland"] <- "chile"
 world.cities$country.etc[world.cities$country.etc == "taiwan"] <- "china"
 world.cities$country.etc[world.cities$country.etc == "congodemocraticrepublic"] <- "congodemrep"
+world.cities$country.etc[world.cities$country.etc == "capeverde"] <- "caboverde"
 world.cities$country.etc[world.cities$country.etc == "congo"] <- "congorep"
 world.cities$country.etc[world.cities$country.etc == "ivorycoast"] <- "cotedivoire"
 world.cities$country.etc[world.cities$country.etc == "faroeislands"] <- "denmark"

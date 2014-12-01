@@ -1,4 +1,3 @@
-# MPP-E1180: Introduction to Collaborative Social Science Data Analysis
 ### Fall 2014
 ### Instructor: Christopher Gandrud
 
@@ -71,17 +70,23 @@ colnames(Highs.URB.TOTL)[2] <- "MAX.URB.TOTL"
 Highs.URB.MCTY <- aggregate(as.numeric(WDIData$EN.URB.MCTY), list(country=WDIData$country),max)
 colnames(Highs.URB.MCTY)[2] <- "MAX.URB.MCTY"
 Highs.URB.LCTY.UR <- aggregate(as.numeric(WDIData$EN.URB.LCTY.UR), list(country=WDIData$country),max)
-colnames(Highs.URB.LCTY.UR )[2] <- "MAX.URB.LCTY.UR"
+colnames(Highs.URB.LCTY.UR)[2] <- "MAX.URB.LCTY.UR"
+Highs.POP.TOTL <- aggregate(as.numeric(WDIData$SP.POP.TOTL), list(country=WDIData$country),max)
+colnames(Highs.POP.TOTL)[2] <- "MAX.POP.TOTL"
 
 # bringing it back into the WDI Data
 WDIData <- merge(WDIData, Highs.URB.TOTL, by=("country"))
 WDIData <- merge(WDIData, Highs.URB.MCTY, by=("country"))
 WDIData <- merge(WDIData, Highs.URB.LCTY.UR, by=("country"))
-rm(Highs.URB.TOTL, Highs.URB.MCTY, Highs.URB.LCTY.UR)
+WDIData <- merge(WDIData, Highs.POP.TOTL, by=("country"))
 
-#MAX.URB.TOTL = Urban population at its highestt for
-#MAX.URB.MCTY = Population in urban agglomerations of more than 1 million at its highestt for
-#MAX.LCTY.UR = Population in the largest city
+
+rm(Highs.URB.TOTL, Highs.URB.MCTY, Highs.URB.LCTY.UR, Highs.POP.TOTL)
+
+#MAX.URB.TOTL = Urban population at its highest point
+#MAX.URB.MCTY = Population in urban agglomerations of more than 1 million at its highest point
+#MAX.LCTY.UR = Population in the largest city at its highest point
+#MAX.POP.TOTL = Population at its highest point
 
 
 ###### Cleaning Data  ######
@@ -346,7 +351,7 @@ CountryData <- WDI_n_WAR
 X <- CountryData$country
 source('SmallScripts/CleanSpecialCharacters.R')
 CountryData$country <- X
-rm(X)
+rm(X, WDI_n_WAR, WDIData)
 
 #create cache WDIData.csv (last: 15.11.2014)
 write.csv(CountryData, "Cache/CountryData.csv")

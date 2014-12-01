@@ -159,7 +159,9 @@ if(file.exists("Cache/world.cities.csv"))
   
   
   ###World cities dataset 2/2 (worldcities2009 from the 'maps' package)###
-  
+  data(world.cities)
+  worldcities2009 <- world.cities
+  rm(world.cities)
   worldcities2009$name <- tolower(worldcities2009$name)
   
   #the dataset has missing or wrong information
@@ -178,6 +180,7 @@ if(file.exists("Cache/world.cities.csv"))
   worldcities2009$country.etc[worldcities2009$country.etc == "East Timor"] <- "Timor-Leste"
   worldcities2009$country.etc[worldcities2009$country.etc == "Madeira"] <- "Portugal"
   worldcities2009$country.etc[worldcities2009$country.etc == "Madiera"] <- "Portugal"
+  worldcities2009$country.etc[worldcities2009$country.etc == "Cape Verde"] <- "caboverde"
   worldcities2009$country.etc<-gsub(" ", "",worldcities2009$country.etc, ignore.case=TRUE)
   worldcities2009$country.etc<-gsub("\\,", "",worldcities2009$country.etc, ignore.case=TRUE)
   worldcities2009$country.etc <- tolower(worldcities2009$country.etc)
@@ -314,13 +317,16 @@ write.csv(WC.UC.dist, "Cache/WC.UC.dist.old.csv")
 
 
 #############################################################################################################
-################################################ 4. Manitulating  ###########################################
+################################################ 4. Manipulating  ###########################################
 #############################################################################################################
+
 
 
 # Country level data from the World Bank Development Indicators (WDI) and the The Correlates of War (COW) project data on wars.
 if(file.exists("Cache/CountryData.csv")){CountryData <- read.csv("Cache/CountryData.csv")} else{source("1.b - Country Data.R")}
 
+# Now with both City and Country Data gathered, we can fill sime gaps in the Wold Banks largest city population indicator
+source('SmallScripts/fill.EN.URB.LCTY.UR.R')
 
 # Bring Country level Data for 2010 into the WC.UC Data for the purpose of changing city population to fit WDI aggregates
 G <- WC.UC.dist
@@ -333,20 +339,17 @@ G <- subset(GM, select=c(realpop, country, name, capital, pop, largestC, part.of
                          EN.URB.LCTY.UR, EN.URB.MCTY, SP.URB.TOTL,SP.POP.TOTL))
 rm(GM)
 
-
-
+# if largest City was attacked, we use the EN.URB.LCTY.UR 
+#(WDI for largest city population) instead of the old population
+G$realpop <- ifelse(G$largestC==1&(!is.na(G$EN.URB.LCTY.UR)),
+                    G$EN.URB.LCTY.UR, G$realpop)
 
 # if UC was attacked, we use the UC Population instead of the previous city population
 G$realpop <- ifelse(G$part.of.urban.center==TRUE, G$Population, G$realpop)
 
-# if largest City was attacked, we use the EN.URB.LCTY.UR 
-#(WDI for largest city population) instead of the old population
-G$realpop <- ifelse((G$part.of.urban.center==FALSE)&(G$largestC==1)&(G$pop.today<=999999)&(!is.na(G$EN.URB.LCTY.UR)),
-                    G$EN.URB.LCTY.UR, G$realpop)
-
-# if UC attacked & its the largest UC > use EN.URB.LCTY.UR
-G$realpop <- ifelse((G$part.of.urban.center==TRUE&(!is.na(G$EN.URB.LCTY))), 
-                    (ifelse(G$largest.UC==1,G$EN.URB.LCTY, G$realpop)), G$realpop)
+# if UC attacked & its the largest UC, use EN.URB.LCTY.UR
+G$realpop <- ifelse((G$part.of.urban.center==TRUE&(!is.na(G$EN.URB.LCTY.UR))), 
+                    (ifelse(G$largest.UC==1,G$EN.URB.LCTY.UR, G$realpop)), G$realpop)
 
 
 #################################
@@ -386,13 +389,17 @@ G["Restpop.WDI"]<- G$SP.URB.TOTL - G$EN.URB.MCTY
 G["MCTYpop.WDI"]<- G$EN.URB.MCTY - G$EN.URB.LCTY.UR
 
 
+# bring all UC-bound cities back to their original estimate 
+G$realpop <- ifelse(G$part.of.urban.center==TRUE, G$pop, G$realpop)
+G$realpop <- ifelse(G$largestC==1&(!is.na(G$EN.URB.LCTY.UR)),G$EN.URB.LCTY.UR, G$realpop)
+
 # chaning the size of all cities under 1m inhabitants so the county sum fits the WDI
-G$realpop <- ifelse((G$realpop!=G$EN.URB.LCTY)&(G$realpop<=999999)&(!is.na(G$EN.URB.LCTY))&(!is.na(G$SUM.fake.REST))&
-                      (!is.na(G$Restpop.WDI))&(G$Restpop.WDI!=0)&(G$SUM.fake.REST!=0), (G$realpop*G$Restpop.WDI/G$SUM.fake.REST), G$realpop)
+G$realpop <- ifelse((G$realpop!=G$EN.URB.LCTY.UR)& (G$realpop<=999999)&(!is.na(G$EN.URB.LCTY.UR))&(!is.na(G$SUM.fake.REST))&
+                      (!is.na(G$Restpop.WDI))&(G$Restpop.WDI>=999999)&(G$SUM.fake.REST>=999999), (G$realpop*G$Restpop.WDI/G$SUM.fake.REST), G$realpop)
 
 # chaning the size of all cities over 1m inhabitants so the county sum fits the WDI
-G$realpop <- ifelse((G$realpop!=G$EN.URB.LCTY)&(G$realpop>=999999)&(!is.na(G$EN.URB.LCTY))&(!is.na(G$SUM.fake.MCTY))&
-                      (!is.na(G$MCTYpop.WDI))&(G$MCTYpop.WDI!=0)&(G$SUM.fake.REST!=0), (G$realpop*G$MCTYpop.WDI/G$SUM.fake.MCTY), G$realpop)
+G$realpop <- ifelse((G$realpop!=G$EN.URB.LCTY.UR)&(G$realpop>=999999)&(!is.na(G$EN.URB.LCTY.UR))&(!is.na(G$SUM.fake.MCTY))&
+                      (!is.na(G$MCTYpop.WDI))&(G$MCTYpop.WDI>=1999999)&(G$SUM.fake.REST>=1999999), (G$realpop*G$MCTYpop.WDI/G$SUM.fake.MCTY), G$realpop)
 
 
 # bringing it back into the WC.UC.dist
@@ -402,9 +409,7 @@ WC.UC.dist["old.pop"] <- WC.UC.dist$pop
 WC.UC.dist$pop <- G$realpop
 
 WC.UC.dist["old.name"] <- as.character(WC.UC.dist$name)
-G["old.name"] <- as.character(G$name)
-G$name <- ifelse((G$part.of.urban.center==TRUE), G$UC, G$old.name)
-WC.UC.dist$name <- ifelse((G$part.of.urban.center==TRUE), G$UC, G$old.name)
+WC.UC.dist$name <- ifelse((G$part.of.urban.center==TRUE), G$UC, WC.UC.dist$old.name)
 
 rm(G.SC.SUMS2, G.SC.SUMS)
 rm(G)
