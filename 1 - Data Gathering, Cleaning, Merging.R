@@ -63,10 +63,9 @@ WC.UC.full$part.of.urban.center[is.na(WC.UC.full$part.of.urban.center)] <- FALSE
 WC.UC.full$in.urban.centers.environment[is.na(WC.UC.full$in.urban.centers.environment)] <- FALSE
 WC.UC.full$in.urban.centers.environment <- recode(WC.UC.full$in.urban.centers.environment, "TRUE=1")
 WC.UC.full$part.of.urban.center <- recode(WC.UC.full$part.of.urban.center, "TRUE=1")
-WC.UC.full$capital[is.na(WC.UC.full$capital)] <- 0 
 WC.UC.full$largestC[is.na(WC.UC.full$largestC)] <- 0 
 WC.UC.full$largest.UC[is.na(WC.UC.full$largest.UC)] <- 0 
-WC.UC.full$coastalMC[is.na(WC.UC.full$coastalMC)] <- 0 
+
 
 
 ###### Change City Size on yearly basis with WDi data and introduce relative city size (Rel.CS) ######
@@ -149,11 +148,11 @@ G2$city.population_with_time <- ifelse(!G2$city.population_with_time<=G2$EN.URB.
 G2["Rel.CS"] <- G2$city.population_with_time/G2$EN.URB.LCTY.UR
 
 # rename the new population estimate
-G2["pop.year"] <-  round(G2$city.population_with_time)
+G2["pop.that.year"] <-  round(G2$city.population_with_time)
 
 # introducing yearly population size rank of each city within its country 
-G2 <- G2[order(G2$country.etc, G2$year, -G2$pop.year),]
-G2$RANK.Country <- unlist(with(G2, tapply(-pop.year, list(year, country.etc), function(x) rank(x, ties.method= "min"))))
+G2 <- G2[order(G2$country.etc, G2$year, -G2$pop.that.year),]
+G2$RANK.Country <- unlist(with(G2, tapply(-pop.that.year, list(year, country.etc), function(x) rank(x, ties.method= "min"))))
 Rank.Country.MAX<-aggregate(G2$RANK.Country, by=list(G2$year, G2$country.etc), FUN=max)
 colnames(Rank.Country.MAX)[1] <- "year"
 colnames(Rank.Country.MAX)[2] <- "country.etc"
@@ -161,8 +160,8 @@ colnames(Rank.Country.MAX)[3] <- "Rank.Country.MAX"
 G2 <- merge(G2, Rank.Country.MAX, by=c("year", "country.etc"), all.x=TRUE)
 
 # introducing yearly population size rank of each city in the world comparasion  
-G2 <- G2[order(G2$year, -G2$pop.year),]
-G2$RANK.World <- unlist(with(G2, tapply(-pop.year, year, function(x) rank(x, ties.method= "min"))))
+G2 <- G2[order(G2$year, -G2$pop.that.year),]
+G2$RANK.World <- unlist(with(G2, tapply(-pop.that.year, year, function(x) rank(x, ties.method= "min"))))
 Rank.World.MAX<-aggregate(G2$RANK.World, by=list(G2$year), FUN=max)
 colnames(Rank.World.MAX)[1] <- "year"
 colnames(Rank.World.MAX)[2] <- "Rank.World.MAX"
@@ -191,24 +190,65 @@ WC.UC.full$Extra.WAR.In <- NULL
 WC.UC.full$Extra.WAR.Out <- NULL
 WC.UC.full$Intra.WAR <- NULL
 WC.UC.full$Inter.WAR <- NULL
+WC.UC.full$EN.POP.DNST <- NULL
+WC.UC.full$EN.RUR.DNST <- NULL
+WC.UC.full$SP.RUR.TOTL <- NULL
+WC.UC.full$SP.RUR.TOTL.ZG <- NULL
+WC.UC.full$SP.RUR.TOTL.ZS <- NULL
+WC.UC.full$EN.URB.LCTY.UR <- NULL
+WC.UC.full$MAX.URB.TOTL <- NULL
+WC.UC.full$MAX.URB.MCTY <- NULL
+WC.UC.full$MAX.URB.LCTY.UR <- NULL
+WC.UC.full$MAX.POP.TOTL <- NULL
+WC.UC.full$iso2c <- NULL
+WC.UC.full$EN.URB.LCTY.UR.ZS <- NULL
+WC.UC.full$EN.URB.MCTY <- NULL
+WC.UC.full$EN.URB.MCTY.TL.ZS <- NULL
+WC.UC.full$SP.URB.GROW <- NULL
+WC.UC.full$SP.URB.TOTL <- NULL
+WC.UC.full$SP.POP.TOTL <- NULL
+WC.UC.full$SP.URB.TOTL.IN.ZS <- NULL
+WC.UC.full$EN.POP.DNST <- NULL
+WC.UC.full$EN.RUR.DNST <- NULL
+WC.UC.full$SP.RUR.TOTL <- NULL
+WC.UC.full$SP.RUR.TOTL.ZG <- NULL
+WC.UC.full$SP.RUR.TOTL.ZS <- NULL
+WC.UC.full$EN.URB.LCTY.UR <- NULL
 
 PreGTD <- merge(GTD, WC.UC.full, by=c("merge2"), all.x=TRUE)
 PreGTD  <- PreGTD [order(-PreGTD$HUMscale, na.last=TRUE) , ]
 
 # bring the lat lon data together from both the GTD and the city data sets
-PreGTD["latg"] <- as.numeric(PreGTD$lat)
-PreGTD$lat <- NULL
-PreGTD["lat"] <- ifelse(!is.na(PreGTD$latg), as.numeric(PreGTD$latg), (ifelse(!is.na(PreGTD$latitude), as.numeric(PreGTD$latitude), NA)))
-PreGTD["lon"] <- ifelse(!is.na(PreGTD$long), as.numeric(PreGTD$long), (ifelse(!is.na(PreGTD$longitude), as.numeric(PreGTD$longitude), NA)))             
-PreGTD$latg <- NULL
+PreGTD$latitude <- ifelse(is.na(PreGTD$latitude), as.numeric(PreGTD$lat), as.numeric(PreGTD$lat))
+PreGTD$longitude <- ifelse(is.na(PreGTD$longitude), as.numeric(PreGTD$long), as.numeric(PreGTD$long))
+
+PreGTD["GTD.city"] <- PreGTD$city
+PreGTD["WCUC.city.old"] <- PreGTD$old.name
+PreGTD["WCUC.city"] <- PreGTD$name
 
 
 # limit and order the new PreGTD
-PreGTD <- subset(PreGTD, select=c(eventid, merge2, iyear, imonth, iday, country_txt, region_txt, city, old.name, lat, lon, pop.year, Rel.CS, 
-                                  inUC, aroundUC, RANK.Country, Rank.Country.MAX, RANK.World, Rank.World.MAX, capital, largestC, 
-                                  Closest.Urban.Center,largest.UC, coastalMC, WC.UC.dist.km, attacktype1, targtype1, targsubtype1,
-                                  weaptype1, weapsubtype1, TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, 
-                                  Inter.WAR, old.pop))
+PreGTD <- subset(PreGTD, select=c(eventid, merge2, iyear, imonth, iday, country_txt, region_txt, GTD.city, WCUC.city, WCUC.city.old, 
+                                  latitude, longitude, pop.that.year, Rel.CS, inUC, aroundUC, RANK.Country, Rank.Country.MAX, RANK.World, 
+                                  Rank.World.MAX, capital, largestC, Closest.Urban.Center,largest.UC, coastalMC, WC.UC.dist.km, 
+                                  attacktype1, targtype1, targsubtype1, weaptype1, weapsubtype1, TUPscale, PROPscale, HUMscale, 
+                                  Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, old.pop))
+
+PreGTD$coastalMC[is.na(PreGTD$coastalMC)] <- 0 
+PreGTD$capital[is.na(PreGTD$capital)] <- 0 
+PreGTD$largest.UC[is.na(PreGTD$largest.UC)] <- 0 
+PreGTD$TUPscale[is.na(PreGTD$TUPscale)] <- 0 
+PreGTD$TUPscale[is.na(PreGTD$TUPscale)] <- 0 
+PreGTD$PROPscale[is.na(PreGTD$PROPscale)] <- 0 
+PreGTD$HUMscale[is.na(PreGTD$HUMscale)] <- 0 
+PreGTD$Extra.WAR.In[is.na(PreGTD$Extra.WAR.In)] <- 0 
+PreGTD$Extra.WAR.Out[is.na(PreGTD$Extra.WAR.Out)] <- 0 
+PreGTD$Intra.WAR[is.na(PreGTD$Intra.WAR)] <- 0 
+PreGTD$Inter.WAR[is.na(PreGTD$Inter.WAR)] <- 0 
+PreGTD$Rel.CS[is.na(PreGTD$Rel.CS)] <- 0 
+PreGTD$inUC[is.na(PreGTD$inUC)] <- 0 
+PreGTD$aroundUC[is.na(PreGTD$aroundUC)] <- 0 
+
 
 # write a csv, just to be sure
 write.csv(PreGTD, file="TerrorData/Pregtd.csv")
