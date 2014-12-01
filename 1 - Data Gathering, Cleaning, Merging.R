@@ -147,7 +147,6 @@ G2$city.population_with_time <- ifelse(!G2$city.population_with_time<=G2$EN.URB.
 
 # introducing relative city size to countries largest city
 G2["Rel.CS"] <- G2$city.population_with_time/G2$EN.URB.LCTY.UR
-G2 <- G2[order(-G2$Rel.CS),]
 
 # rename the new population estimate
 G2["pop.year"] <-  round(G2$city.population_with_time)
@@ -169,14 +168,16 @@ colnames(Rank.World.MAX)[1] <- "year"
 colnames(Rank.World.MAX)[2] <- "Rank.World.MAX"
 G2 <- merge(G2, Rank.World.MAX, by=c("year"), all.x=TRUE)
 rm(Rank.World.MAX, Rank.Country.MAX)
-
 WC.UC.full<-G2
 
+rm(G2)
 
 ###### Merge combined set with GTD ######
 
 
 # merge
+GTD <- merge(GTD, CountryData, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
+
 WC.UC.merge <- WC.UC.full$merge
 WC.UC.time <- WC.UC.full$Time
 WC.UC.full["merge2"] <- paste(WC.UC.merge, WC.UC.time, sep="")
@@ -185,6 +186,12 @@ GTDcountry <- GTD$country_txt
 GTDyear <-GTD$iyear
 GTD["merge"] <-data.frame(paste(GTDcountry, GTDcity, sep=""))
 GTD["merge2"] <-data.frame(paste(GTDcountry, GTDcity, GTDyear, sep=""))
+
+WC.UC.full$Extra.WAR.In <- NULL
+WC.UC.full$Extra.WAR.Out <- NULL
+WC.UC.full$Intra.WAR <- NULL
+WC.UC.full$Inter.WAR <- NULL
+
 PreGTD <- merge(GTD, WC.UC.full, by=c("merge2"), all.x=TRUE)
 PreGTD  <- PreGTD [order(-PreGTD$HUMscale, na.last=TRUE) , ]
 
@@ -195,8 +202,9 @@ PreGTD["lat"] <- ifelse(!is.na(PreGTD$latg), as.numeric(PreGTD$latg), (ifelse(!i
 PreGTD["lon"] <- ifelse(!is.na(PreGTD$long), as.numeric(PreGTD$long), (ifelse(!is.na(PreGTD$longitude), as.numeric(PreGTD$longitude), NA)))             
 PreGTD$latg <- NULL
 
+
 # limit and order the new PreGTD
-PreGTD <- subset(PreGTD, select=c(eventid, merge2, iyear, imonth, iday, city, old.name, lat, lon, pop.year, Rel.CS, 
+PreGTD <- subset(PreGTD, select=c(eventid, merge2, iyear, imonth, iday, country_txt, region_txt, city, old.name, lat, lon, pop.year, Rel.CS, 
                                   inUC, aroundUC, RANK.Country, Rank.Country.MAX, RANK.World, Rank.World.MAX, capital, largestC, 
                                   Closest.Urban.Center,largest.UC, coastalMC, WC.UC.dist.km, attacktype1, targtype1, targsubtype1,
                                   weaptype1, weapsubtype1, TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, 
@@ -204,7 +212,7 @@ PreGTD <- subset(PreGTD, select=c(eventid, merge2, iyear, imonth, iday, city, ol
 
 # write a csv, just to be sure
 write.csv(PreGTD, file="TerrorData/Pregtd.csv")
-rm(WC.UC.merge, WC.UC.time, GTDWDIcountry, Cities, GTD, Countries, GTDWDI)
+rm(WC.UC.merge, WC.UC.time, GTDcountry, GTDcity, GTDyear, GTD, Countries, GTDWDI, WC.UC.dist)
 
 
 
