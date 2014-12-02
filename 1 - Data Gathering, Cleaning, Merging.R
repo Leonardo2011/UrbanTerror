@@ -15,7 +15,8 @@
 # In this script we combine all our previously established databases into one, bringing together 
 # terror data, country level data and city level data into one database ready for analysis.
 
-
+# Load Packages if necessary
+source("0 - Loading Packages.R")
 
 #############################################################################################################
 ################### Loading Datasets previously gathered, cleaned and partially merged ######################
@@ -150,25 +151,42 @@ G2["Rel.CS"] <- G2$city.population_with_time/G2$EN.URB.LCTY.UR
 # rename the new population estimate
 G2["pop.that.year"] <-  round(G2$city.population_with_time)
 
-# introducing yearly population size rank of each city within its country 
-G2 <- G2[order(G2$country.etc, G2$year, -G2$pop.that.year),]
-G2$RANK.Country <- unlist(with(G2, tapply(-pop.that.year, list(year, country.etc), function(x) rank(x, ties.method= "min"))))
+# introducing yearly population size rank of each city within its country into the city data
+G2["mergerr"] <-data.frame(paste(G2$country.etc, G2$name, G2$year, sep=""))
+GX <- G2
+GX <- GX[order(GX$mergerr, GX$capital, -GX$pop.that.year),]
+GX <- GX[!duplicated(GX$mergerr), ]
+GXX <- GX[order(GX$country.etc, GX$year, -GX$pop.that.year),]
+GXX["RANK.Country"] <- unlist(with(GXX, tapply(-pop.that.year, list(year, country.etc), function(x) rank(x, ties.method= "min"))))
+GXX <- subset(GXX, select=c(mergerr, RANK.Country), row.names=NULL)
+G2 <- merge(G2, GXX, by=c("mergerr"), all.x=TRUE)
+rm(GXX)
+
+# put the maxium rank per year and country in the GTD
 Rank.Country.MAX<-aggregate(G2$RANK.Country, by=list(G2$year, G2$country.etc), FUN=max)
 colnames(Rank.Country.MAX)[1] <- "iyear"
 colnames(Rank.Country.MAX)[2] <- "country_txt"
-colnames(Rank.Country.MAX)[3] <- "Rank.Country.MAX"
+colnames(Rank.Country.MAX)[3] <- "Rank.C.MAX"
 GTDr <- merge(GTD, Rank.Country.MAX, by=c("iyear", "country_txt"), all.x=TRUE)
+rm(Rank.Country.MAX)
 
 # introducing yearly population size rank of each city in the world comparasion  
-G2 <- G2[order(G2$year, -G2$pop.that.year),]
-G2$RANK.World <- unlist(with(G2, tapply(-pop.that.year, year, function(x) rank(x, ties.method= "min"))))
+GXX<- GX[order(GX$year, -GX$pop.that.year),]
+GXX["RANK.World"] <-unlist(with(GXX, tapply(-pop.that.year, year, function(x) rank(x, ties.method= "min"))))
+GXX <- subset(GXX, select=c(mergerr, RANK.World), row.names=NULL)
+G2 <- merge(G2, GXX, by=c("mergerr"), all.x=TRUE)
+G2$mergerr <- NULL
+rm(GXX,GX)
+
+# put the maxium rank per year in the GTD
 Rank.World.MAX<-aggregate(G2$RANK.World, by=list(G2$year), FUN=max)
 colnames(Rank.World.MAX)[1] <- "iyear"
-colnames(Rank.World.MAX)[2] <- "Rank.World.MAX"
+colnames(Rank.World.MAX)[2] <- "Rank.W.MAX"
 GTDr <- merge(GTDr, Rank.World.MAX, by=c("iyear"), all.x=TRUE)
+rm(Rank.World.MAX)
 
 WC.UC.full<-G2
-rm(G2, Rank.World.MAX, Rank.Country.MAX)
+rm(G2)
 
 ###### Merge combined set with GTD ######
 
@@ -222,8 +240,12 @@ PreGTD  <- PreGTD [order(-PreGTD$HUMscale, na.last=TRUE) , ]
 PreGTD$latitude <- ifelse(is.na(PreGTD$latitude), as.numeric(PreGTD$lat), as.numeric(PreGTD$lat))
 PreGTD$longitude <- ifelse(is.na(PreGTD$longitude), as.numeric(PreGTD$long), as.numeric(PreGTD$long))
 
-# better names before subsetting
+# Introduce loged ranks 
+PreGTD["Rank01.C"] <-((((PreGTD$RANK.Country-1)/(PreGTD$Rank.C.MAX-1))-1)*-1)
+PreGTD["Rank01.W"] <-((((PreGTD$RANK.World-1)/(PreGTD$Rank.W.MAX-1))-1)*-1)
 
+
+# better names before subsetting
 PreGTD["GTD.city"] <- PreGTD$city
 PreGTD["WCUC.city.old"] <- PreGTD$old.name
 PreGTD["WCUC.city"] <- PreGTD$name
@@ -232,10 +254,10 @@ PreGTD["merge"]<- PreGTD$merge.x
 
 # limit and order the new PreGTD
 PreGTD <- subset(PreGTD, select=c(eventid, iyear, imonth, iday, country_txt, region_txt, GTD.city, WCUC.city, WCUC.city.old, 
-                                  latitude, longitude, pop.that.year, Rel.CS, inUC, aroundUC, RANK.Country, Rank.Country.MAX, RANK.World, 
-                                  Rank.World.MAX, capital, largestC, Closest.Urban.Center,largest.UC, coastalMC, WC.UC.dist.km, 
-                                  attacktype1, targtype1, targsubtype1, weaptype1, weapsubtype1, TUPscale, PROPscale, HUMscale, 
-                                  Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, old.pop, merge, merge2))
+                                  latitude, longitude, pop.that.year, Rel.CS, inUC, aroundUC, RANK.Country, Rank.C.MAX, Rank01.C, 
+                                  RANK.World, Rank.W.MAX, Rank01.W, capital, largestC, Closest.Urban.Center,largest.UC, 
+                                  coastalMC, WC.UC.dist.km, attacktype1, targtype1, targsubtype1, weaptype1, weapsubtype1, 
+                                  TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, old.pop, merge, merge2))
 
 # fill rural atacks (= no city found) with respective data 
 PreGTD$coastalMC[is.na(PreGTD$coastalMC)] <- 0 
