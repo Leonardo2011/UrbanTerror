@@ -264,7 +264,6 @@ PreGTD$coastalMC[is.na(PreGTD$coastalMC)] <- 0
 PreGTD$capital[is.na(PreGTD$capital)] <- 0 
 PreGTD$largest.UC[is.na(PreGTD$largest.UC)] <- 0 
 PreGTD$TUPscale[is.na(PreGTD$TUPscale)] <- 0 
-PreGTD$TUPscale[is.na(PreGTD$TUPscale)] <- 0 
 PreGTD$PROPscale[is.na(PreGTD$PROPscale)] <- 0 
 PreGTD$HUMscale[is.na(PreGTD$HUMscale)] <- 0 
 PreGTD$Extra.WAR.In[is.na(PreGTD$Extra.WAR.In)] <- 0 
@@ -272,6 +271,8 @@ PreGTD$Extra.WAR.Out[is.na(PreGTD$Extra.WAR.Out)] <- 0
 PreGTD$Intra.WAR[is.na(PreGTD$Intra.WAR)] <- 0 
 PreGTD$Inter.WAR[is.na(PreGTD$Inter.WAR)] <- 0 
 PreGTD$Rel.CS[is.na(PreGTD$Rel.CS)] <- 0 
+PreGTD$Rank01.C[is.na(PreGTD$Rank01.C)] <- 0 
+PreGTD$Rank01.W[is.na(PreGTD$Rank01.W)] <- 0 
 PreGTD$inUC[is.na(PreGTD$inUC)] <- 0 
 PreGTD$aroundUC[is.na(PreGTD$aroundUC)] <- 0 
 PreGTD$RANK.Country <- ifelse(is.na(PreGTD$RANK.Country), as.numeric(PreGTD$Rank.Country.MAX), PreGTD$RANK.Country)
