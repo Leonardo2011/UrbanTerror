@@ -430,4 +430,4 @@ rm(G.SC.SUMS2, G.SC.SUMS)
 rm(G)
 
 #write csv
-write.csv(WC.UC.dist3, "Cache/WC.UC.dist.csv")
+write.csv(WC.UC.dist, "Cache/WC.UC.dist.csv")
