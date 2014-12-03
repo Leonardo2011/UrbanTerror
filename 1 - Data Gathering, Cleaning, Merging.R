@@ -102,10 +102,10 @@ G2$inUC[is.na(G2$inUC)]<- 0
 #in case we only have very limited numers on the country population, we put in some first assumptions based on total population
 # and UC population
 G2["city.population_with_time"] <- ifelse(G2$inUC==1, G2$Population, G2$pop.2013)
-G2$city.population_with_time <- ifelse(!is.na(G2$SP.POP.TOTL), G2$pop.2013*G2$SP.POP.TOTL/G2$MAX.POP.TOTL, G2$pop.2013)
+G2$city.population_with_time <- ifelse(!is.na(G2$SP.POP.TOTL), G2$pop.2013*G2$SP.POP.TOTL/G2$MAX.POP.TOTL, G2$city.population_with_time)
 
 #in case we only have URB.POP numers, we assume that all cities grew with those numbers each year
-G2$city.population_with_time <- ifelse(!is.na(G2$SP.URB.TOTL), G2$pop.2013*G2$SP.URB.TOTL/G2$MAX.URB.TOTL, G2$pop.2013)
+G2$city.population_with_time <- ifelse(!is.na(G2$SP.URB.TOTL), G2$pop.2013*G2$SP.URB.TOTL/G2$MAX.URB.TOTL, G2$city.population_with_time)
 
 # if it is the largest city, EN.URB.LCTY.UR is the size estimator for each year
 G2$city.population_with_time <-ifelse((G2$inUC==0 & G2$largestC==1 & !is.na(G2$EN.URB.LCTY.UR))|
@@ -280,7 +280,7 @@ PreGTD$RANK.World <- ifelse(is.na(PreGTD$RANK.World), as.numeric(PreGTD$Rank.Wor
 
 # write a csv, just to be sure
 write.csv(PreGTD, file="TerrorData/Pregtd.csv")
-rm(WC.UC.merge, WC.UC.time, GTDcountry, GTDcity, GTDyear, GTD2, WC.UC.dist)
+rm(WC.UC.merge, WC.UC.time, GTDcountry, GTDcity, GTDyear, GTD2, WC.UC.full)
 
 
 

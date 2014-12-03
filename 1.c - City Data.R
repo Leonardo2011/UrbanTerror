@@ -23,7 +23,7 @@ if(file.exists("Cache/UrbanCenters.csv"))
 {UrbanCenters <- read.csv("Cache/UrbanCenters.csv")
 } else
 {
-
+  
   ##### Urban Centers #####
   
   #We use a Wikipedia article on global Urban Centers for our analysis on the geographical distance from the location of attacks
@@ -75,7 +75,7 @@ if(file.exists("Cache/UrbanCenters.csv"))
   UrbanCenters$Population <- gsub("\\,","",UrbanCenters$Population)
   UrbanCenters$Area <- gsub("\\,","",UrbanCenters$Area)
   UrbanCenters$Density <- gsub("\\,","",UrbanCenters$Density)
- 
+  
   # Assigning a 1 to all the largest urban centers in a country
   UrbanCenters$Population <- as.numeric(UrbanCenters$Population)
   LUC <- aggregate(Population ~ Country,UrbanCenters,max)
@@ -99,31 +99,51 @@ if(file.exists("Cache/UrbanCenters.csv"))
 
 
 #############################################################################################################
-###################################### 2. Both City Data Sets ###############################################
+###################################### 2. Three City Data Sets ###############################################
 #############################################################################################################
-
 
 if(file.exists("Cache/world.cities.csv"))
 {world.cities <- read.csv("Cache/world.cities.csv")
 } else
 {
+
+    
+  ############## City Data  ##############
   
-  #############  City Data  ##############
-  
-  #The purpose of this script is to gather, clean, and merge two different datasets on cities of the world with similar information.
+  #The purpose of this script is to gather, clean, and merge three different datasets on cities of the world with similar information.
   #We merge them to increase the total number of cities that could match the GTD.
   
   
   ###### Gathering Data  ######
   
-  ###World cities dataset 1/2 (worldcities2013)###
+  ###World cities dataset 1/3 (worldcities2013)###
   
   # it stems from a private company, Maxmind Inc.
   #http://download.maxmind.com/download/worldcities/worldcitiespop.txt.gz and transformed into CSV, since it is not available
   #in .csv format right away.
   worldcities2013 <- read.csv("Downloaded_Data/worldcitiespop.csv")
   
-  ###World cities dataset 2/2 (world.cities from the 'maps' package)###
+  ###World cities dataset 2/3 (worldcities1000)###
+  
+  #http://download.geonames.org/export/dump/cities1000.zip and transformed into CSV, since it is not available
+  #in .csv format right away. The GeoNames geographical database is available for download free of charge under 
+  #a creative commons attribution license.
+  worldcities1000 <- read.csv("Downloaded_Data/worldcitiespop1000.csv")
+  
+  # the first both city data sets are very similar, this brought together right away as worldcities2013
+  worldcities1000 <- subset(worldcities1000, select=c("V9", "V3", "V2", "V18", "V5", "V6", "V15"), !is.na(V5) & V15!=0)
+  worldcities1000$V3 <- tolower(worldcities1000$V3)
+  worldcities1000$V9 <- tolower(worldcities1000$V9)
+  worldcities2013 <- merge(worldcities2013, worldcities1000, by.x=c("Country", "City", "AccentCity", "Region", "Latitude", "Longitude", "Population"), 
+                           by.y=c("V9", "V3", "V2", "V18", "V5", "V6", "V15"), all=TRUE)
+  rm(worldcities1000)
+  worldcities2013 <- worldcities2013[order(-worldcities2013$Population),]
+  worldcities2013["merge"] <- paste(worldcities2013$Country, worldcities2013$City, sep="xxx")
+  worldcities2013 <- worldcities2013[!duplicated(worldcities2013$merge),]
+  worldcities2013$merge <-NULL  
+  
+  
+  ###World cities dataset 3/3 (world.cities from the 'maps' package)###
   
   #The dataset is called world.cities. Since it is from 2009, we call it worldcities2009.
   data(world.cities)
@@ -137,12 +157,6 @@ if(file.exists("Cache/world.cities.csv"))
   #for easier merging purposes, and lowercase country names (no special charackters) from the world.cities2013 dataset.
   
   ###World cities dataset 1/2 (worldcities2013)###
-  
-  #The dataset lacks some information.
-  
-  #introduce Tehran as it was missing in the original dataset
-  worldcities2013 <- rbind(worldcities2013, data.frame(X=0,Country="ir", City="tehran", AccentCity="Tehran", 
-                                                       Region= 1, Latitude=35.67, Longitude=51.43,Population=7160094))
   
   #introduce Akkaraipattu as it was missing in the original dataset
   worldcities2013 <- rbind(worldcities2013, data.frame(X=0,Country="lk", City="Akkaraipattu", AccentCity="Akkaraipattu", 
@@ -190,7 +204,7 @@ if(file.exists("Cache/world.cities.csv"))
   
   ###### Manipulate Data  ######
   
-  #We now merge the two datasets into one. First, some preparation.
+  #We now merge the three datasets into one. First, some preparation.
   
   #Ordering to later enable selection on duplicates
   worldcities2013 <- worldcities2013[order(-worldcities2013$Population, na.last=TRUE) , ]
@@ -212,11 +226,11 @@ if(file.exists("Cache/world.cities.csv"))
   world.cities <- merge(worldcities2009, worldcities2013, by= c("merge", "name", "country.etc", "pop", "lat", "long"), all=TRUE)
   world.cities <- world.cities[order(world.cities$merge, world.cities$capital, world.cities$pop),]
   world.cities <- world.cities[!duplicated(world.cities$merge), ]
- 
+  
   world.cities <- world.cities[order(-world.cities$pop), ]
   rm(worldcities2013, worldcities2009)
   
-
+  
   
   
   #Bringing country names in combined world.cities to WDI lowercase standard
@@ -228,7 +242,8 @@ if(file.exists("Cache/world.cities.csv"))
   
   #create cache world.cities.csv
   write.csv(world.cities, "Cache/world.cities.csv")
-    
+  
+  
 }
 
 
@@ -258,7 +273,7 @@ ALLDIST["DISTkm"] <- gdist(ALLDIST$lon, ALLDIST$lat.x, ALLDIST$long, ALLDIST$lat
 #Reducing to only the closest Urban Center for each and every city, 30 million distances to the ~ 60.000 minimal ones
 ALLDIST.min <- aggregate(DISTkm ~ CityID, ALLDIST, function(x) min(x))
 ALLDIST$lon <- NULL
-ALLDIST$lat.x	<- NULL		
+ALLDIST$lat.x  <- NULL		
 ALLDIST$long <- NULL
 ALLDIST$lat.y <- NULL
 ALLDIST.fullmin <- merge(ALLDIST.min, ALLDIST, by=c("CityID", "DISTkm"))
