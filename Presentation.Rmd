@@ -34,8 +34,6 @@ source("0 - Loading Packages.R")
 > - [Open Source Database](http://www.start.umd.edu/gtd/) run by University of Maryland
 > - contains more than 120,000 observations on over 120 variables between 1970 and 2013
 > - detailed description of target and effect of attack
-> - a lot of information is missing
-> - improvable data quality
 
 > ...The GTD is a powerful database!
 
@@ -71,11 +69,20 @@ qplot(factor(iyear), data=PreGTD, geom = "freqpoly",color = TUPscale, group = TU
 
 ## Main Database | ![@START2013](http://www.start.umd.edu/gtd/images/logo-gtd.gif)
 
-The GTD is a powerful tool on itself, but to answer our research question, we lack important information:
+ - [Open Source Database](http://www.start.umd.edu/gtd/) run by University of Maryland
+ - contains more than 120,000 observations on over 120 variables between 1970 and 2013
+ - detailed description of target and effect of attack
+> - improvable data quality
+> - a lot of information is missing
+
+
+> ...The GTD is not providing enough information to answer our research question
+
 
 > * Environments 
-      * Location 
-      * Urbanity  
+      * Location (suburb? center?)
+      * Importance (capital? stronghold?)
+      * Urbanity   
       * Population
 
 ## Additional Databases
