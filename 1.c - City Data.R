@@ -131,7 +131,7 @@ if(file.exists("Cache/world.cities.csv"))
   worldcities1000 <- read.csv("Downloaded_Data/worldcitiespop1000.csv")
   
   # the first both city data sets are very similar, this brought together right away as worldcities2013
-  worldcities1000 <- subset(worldcities1000, select=c("V9", "V3", "V2", "V18", "V5", "V6", "V15"), !is.na(V5) & V15!=0)
+  worldcities1000 <- subset(worldcities1000, select=c("V9", "V3", "V2", "V18", "V5", "V6", "V15"), !is.na(V9) &!is.na(V5) & V15!=0)
   worldcities1000$V3 <- tolower(worldcities1000$V3)
   worldcities1000$V9 <- tolower(worldcities1000$V9)
   worldcities2013 <- merge(worldcities2013, worldcities1000, by.x=c("Country", "City", "AccentCity", "Region", "Latitude", "Longitude", "Population"), 
@@ -255,6 +255,7 @@ if(file.exists("Cache/world.cities.csv"))
 #In this script we merge the UrbanCenters and world.cities databases so that each 
 #city is allocated to its closest Urban Center (including distances)
 
+#extremely time and RAM consuming. See: source('SmallScripts/if.the.WC.UC.Merger.needs.splitting.of.dataset.R')
 
 #Renaming columns and select subsets for merging over fake variable to create a matrix 
 #with each City X each Urban Center (~ 60.000 Cities X ~ 500 urban Centers) 
@@ -334,7 +335,6 @@ write.csv(WC.UC.dist, "Cache/WC.UC.dist.old.csv")
 #############################################################################################################
 ################################################ 4. Manipulating  ###########################################
 #############################################################################################################
-
 
 
 # Country level data from the World Bank Development Indicators (WDI) and the The Correlates of War (COW) project data on wars.
@@ -430,4 +430,4 @@ rm(G.SC.SUMS2, G.SC.SUMS)
 rm(G)
 
 #write csv
-write.csv(WC.UC.dist, "Cache/WC.UC.dist.csv")
+write.csv(WC.UC.dist3, "Cache/WC.UC.dist.csv")
