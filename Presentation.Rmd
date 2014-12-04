@@ -207,6 +207,7 @@ We control for
   * Inter State War
   * Capitals
   * Target's Potential Urbanity
+  * including weightings for human and property damage
 
 ## Results
 
