@@ -33,7 +33,18 @@ library(mapproj)
 qmap('Sri Lanka', zoom = 8)
 
 #subset the database
+#subset the database
 srilankamap <- subset(PreGTD, country_txt=="srilanka" & !is.na(latitude))
+sum.hum <- aggregate(srilankamap$HUMscale, by=list(srilankamap$WCUC.city.old), FUN=sum)
+max.hum <- aggregate(srilankamap$HUMscale, by=list(srilankamap$WCUC.city.old), FUN=max)
+sum.prop <- aggregate(srilankamap$PROPscale, by=list(srilankamap$WCUC.city.old), FUN=sum)
+srilankamap  <- merge(srilankamap , sum.hum, by.y=c("Group.1"), by.x=c("WCUC.city.old"), all.x=TRUE)
+srilankamap  <- merge(srilankamap , max.hum, by.y=c("Group.1"), by.x=c("WCUC.city.old"), all.x=TRUE)
+srilankamap  <- merge(srilankamap , sum.prop, by.y=c("Group.1"), by.x=c("WCUC.city.old"), all.x=TRUE)
+
+
+
+
 srilankamap <- srilankamap[!duplicated(srilankamap$merge),]
 
 slmap <- qmap('Sri Lanka', zoom = 8,  
