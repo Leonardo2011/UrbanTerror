@@ -56,7 +56,7 @@ X$TimeFilled <- NULL
 
 # merge city and country data 
 WC.UC.full<- merge(X, WC.UC.dist, by=c("merge"), all.x=TRUE)
-WC.UC.full <- merge(WC.UC.full, CountryData, by.x=c("country.etc", "Time"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
+WC.UC.full <- merge(WC.UC.full, CountryData, by.x=c("country.etc", "year"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
 rm(X)
 
 # minor cleanups 
@@ -156,8 +156,8 @@ G2["mergerr"] <-data.frame(paste(G2$country.etc, G2$name, G2$year, sep=""))
 GX <- G2
 GX <- GX[order(GX$mergerr, GX$capital, -GX$pop.that.year),]
 GX <- GX[!duplicated(GX$mergerr), ]
-GXX <- GX[order(GX$country.etc, GX$year, -GX$pop.that.year),]
-GXX["RANK.Country"] <- unlist(with(GXX, tapply(-pop.that.year, list(year, country.etc), function(x) rank(x, ties.method= "min"))))
+GXX <- GX[order(GX$country.etc, GX$year, -GX$pop.that.year, -GX$long),]
+GXX["RANK.Country"] <- unlist(with(GXX, tapply(-pop.that.year, list(Time, country.etc), function(x) rank(x, ties.method= "min"))))
 GXX <- subset(GXX, select=c(mergerr, RANK.Country), row.names=NULL)
 G2 <- merge(G2, GXX, by=c("mergerr"), all.x=TRUE)
 rm(GXX)
@@ -281,8 +281,3 @@ PreGTD$RANK.World <- ifelse(is.na(PreGTD$RANK.World), as.numeric(PreGTD$Rank.Wor
 # write a csv, just to be sure
 write.csv(PreGTD, file="TerrorData/Pregtd.csv")
 rm(WC.UC.merge, WC.UC.time, GTDcountry, GTDcity, GTDyear, GTD2, WC.UC.full)
-
-
-
-
-

@@ -184,7 +184,7 @@ X$GTD.city <- sub("swaziland", NA, X$GTD.city)
 X$GTD.city <- sub("vanuatu", NA, X$GTD.city)
 X <- subset(X, !is.na(GTD.city))
 X$X <- 1
-List <- aggregate<-aggregate(X$X, by=list(X$country_txt), FUN=sum)
+List <- aggregate(X$X, by=list(X$country_txt), FUN=sum)
 List <- List[order(-List$x),]
 
 
