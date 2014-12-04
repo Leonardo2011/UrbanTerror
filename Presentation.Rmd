@@ -30,7 +30,7 @@ source("0 - Loading Packages.R")
 <br>
 <br>
 <br>
-> Purely descriptive analysis of a change of time in terrorists targeting behavior
+Purely descriptive analysis of a change of time in terrorists targeting behavior
 
 
 # Data Collection
@@ -105,9 +105,8 @@ srilankamap <- srilankamap[!duplicated(srilankamap$merge),]
 
 qmap('Sri Lanka', zoom = 8,  
                    maptype = "terrain",
-                   legend="none") + geom_point(aes(x = longitude, y = latitude, color=largest.UC),
+                   legend="none") + geom_point(aes(x = longitude, y = latitude), size=5, color="red",
                   data = srilankamap)
-
 
 ```
 
@@ -134,10 +133,6 @@ We use absolute and relative city size (population) as a proxy for urbanity.
  * ``Reliability``
     - multiple collection sources over decades with unreproducible methods in unclear administrative environments
  
------
-
-    (map of Israel with a couple of attacks illustrating urban mess)
-    
 
 # Data Cleaning
 
@@ -198,7 +193,17 @@ Within single and across datasets
     
 ------
 
-(map of Israel with a couple of attacks illustrating urban mess after everything is included)
+```{r, echo=FALSE, warning=FALSE, results='asis', message=FALSE, fig.height=6}
+
+#subset the database
+srilankamap <- subset(PreGTD, country_txt=="srilanka" & !is.na(latitude))
+srilankamap <- srilankamap[!duplicated(srilankamap$merge),]
+
+qmap('Sri Lanka', zoom = 8,  
+                   maptype = "terrain",
+                   legend="none") + geom_point(aes(x = longitude, y = latitude, colour=srilankamap$inUC, legend.position="none"), size=5, data = srilankamap) +theme (legend.position="none")
+
+```
 
 
 ## Merging to Current Dataset
@@ -228,7 +233,7 @@ We control for
 
 ## Results
 
-[Regresison Table](http://github.com)
+[Regresison Table](https://www.dropbox.com/s/tm9ay9dh7o4izyx/rank.model.per.region.1998bis2013.INTRA.WAR.TEST.html?dl=0)
 
 * There is no general global trend for terrorists moving to urban targets
 * Results vary across world regions:
