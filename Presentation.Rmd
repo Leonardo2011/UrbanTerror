@@ -27,74 +27,90 @@ source("0 - Loading Packages.R")
 ### **Do Terrorists target urban environments more now than in past days?**
 </div>
 
+
+*Purely descriptive analysis of a change of time in terrorists targeting behavior*
+
+
 # Data Collection
 
 ## Main Database | ![@START2013](http://www.start.umd.edu/gtd/images/logo-gtd.gif)
 
-> - [Open Source Database](http://www.start.umd.edu/gtd/) run by University of Maryland
-> - contains more than 120,000 observations on over 120 variables between 1970 and 2013
-> - detailed description of target and effect of attack
+> * [Open Source Database](http://www.start.umd.edu/gtd/) run by University of Maryland
+> * contains more than 120,000 observations on over 120 variables between 1970 and 2013
+> * detailed description of target and effect of attack
+    - target type, weapon type, human damage, property damage, perpetrator
 
-> ...The GTD is a powerful database!
+  The GTD is a powerful database!
 
 -----
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-qplot(factor(iyear), data=PreGTD, geom = "freqpoly",color = region_txt, group = region_txt, ylab= NULL, xlab= NULL,
-)
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9}
+PreGTD2 <- PreGTD
+levels(PreGTD2$region_txt) <- c("Oceania", "Central America", "Central Asia",
+                                   "East Asia", "Eastern Europe", "MENA", "North America", "Russia", "South America",
+                                   "South Asia", "Southeast Asia", "Sub-Saharan Africa", "Western Europe")
+pregtd.alltest <- subset(PreGTD2, select=(c(iyear, region_txt, GTD.city)))
+pregtd.alltest <- data.frame(Year=pregtd.alltest$iyear, Region=pregtd.alltest$region_txt, city=pregtd.alltest$GTD.city)
+qplot(factor(Year), data=pregtd.alltest, geom = "freqpoly", color = Region, group= Region, xlab="Year", ylab="No. of Attacks") + theme(axis.text.x = element_text(angle = 90), complete = TRUE)
 ```
 **Figure 1:** attacks per year in all world regions
 
 -----
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9}
 # Preparing the intersections where collecting agencies changed 
 intersepz <- data.frame(date=as.numeric(c("27", "38", "41")), 
                        date2=as.numeric(c("1997", "2009", "2011")), 
                        event=c("PGIS Data Collection End", "CETIS Data Collection End", "ISVG Data Collection End"))
 
-qplot(factor(iyear), data=PreGTD, geom = "freqpoly",color = region_txt, group = region_txt, ylab= NULL, xlab= NULL,
-) + geom_vline(data=intersepz, mapping=aes(xintercept=date)) + theme(axis.text.x = element_text(angle = 90), complete = FALSE, legend.position = "none")
+qplot(factor(Year), data=pregtd.alltest, geom = "freqpoly", color = Region, group= Region, xlab="Year", ylab="No. of Attacks") + theme(axis.text.x = element_text(angle = 90), complete = TRUE) + geom_vline(data=intersepz, mapping=aes(xintercept=date))
+
 ```
 **Figure 2:** attacks per year in all world regions, indicating transition of collectors: 
  PIGS - 1997, CETIS - 2008, ISVG - 2011, START since 2011
  
------
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-qplot(factor(iyear), data=PreGTD, geom = "freqpoly",color = TUPscale, group = TUPscale, ylab= NULL, xlab= NULL,
-) + theme(axis.text.x = element_text(angle = 90), complete = FALSE)
-```
-**Figure 3:** attacks per year on targets of different urbanity
-
 ## Main Database | ![@START2013](http://www.start.umd.edu/gtd/images/logo-gtd.gif)
 
- - [Open Source Database](http://www.start.umd.edu/gtd/) run by University of Maryland
- - contains more than 120,000 observations on over 120 variables between 1970 and 2013
- - detailed description of target and effect of attack
-> - improvable data quality
-> - a lot of information is missing
+      
+> * improvable data quality
+> * a lot of information is missing
 
 
 > ...The GTD is not providing enough information to answer our research question
 
+## Main Database | ![@START2013](http://www.start.umd.edu/gtd/images/logo-gtd.gif)
 
-> * Environments 
+ * Environment (map of random attack in a city illustrating that point)
       * Location (suburb? center?)
       * Importance (capital? stronghold?)
-      * Urbanity   
-      * Population
+      * ``Urbanity``   
 
-## Additional Databases
+## Addtional Databases
+
+We use absolute and relative city size (population) as a proxy for urbanity.
 
 > * City level data
-    + [world.cities2009](http://CRAN.R-project.org/package=maps) 
-    + [World Cities2013](http://download.maxmind.com/download/geoip/database/LICENSE_WC.txt) 
-    + [Urban Centers](http://en.wikipedia.org/wiki/List_of_urban_areas_by_population)
+    + [about 45,000 cities from the R 'maps' package](http://CRAN.R-project.org/package=maps) 
+    + [about 48,000 cities from Maxmind Inc.](http://download.maxmind.com/download/geoip/database/LICENSE_WC.txt) 
+    + [458 urban centers from wikipedia](http://en.wikipedia.org/wiki/List_of_urban_areas_by_population)
 > * Country level data
-    + [World Development Indicators](http://data.worldbank.org/data-catalog/world-development-indicators)
-    + [Correlates of War](http://www.correlatesofwar.org/)
+    + [World Development Indicators from the World Bank](http://data.worldbank.org/data-catalog/world-development-indicators)
+    + [Correlates of War from the COW project](http://www.correlatesofwar.org/)
 
+## Limitations 
+
+ * Validity
+    - population an insufficient proxy for urbanity
+    - but economic, political etc. data not available open source on city level
+    - and population probably the single most important one
+  
+ * Reliability
+    - multiple collection sources over decades with unreproducible methods in unclear administrative environments
+ 
+-----
+
+    (map of Israel with a couple of attacks illustrating urban mess)
+    
 
 # Data Cleaning
 
@@ -140,35 +156,47 @@ Within single and across datasets
                     GTD$city =="Banjica" ] <- "Serbia"
     `````
 
+
 # Data Manipulating
 
-## Filling In
+## Filling, Adding, Extrapolating
 
-* Geo Reference
-* Urban Reference
+> * ``Geo Referencing`` absolute & relative city position
+> * ``Proximity Referencing`` each city by assigning it to its closest Urban Center
+> * Establishing ``Relative City Size`` as a share of each countries' total population
+> * Estimating ``Past Populations`` using country level data and growth rates
+> * Determining ``Cities' Rank`` Size given by the population on a country, regional, and world level
+> * Including additional ``Control Variables`` for capitals, largest cities, wars, and coastal megacities
+    
+------
 
-## New Information
+(map of Israel with a couple of attacks illustrating urban mess after everything is included)
 
-* Coastal Megacities
-* Relative City Size
-* Cities' Rank Size
 
-## Extrapolation
+## Merging to Current Dataset
 
-* Population in the past
+We merge city level, country level, and GTD data together to a reproducible database containing 
+114086 observations on 44 variables.
+
+* Merged database contains NA share of 11%
+* Considered acceptable
+* Potential for further reduction
+* We assume systematic sources
 
 # Data Analysis
 
-## Approach
-
-## test leftover
 
 
+## Results
 
-Target Type
-    Human Damage
-    Property Damage
-    
+## Outlook
 
+* Still a lot of potential for further cleaning
+* More possibilities for including control variables
+* Currently only few projects using GTD for analysis
+* Our approach seems promising for more research endavours
+
+
+> * ``First, the Master's Thesis!``
 
 ## References
