@@ -92,7 +92,24 @@ qplot(factor(Year), data=pregtd.alltest, geom = "freqpoly", color = Region, grou
  * Environment's is not 
       * Location (suburb? center?)
       * Importance (capital? stronghold?)
-      * ``Urbanity``   
+      * ``Urbanity`` 
+      
+      
+-----
+
+```{r, echo=FALSE, warning=FALSE, results='asis', message=FALSE, fig.height=6}
+
+#subset the database
+srilankamap <- subset(PreGTD, country_txt=="srilanka" & !is.na(latitude))
+srilankamap <- srilankamap[!duplicated(srilankamap$merge),]
+
+qmap('Sri Lanka', zoom = 8,  
+                   maptype = "terrain",
+                   legend="none") + geom_point(aes(x = longitude, y = latitude, color=largest.UC),
+                  data = srilankamap)
+
+
+```
 
 ## Addtional Databases
 
