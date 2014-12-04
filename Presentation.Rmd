@@ -67,7 +67,7 @@ qplot(factor(Year), data=pregtd.alltest, geom = "freqpoly", color = Region, grou
 
 ```
 **Figure 2:** attacks per year in all world regions, indicating transition of collectors: 
- PIGS - 1997, CETIS - 2008, ISVG - 2011, START since 2011
+ PGIS - 1997, CETIS - 2008, ISVG - 2011, START since 2011
  
 ## Main Database | ![@START2013](http://www.start.umd.edu/gtd/images/logo-gtd.gif)
 
@@ -80,7 +80,8 @@ qplot(factor(Year), data=pregtd.alltest, geom = "freqpoly", color = Region, grou
 
 ## Main Database | ![@START2013](http://www.start.umd.edu/gtd/images/logo-gtd.gif)
 
- * Environment (map of random attack in a city illustrating that point)
+ * Target's potential urbanity is provided
+ * Environment's is not 
       * Location (suburb? center?)
       * Importance (capital? stronghold?)
       * ``Urbanity``   
@@ -91,7 +92,8 @@ We use absolute and relative city size (population) as a proxy for urbanity.
 
 > * City level data
     + [about 45,000 cities from the R 'maps' package](http://CRAN.R-project.org/package=maps) 
-    + [about 48,000 cities from Maxmind Inc.](http://download.maxmind.com/download/geoip/database/LICENSE_WC.txt) 
+    + [about 48,000 cities from Maxmind Inc.](http://download.maxmind.com/download/geoip/database/LICENSE_WC.txt)
+    + [additonal 110,000 cities from geonames.com](http://www.geonames.org/)
     + [458 urban centers from wikipedia](http://en.wikipedia.org/wiki/List_of_urban_areas_by_population)
 > * Country level data
     + [World Development Indicators from the World Bank](http://data.worldbank.org/data-catalog/world-development-indicators)
@@ -163,10 +165,11 @@ Within single and across datasets
 
 > * ``Geo Referencing`` absolute & relative city position
 > * ``Proximity Referencing`` each city by assigning it to its closest Urban Center
-> * Establishing ``Relative City Size`` as a share of each countries' total population
+> * Establishing ``Relative City Size`` as a share of each countries' largest cityies'total population
 > * Estimating ``Past Populations`` using country level data and growth rates
 > * Determining ``Cities' Rank`` Size given by the population on a country, regional, and world level
-> * Including additional ``Control Variables`` for capitals, largest cities, wars, and coastal megacities
+> * Including additional ``Control Variables`` for capitals, largest cities, inter-state war, intra-state war, extra-in war, 
+    extra-out war, and coastal megacities
     
 ------
 
