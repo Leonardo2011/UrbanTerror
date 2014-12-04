@@ -97,7 +97,7 @@ qplot(factor(Year), data=pregtd.alltest, geom = "freqpoly", color = Region, grou
       
 -----
 
-```{r, echo=FALSE, warning=FALSE, results='asis', message=FALSE, fig.height=6}
+```{r, echo=FALSE, warning=FALSE, results='asis', message=FALSE, fig.height=6, fig.width=8}
 
 #subset the database
 srilankamap <- subset(PreGTD, country_txt=="srilanka" & !is.na(latitude))
@@ -190,10 +190,20 @@ Within single and across datasets
 > * Determining ``Cities' Rank`` Size given by the population on a country, regional, and world level
 > * Including additional ``Control Variables`` for capitals, largest cities, inter-state war, intra-state war, extra-in war, 
     extra-out war, and coastal megacities
-    
+
+## Merging to Current Dataset
+
+We merge city level, country level, and GTD data together to a reproducible database containing 
+114086 observations on 44 variables.
+
+* Merged database contains NA share of 11%
+* Considered acceptable
+* Potential for further reduction
+* We assume systematic sources
+
 ------
 
-```{r, echo=FALSE, warning=FALSE, results='asis', message=FALSE, fig.height=6}
+```{r, echo=FALSE, warning=FALSE, results='asis', message=FALSE, fig.height=6, fig.width=8}
 
 #subset the database
 srilankamap <- subset(PreGTD, country_txt=="srilanka" & !is.na(latitude))
@@ -205,16 +215,47 @@ qmap('Sri Lanka', zoom = 8,
 
 ```
 
+------
 
-## Merging to Current Dataset
+```{r, echo=FALSE, warning=FALSE, results='asis', message=FALSE, fig.height=6, fig.width=8}
 
-We merge city level, country level, and GTD data together to a reproducible database containing 
-114086 observations on 44 variables.
+#subset the database
+colombomap <- subset(PreGTD, country_txt=="srilanka" & !is.na(latitude))
+sum.hum <- aggregate(colombomap$HUMscale, by=list(colombomap$WCUC.city.old), FUN=sum)
+max.hum <- aggregate(colombomap$HUMscale, by=list(colombomap$WCUC.city.old), FUN=max)
+sum.prop <- aggregate(colombomap$PROPscale, by=list(colombomap$WCUC.city.old), FUN=sum)
+colombomap  <- merge(colombomap , sum.hum, by.y=c("Group.1"), by.x=c("WCUC.city.old"), all.x=TRUE)
+colombomap  <- merge(colombomap , max.hum, by.y=c("Group.1"), by.x=c("WCUC.city.old"), all.x=TRUE)
+colombomap  <- merge(colombomap , sum.prop, by.y=c("Group.1"), by.x=c("WCUC.city.old"), all.x=TRUE)
+colombomap["sum.hum"]<-colombomap$x.x
+colombomap$sum.hum <- ifelse(colombomap$sum.hum >=1500, 1500, colombomap$sum.hum)
+colombomap$sum.hum <- ifelse(colombomap$sum.hum >=1000 & colombomap$sum.hum<=1499, 1000, colombomap$sum.hum)
+colombomap$sum.hum <- ifelse(colombomap$sum.hum >=500 & colombomap$sum.hum<=999, 500, colombomap$sum.hum)
+colombomap$sum.hum <- ifelse(colombomap$sum.hum >=100 & colombomap$sum.hum<=499, 100, colombomap$sum.hum)
+colombomap$sum.hum <- ifelse(colombomap$sum.hum >=10 & colombomap$sum.hum<=99, 50, colombomap$sum.hum)
+colombomap$sum.hum <- ifelse(colombomap$sum.hum <=10, 10, colombomap$sum.hum)
+colombomap$sum.hum <- as.numeric(colombomap$sum.hum)
+colombomap["max.hum"]<-colombomap$x.y
+colombomap["sum.prop"]<-colombomap$x
+colombomap["lon"]<-colombomap$longitude
+colombomap["lat"]<-colombomap$latitude
+colombomap$inUC<-as.factor(colombomap$inUC)
+colombomap$x <- NULL
+colombomap$x.y <- NULL
+colombomap$x.x <- NULL 
 
-* Merged database contains NA share of 11%
-* Considered acceptable
-* Potential for further reduction
-* We assume systematic sources
+rm(sum.hum, max.hum, sum.prop)
+
+colombomap <- colombomap[!duplicated(colombomap$merge),]
+
+sum.hum <- as.numeric(colombomap$sum.hum)
+
+qmap('Colombo', zoom = 10,  
+              maptype = "satellite",
+              legend = "topleft", legend="none") + geom_point(aes(x=lon, y=lat, size=sum.hum, color=inUC), data = colombomap) + scale_size_continuous(range=c(5, 15)) +theme (legend.position="none")
+
+```
+
 
 # Data Analysis
 
