@@ -20,15 +20,17 @@ source("0 - Loading Packages.R")
 ![@Cutter2003](http://img2.imagesbn.com/p/9780415946421_p0_v1_s260x420.jpg)
 </div>
 
-## Research Question {.flexbox .vcenter}
-
-
-<div class="centered">
-### **Do Terrorists target urban environments more now than in past days?**
-</div>
-
-
-*Purely descriptive analysis of a change of time in terrorists targeting behavior*
+## Research Question
+<br>
+<br>
+<br>
+<br>
+**Do terrorists target urban environments more now than in past days?**
+<br>
+<br>
+<br>
+<br>
+> Purely descriptive analysis of a change of time in terrorists targeting behavior
 
 
 # Data Collection
@@ -38,8 +40,12 @@ source("0 - Loading Packages.R")
 > * [Open Source Database](http://www.start.umd.edu/gtd/) run by University of Maryland
 > * contains more than 120,000 observations on over 120 variables between 1970 and 2013
 > * detailed description of target and effect of attack
-    - target type, weapon type, human damage, property damage, perpetrator
+    - target & weapon,
+    - human & property damage
+    - perpetrator
 
+<br>
+<br>
   The GTD is a powerful database!
 
 -----
@@ -74,9 +80,11 @@ qplot(factor(Year), data=pregtd.alltest, geom = "freqpoly", color = Region, grou
       
 > * improvable data quality
 > * a lot of information is missing
-
-
-> ...The GTD is not providing enough information to answer our research question
+<br>
+<br>
+<br>
+<br>
+> The GTD is not providing enough information to answer our research question
 
 ## Main Database | ![@START2013](http://www.start.umd.edu/gtd/images/logo-gtd.gif)
 
@@ -101,12 +109,12 @@ We use absolute and relative city size (population) as a proxy for urbanity.
 
 ## Limitations 
 
- * Validity
+ * ``Validity``
     - population an insufficient proxy for urbanity
     - but economic, political etc. data not available open source on city level
     - and population probably the single most important one
   
- * Reliability
+ * ``Reliability``
     - multiple collection sources over decades with unreproducible methods in unclear administrative environments
  
 -----
@@ -188,9 +196,99 @@ We merge city level, country level, and GTD data together to a reproducible data
 
 # Data Analysis
 
+## Approach
 
+We use a simple linear regression, depending on Relative City Sizes attacked over time for various world regions. 
+We control for 
+
+  * Extra-In State War
+  * Extra-Out State War
+  * Intra State War
+  * Inter State War
+  * Capitals
+  * Target's Potential Urbanity
 
 ## Results
+
+[Regresison Table](http://github.com)
+
+* There is no general global trend for terrorists moving to urban targets
+* Results vary across world regions:
+    - there is a trend in the Arab World
+    - there is a trend in Southeast Asia
+* Civil War changes everything!
+
+
+
+
+# From Here...
+
+-----
+
++-------+--------------+-----------------+------------------+
+|   #   |     City     |     Country     | Attacks (Peace)  |
++=======+==============+=================+==================+
+| 1     | Santiago     | Chile           | 1426             |
++-------+--------------+-----------------+------------------+
+|   2   |    Belfast   | United Kingdom  | 1187             |
++-------+--------------+-----------------+------------------+
+|   3   |    Karachi   |    Pakistan     | 1155             |
++-------+--------------+-----------------+------------------+
+|   4   |    Bogota    |    Colombia     | 845              |
++-------+--------------+-----------------+------------------+
+|   5   |   Medellin   |    Colombia     | 808              |
++-------+--------------+-----------------+------------------+
+
+------
+
++-------+--------------+-----------------+
+|   #   |     Region   |     Attacks     |
++=======+==============+=================+
+|   1   |   S. Asia    |      25854      |
++-------+--------------+-----------------+
+|   2   |    MENA      |      25250      |
++-------+--------------+-----------------+
+|   3   |  S. America  |      16917      |
++-------+--------------+-----------------+
+|   4   |  W. Europe   |      13217      |
++-------+--------------+-----------------+
+|   5   |  C. America  |      10158      |
++-------+--------------+-----------------+
+
+
+------
+
++----------------+--------------+-----------------+------------------+
+| Human Damage   |     City     |     Country     |  Killed+Injured  |
++================+==============+=================+==================+
+|   1            |    Baghdad   |      Iraq       |       4345       |
++----------------+--------------+-----------------+------------------+
+|   2            |     Lima     |      Peru       |       2163       |
++----------------+--------------+-----------------+------------------+
+|   3            |    Karachi   |    Pakistan     |       1879       |
++----------------+--------------+-----------------+------------------+
+|   4            |   Belfast    | United Kingdom  |       1706       |
++----------------+--------------+-----------------+------------------+
+|   5            | San Salvador |   El Salvador   |       1491       |
++----------------+--------------+-----------------+------------------+
+
+-----
+
++-------+--------------+-----------------+------------------+
+|   #   |     Group    |     Country     |  Total Attacks   |
++=======+==============+=================+==================+
+|   1   | Shining Path |      Peru       |       4533       |
++-------+--------------+-----------------+------------------+
+|   2   |    FMNLF     |   El Salvador   |       3351       |
++-------+--------------+-----------------+------------------+
+|   3   |   Taliban    |   Afghanistan   |       3204       |
++-------+--------------+-----------------+------------------+
+|   4   |     IRA      | United Kingdom  |       2673       |
++-------+--------------+-----------------+------------------+
+|   5   |     FARC     |   Colombia      |       2228       |
++-------+--------------+-----------------+------------------+
+
+
 
 ## Outlook
 
