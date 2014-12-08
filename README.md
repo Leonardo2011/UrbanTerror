@@ -4,7 +4,7 @@ UrbanTerror
 Lukas Bretzinger, Cameron Reed, Sascha Schuster
 
 
-**DataCleaning.R**	is the main script for cleaning and merging data sets.
+**DataCleaning.R**	is the main script for cleaning and merging data sets. The result is the "preGTD" saved as csv in the Terror Data Folder.
 
 **CityCleaning.R** is a script to clean the cities in the GTD, which has a lot of inconsistentcies and typos.
 
