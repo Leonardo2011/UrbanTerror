@@ -1,7 +1,7 @@
-# Hertie School of Governance
-# MPP-E1180: Introduction to Collaborative Social Science Data Analysis
-### Fall 2014
-### Instructor: Christopher Gandrud
+Hertie School of Governance
+MPP-E1180: Introduction to Collaborative Social Science Data Analysis
+Fall 2014
+Instructor: Christopher Gandrud
 
 ##############################################
 ############## URBAN TERROR ##################
