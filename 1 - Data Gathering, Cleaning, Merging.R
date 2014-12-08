@@ -30,7 +30,7 @@ if(file.exists("Cache/GTD.csv")) {GTD <- read.csv("Cache/GTD.csv")} else{source(
 if(file.exists("Cache/CountryData.csv")){CountryData <- read.csv("Cache/CountryData.csv")} else{source("1.b - Country Data.R")}
 
 
-# City level data from a number of sources, including web scraping
+# City level data from a number of sources, including web scraping and GIS analysis
 if(file.exists("Cache/WC.UC.dist.csv")) {WC.UC.dist <- read.csv("Cache/WC.UC.dist.gis.csv")} else{source("1.c - City Data.R")}
 
 
@@ -262,8 +262,8 @@ PreGTD <- subset(PreGTD, select=c(eventid, iyear, imonth, iday, country_txt, reg
                                   coastalMC, WC.UC.dist.km, attacktype1, targtype1, targsubtype1, weaptype1, weapsubtype1, 
                                   TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, old.pop, 
                                   merge, original.city, coast.dist, coast.dist.MIN, access, access.MIN, light, LIGHT.MAX, nldi, 
-                                  nldi.MAX, city.gdp, gdp.MAX, dens.90, dens.90.MAX, dens.95, dens.95.MAX, dens.00, dens.00.MAX, 
-                                  dens.05, dens.05.MAX, dens.10, dens.10.MAX))
+                                  nldi.MAX, urbn.cover, city.gdp, gdp.MAX, dens.90, dens.90.MAX, dens.95, dens.95.MAX, dens.00, 
+                                  dens.00.MAX, dens.05, dens.05.MAX, dens.10, dens.10.MAX))
 
 # fill rural atacks (= no city found) with respective data 
 PreGTD$coastalMC[is.na(PreGTD$coastalMC)] <- 0 

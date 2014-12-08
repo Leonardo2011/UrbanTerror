@@ -115,23 +115,24 @@ if(file.exists("Cache/world.cities.csv"))
   
   
   ###### Gathering Data  ######
-  
+    
   ###World cities dataset 1/3 (worldcities2013)###
   
   # it stems from a private company, Maxmind Inc.
   #http://download.maxmind.com/download/worldcities/worldcitiespop.txt.gz and transformed into CSV, since it is not available
   #in .csv format right away.
+  unzip("Downloaded_Data/worldcitiespop1000.zip", exdir="Downloaded_Data")
   worldcities2013 <- read.csv("Downloaded_Data/worldcitiespop.csv")
+  
   
   ###World cities dataset 2/3 (worldcities1000)###
   
   #http://download.geonames.org/export/dump/cities1000.zip and transformed into CSV, since it is not available
   #in .csv format right away. The GeoNames geographical database is available for download free of charge under 
   #a creative commons attribution license.
-  unzip("Downloaded_Data/worldcitiespop1000.zip", exdir="Downloaded_Data")
-  worldcities1000 <- read.csv("Downloaded_Data/worldcitiespop1000.csv")
-  unlink("Downloaded_Data/worldcitiespop1000.csv")
-    
+  
+  worldcities1000 <- read.csv("Downloaded_Data/worldcitiespop1000.csv") 
+  
   # the first both city data sets are very similar, this brought together right away as worldcities2013
   worldcities1000 <- subset(worldcities1000, select=c("V9", "V3", "V2", "V18", "V5", "V6", "V15"), !is.na(V9) &!is.na(V5) & V15!=0)
   worldcities1000$V3 <- tolower(worldcities1000$V3)
@@ -248,8 +249,12 @@ if(file.exists("Cache/world.cities.csv"))
   #create cache world.cities.csv
   write.csv(world.cities, "Cache/world.cities.csv")
   
+  unlink("Downloaded_Data/worldcitiespop1000.csv")
+  unlink("Downloaded_Data/worldcitiespop.csv")
+  
   
 }
+
 
 
 #############################################################################################################
@@ -446,16 +451,15 @@ C <- WC.UC.dist
 
 unzip("Downloaded_Data/Downloaded_Raster_Data.zip", exdir="Downloaded_Data")
 
-
+###
 # Distance to coast in km 
 # http://worldgrids.org/doku.php?id=wiki:layers
 
-
 RASTERcoastdist <- raster("Downloaded_Data/DICGSH1a.tif")
 p1 <- data.frame(lon=C$lon, lat=C$lat)
-p1["coast.dist"] <- extract(RASTERcoastdist, p1)
+p1["coast.dist"] <- raster::extract(RASTERcoastdist, p1)
 C["coast.dist"] <- ifelse(p1$coast.dist>=0, 0, round((p1$coast.dist^2)^0.5))
-unlink("Downloaded_Data/DICGSH1a.tif")
+
 # Plus Countries Minimum
 Rank.COASTDIST.MIN<-aggregate(C$coast.dist, by=list(C$country.etc), FUN=min)
 colnames(Rank.COASTDIST.MIN)[1] <- "country.etc"
@@ -464,25 +468,39 @@ C <- merge(C, Rank.COASTDIST.MIN, by=c("country.etc"), all.x=TRUE)
 rm(Rank.COASTDIST.MIN, RASTERcoastdist)
 
 
+###
+# Urban Land Cover in %
+# http://worldgrids.org/doku.php?id=wiki:g19esa3
+
+RASTERurban <- raster("Downloaded_Data/G19ESA3a.tif")
+RASTERurban <- aggregate(RASTERurban, fact=20, fun=max, na.rm=TRUE)
+p1 <- data.frame(lon=C$lon, lat=C$lat)
+p1["urbn.cover"] <- raster::extract(RASTERurban, p1, method='bilinear')
+C["urbn.cover"] <- round(p1$urbn.cover)
+rm(RASTERurban)
+
+
+###
 # travel time to major city in minutes (2000) 
 # http://worldgrids.org/doku.php?id=wiki:layers
 
 RASTERacess <- raster("Downloaded_Data/GACGEM2a.tif")
 p1 <- data.frame(lon=C$lon, lat=C$lat)
-p1["access"] <- extract(RASTERacess, p1)
+p1["access"] <- raster::extract(RASTERacess, p1)
 C["access"] <- round(p1$access)
 unlink("Downloaded_Data/GACGEM2a.tif")
 
+
+###
 # Stable light shining at night in mean reflection levels 1-63 from 1992 to 2010 
 # http://worldgrids.org/doku.php?id=wiki:layers
-
 
 RASTERlight<- raster("Downloaded_Data/LNMDMS2a.tif")
 RASTERlight <- aggregate(RASTERlight, fact=2, fun=max, na.rm=TRUE)
 p1 <- data.frame(lon=C$lon, lat=C$lat)
-p1["light"] <- extract(RASTERlight, p1, method='bilinear')
+p1["light"] <- raster::extract(RASTERlight, p1, method='bilinear')
 C["light"] <- round(p1$light)
-unlink("Downloaded_Data/LNMDMS2a.tif")
+
 # Plus Countries Maximum
 Rank.LIGHT.MAX<- ifelse(!is.na(C$light), as.numeric(C$light), 0)
 Rank.LIGHT.MAX<-aggregate(Rank.LIGHT.MAX, by=list(C$country.etc), FUN=max)
@@ -492,6 +510,7 @@ C <- merge(C, Rank.LIGHT.MAX, by=c("country.etc"), all.x=TRUE)
 rm(Rank.LIGHT.MAX, RASTERlight)
 
 
+###
 # Economic activity in millions of dollars per km2 (2006)
 # http://ngdc.noaa.gov/eog/dmsp/download_gdp.html
 
@@ -501,9 +520,8 @@ gunzip("Downloaded_Data/GDP_grid_flt.tif.gz", destname="Downloaded_Data/GDP_grid
 RASTERgdp <- raster("Downloaded_Data/GDP_grid_flt.tif")
 RASTERgdp <- aggregate(RASTERgdp, fact=10, fun=max, na.rm=TRUE) # take 10km Radius max
 p1 <- data.frame(lon=C$lon, lat=C$lat)
-p1["gdp"] <- extract(RASTERgdp, p1, method='bilinear')
+p1["gdp"] <- raster::extract(RASTERgdp, p1, method='bilinear')
 C["city.gdp"] <- round(p1$gdp)
-unlink("Downloaded_Data/GDP_grid_flt.tif")
 
 # Plus Countries Maximum
 Rank.GDP.MAX<-aggregate(C$city.gdp, by=list(C$country.etc), FUN=max)
@@ -513,14 +531,15 @@ C <- merge(C, Rank.GDP.MAX, by=c("country.etc"), all.x=TRUE)
 rm(Rank.GDP.MAX, RASTERgdp)
 
 
+###
 # The Night Light Development Index for 2006, exquality in distribution of light (0-1 Lorenz Curve)
 # ngdc.noaa.gov 
 
 RASTERnldi <- raster("Downloaded_Data/NLDI_2006_0p25_rev20111230.tif")
 p1 <- data.frame(lon=C$lon, lat=C$lat)
-p1["nldi"] <- extract(RASTERnldi, p1, method='bilinear')
+p1["nldi"] <- raster::extract(RASTERnldi, p1, method='bilinear')
 C["nldi"] <- ifelse(p1$nldi<=0 | p1$nldi>=1, NA, as.numeric(p1$nldi))
-unlink("Downloaded_Data/NLDI_2006_0p25_rev20111230.tif")
+
 # Plus Countries Maximum
 Rank.NLDI.MAX<- ifelse(!is.na(C$nldi), as.numeric(C$nldi), 0)
 Rank.NLDI.MAX<-aggregate(Rank.NLDI.MAX, by=list(C$country.etc), FUN=max)
@@ -530,12 +549,13 @@ C <- merge(C, Rank.NLDI.MAX, by=c("country.etc"), all.x=TRUE)
 rm(Rank.NLDI.MAX, RASTERnldi)
 
 
+###
 # Population Density with 50km resolution (1990)
 # NASA's Earth Observing System Data and Information System
 
 RASTER90pop <- raster("Downloaded_Data/glds90ag30.asc")
 p1 <- data.frame(lon=C$lon, lat=C$lat)
-p1["dens.90"] <- extract(RASTER90pop, p1, method='bilinear')
+p1["dens.90"] <- raster::extract(RASTER90pop, p1, method='bilinear')
 C["dens.90"] <- round(p1$dens.90)
 
 # Plus Countries Maximum
@@ -546,12 +566,13 @@ C <- merge(C, Rank.POP90.MAX, by=c("country.etc"), all.x=TRUE)
 rm(Rank.POP90.MAX, RASTER90pop)
 
 
+###
 # Population Density with 50km resolution (1995)
 # NASA's Earth Observing System Data and Information System
 
 RASTER95pop <- raster("Downloaded_Data/glds95ag30.asc")
 p1 <- data.frame(lon=C$lon, lat=C$lat)
-p1["dens.95"] <- extract(RASTER95pop, p1, method='bilinear')
+p1["dens.95"] <- raster::extract(RASTER95pop, p1, method='bilinear')
 C["dens.95"] <- round(p1$dens.95)
 
 # Plus Countries Maximum
@@ -562,12 +583,13 @@ C <- merge(C, Rank.POP95.MAX, by=c("country.etc"), all.x=TRUE)
 rm(Rank.POP95.MAX, RASTER95pop)
 
 
+###
 # Population Density with 50km resolution (2000)
 # NASA's Earth Observing System Data and Information System
 
 RASTER00pop <- raster("Downloaded_Data/glds00ag30.asc")
 p1 <- data.frame(lon=C$lon, lat=C$lat)
-p1["dens.00"] <- extract(RASTER00pop, p1, method='bilinear')
+p1["dens.00"] <- raster::extract(RASTER00pop, p1, method='bilinear')
 C["dens.00"] <- round(p1$dens.00)
 
 # Plus Countries Maximum
@@ -578,12 +600,13 @@ C <- merge(C, Rank.POP00.MAX, by=c("country.etc"), all.x=TRUE)
 rm(Rank.POP00.MAX, RASTER00pop)
 
 
+###
 # Population Density Estimate with 50km resolution (2005)
 # NASA's Earth Observing System Data and Information System
 
 RASTER05pop <- raster("Downloaded_Data/glds05ag30.asc")
 p1 <- data.frame(lon=C$lon, lat=C$lat)
-p1["dens.05"] <- extract(RASTER05pop, p1, method='bilinear')
+p1["dens.05"] <- raster::extract(RASTER05pop, p1, method='bilinear')
 C["dens.05"] <- round(p1$dens.05)
 
 # Plus Countries Maximum
@@ -594,12 +617,13 @@ C <- merge(C, Rank.POP05.MAX, by=c("country.etc"), all.x=TRUE)
 rm(Rank.POP05.MAX, RASTER05pop)
 
 
+###
 # Population Density Estimate with 50km resolution (2010)
 # NASA's Earth Observing System Data and Information System
 
 RASTER10pop <- raster("Downloaded_Data/glds10ag30.asc")
 p1 <- data.frame(lon=C$lon, lat=C$lat)
-p1["dens.10"] <- extract(RASTER10pop, p1, method='bilinear')
+p1["dens.10"] <- raster::extract(RASTER10pop, p1, method='bilinear')
 C["dens.10"] <- round(p1$dens.10)
 
 # Plus Countries Maximum
@@ -610,8 +634,14 @@ C <- merge(C, Rank.POP10.MAX, by=c("country.etc"), all.x=TRUE)
 rm(Rank.POP10.MAX, RASTER10pop)
 
 WC.UC.dist.gis <- C
-rm(C)
+rm(C, p1)
 
 
 write.csv(WC.UC.dist.gis, "Cache/WC.UC.dist.gis.csv")
+
+unlink("Downloaded_Data/NLDI_2006_0p25_rev20111230.tif")
+unlink("Downloaded_Data/GDP_grid_flt.tif")
+unlink("Downloaded_Data/LNMDMS2a.tif")
+unlink("Downloaded_Data/DICGSH1a.tif")
+unlink("Downloaded_Data/G19ESA3a.tif")
 

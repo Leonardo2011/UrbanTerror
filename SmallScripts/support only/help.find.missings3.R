@@ -9,6 +9,7 @@ PreGTD <- read.csv("Pre.GTD.csv", header=TRUE)
 WC.UC.dist_in_Memory <- getURL("https://rawgit.com/LBRETZIN/UrbanTerror/master/Cache/WC.UC.dist.csv", ssl.verifypeer=0L, followlocation=1L)
 writeLines(WC.UC.dist_in_Memory,'WC.UC.dist.csv')
 rm(WC.UC.dist_in_Memory)
+
 WC.UC.dist <- read.csv("WC.UC.dist.csv", header=TRUE)
 
 PreGTD <- read.csv('TerrorData/Pregtd.csv')
@@ -233,18 +234,21 @@ X$X <- 1
 List <- aggregate(X$X, by=list(X$GTD.city), FUN=sum)
 List <- List[order(-List$x), ]
 rm(X)
-List <- merge(List, PreGTD, by.x=c("Group.1"), by.y=c("merge"), all.x=TRUE)
-List <- List[!duplicated(List$Group.1),]
-Missing <- subset(List, select=c("country_txt", "GTD.city", "x", "original.city"))
+List <- merge(List, PreGTD, by.x=c("Group.1"), by.y=c("GTD.city"), all.x=TRUE)
+List <- subset(List, is.na(List$old.pop))
+List <- List[!duplicated(List$merge),]
+Missing <- subset(List, select=c("country_txt", "Group.1", "x", "original.city"))
 Missing["attacks"] <- Missing$x
 Missing$x <- NULL
 Missing <- Missing[order(-Missing$attacks), ]
 rm(List)
 X <- subset(Missing, attacks>=3 & attacks<=150)
+X["lookup"] <- paste(X$Group.1, X$country_txt, sep=", ")
 
 
 
-X["lookup"] <- paste(X$original.city, X$country_txt, sep=", ")
+
+
 missingLOC <- geocode(X$lookup, output = c("latlon", "latlona", "more", "all"), messaging = FALSE, sensor = FALSE, override_limit = TRUE)
 missingLOC["CityGTD"] <- X$GTD.city
 missingLOC <- subset(missingLOC, !is.na(lon))
