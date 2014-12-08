@@ -5,7 +5,9 @@ Instructor: Christopher Gandrud
 
 
 #URBAN TERROR
-Lukas B Cameron R Sascha S##########
+
+
+Lukas B Cameron R Sascha S
 ===========
 
 Lukas Bretzinger, Cameron Reed, Sascha Schuster
