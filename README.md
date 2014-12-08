@@ -3,11 +3,9 @@ MPP-E1180: Introduction to Collaborative Social Science Data Analysis
 Fall 2014
 Instructor: Christopher Gandrud
 
-##############################################
-############## URBAN TERROR ##################
-##############################################
-##########Lukas B Cameron R Sascha S##########
-##############################################
+
+#URBAN TERROR
+Lukas B Cameron R Sascha S##########
 ===========
 
 Lukas Bretzinger, Cameron Reed, Sascha Schuster
