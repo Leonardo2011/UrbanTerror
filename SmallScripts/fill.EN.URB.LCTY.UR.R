@@ -21,6 +21,13 @@ CountryData$EN.URB.LCTY.UR <-ifelse(is.na(CountryData$EN.URB.LCTY.UR) & is.na(Co
 CountryData$WC.UC.Largest <- NULL
 CountryData$X <- NULL
 
+Highs.URB.LCTY.UR <- aggregate(as.numeric(CountryData$EN.URB.LCTY.UR), list(country=CountryData$country),max)
+colnames(Highs.URB.LCTY.UR)[2] <- "MAX.URB.LCTY.UR"
+CountryData$MAX.URB.LCTY.UR <- NULL
+
+CountryData <- merge(CountryData, Highs.URB.LCTY.UR, by=("country"))
+rm(Highs.URB.LCTY.UR)
+
 #create cache WDIData.csv
 write.csv(CountryData, "Cache/CountryData.csv")
 

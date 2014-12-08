@@ -20,9 +20,9 @@
 
 #Load the Global Terrorism Database (GTD). It is open souce and can be downloaded after registration at 
 # http://www.start.umd.edu/gtd/contact/
-
+unzip("TerrorData/globalterrorismdb_0814dist.zip", exdir="TerrorData")
 rawGTD <- read.csv("TerrorData/globalterrorismdb_0814dist.csv", header=TRUE)
-
+unlink("TerrorData/globalterrorismdb_0814dist.csv")
 
 #The (GTD) contains over a 120k observations on more than 120 variables. Many seem irrelevant to our analysis. 
 #We subset the database, selecting also only successful terror attacks.
@@ -292,6 +292,8 @@ source('SmallScripts/CleanSpecialCharacters.R')
 GTD$country_txt <- X
 rm(X)
 
+
+GTD["original.city"]<- GTD$city
 X <- GTD$city
 source('SmallScripts/CityCleaning.R')
 source('SmallScripts/CleanSpecialCharacters.R')

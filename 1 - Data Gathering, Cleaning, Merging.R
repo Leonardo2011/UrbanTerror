@@ -31,7 +31,7 @@ if(file.exists("Cache/CountryData.csv")){CountryData <- read.csv("Cache/CountryD
 
 
 # City level data from a number of sources, including web scraping
-if(file.exists("Cache/WC.UC.dist.csv")) {WC.UC.dist <- read.csv("Cache/WC.UC.dist.csv")} else{source("1.c - City Data.R")}
+if(file.exists("Cache/WC.UC.dist.csv")) {WC.UC.dist <- read.csv("Cache/WC.UC.dist.gis.csv")} else{source("1.c - City Data.R")}
 
 
 
@@ -56,7 +56,7 @@ X$TimeFilled <- NULL
 
 # merge city and country data 
 WC.UC.full<- merge(X, WC.UC.dist, by=c("merge"), all.x=TRUE)
-WC.UC.full <- merge(WC.UC.full, CountryData, by.x=c("country.etc", "year"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
+WC.UC.full <- merge(WC.UC.full, CountryData, by.x=c("country.etc", "Time"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
 rm(X)
 
 # minor cleanups 
@@ -88,16 +88,19 @@ G2$pop <- NULL
 
 
 # Area Manipulation for UC's, in order to account for growing urban centers incorporating less in the past
-G2$Area <-ifelse(G2$largest.UC==1 & !is.na(G2$EN.URB.LCTY.UR), 
-                 (G2$EN.URB.LCTY.UR/G2$MAX.URB.LCTY.UR*G2$Area), G2$Area)
-G2$Area <-ifelse(G2$largest.UC==0 & !is.na(G2$EN.URB.MCTY)
-                 & !is.na(G2$EN.URB.LCTY.UR) & !is.na(G2$MAX.URB.MCTY) & !is.na(G2$MAX.URB.LCTY.UR)
-                 ,((G2$EN.URB.MCTY - G2$EN.URB.LCTY.UR)/(G2$MAX.URB.MCTY - G2$MAX.URB.LCTY.UR)*G2$Area), G2$Area)
+G2$Area <-ifelse(G2$largest.UC==1 & !is.na(G2$EN.URB.LCTY.UR) & !is.na(G2$MAX.URB.LCTY.UR)  & (G2$EN.URB.LCTY.UR/G2$MAX.URB.LCTY.UR)<=1 & 
+                   (G2$EN.URB.LCTY.UR/G2$MAX.URB.LCTY.UR)>=0.05, (G2$EN.URB.LCTY.UR/G2$MAX.URB.LCTY.UR*G2$Area), G2$Area)
+G2$Area <-ifelse(G2$largest.UC==0 & (((G2$EN.URB.MCTY - G2$EN.URB.LCTY.UR)/(G2$MAX.URB.MCTY - G2$MAX.URB.LCTY.UR))<=1)& 
+                      (((G2$EN.URB.MCTY - G2$EN.URB.LCTY.UR)/(G2$MAX.URB.MCTY - G2$MAX.URB.LCTY.UR))>=0.05) &
+                 !is.na((G2$EN.URB.MCTY - G2$EN.URB.LCTY.UR)/(G2$MAX.URB.MCTY - G2$MAX.URB.LCTY.UR)),
+                 ((G2$EN.URB.MCTY - G2$EN.URB.LCTY.UR)/(G2$MAX.URB.MCTY - G2$MAX.URB.LCTY.UR)*G2$Area), G2$Area)
+
 
 # re-answering the question again, if a city is part of an UC, now with new Area estimates of all UCs
 G2["inUC"] <- ifelse((G2$WC.UC.dist.km <= (15+(((G2$Area)/pi)**0.5))), 1, 0) # 20km + radius of UC as circle
 G2["aroundUC"] <- ifelse((G2$WC.UC.dist.km <= (30+(((G2$Area)/pi)**0.5))), 1, 0) # 40km + radius of UC as circle
 G2$inUC[is.na(G2$inUC)]<- 0 
+G2$name <- ifelse((G2$inUC==1), G2$name, G2$old.name)
 
 #in case we only have very limited numers on the country population, we put in some first assumptions based on total population
 # and UC population
@@ -257,7 +260,10 @@ PreGTD <- subset(PreGTD, select=c(eventid, iyear, imonth, iday, country_txt, reg
                                   latitude, longitude, pop.that.year, Rel.CS, inUC, aroundUC, RANK.Country, Rank.C.MAX, Rank01.C, 
                                   RANK.World, Rank.W.MAX, Rank01.W, capital, largestC, Closest.Urban.Center,largest.UC, 
                                   coastalMC, WC.UC.dist.km, attacktype1, targtype1, targsubtype1, weaptype1, weapsubtype1, 
-                                  TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, old.pop, merge, merge2))
+                                  TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, old.pop, 
+                                  merge, original.city, coast.dist, coast.dist.MIN, access, access.MIN, light, LIGHT.MAX, nldi, 
+                                  nldi.MAX, city.gdp, gdp.MAX, dens.90, dens.90.MAX, dens.95, dens.95.MAX, dens.00, dens.00.MAX, 
+                                  dens.05, dens.05.MAX, dens.10, dens.10.MAX))
 
 # fill rural atacks (= no city found) with respective data 
 PreGTD$coastalMC[is.na(PreGTD$coastalMC)] <- 0 
@@ -281,3 +287,4 @@ PreGTD$RANK.World <- ifelse(is.na(PreGTD$RANK.World), as.numeric(PreGTD$Rank.Wor
 # write a csv, just to be sure
 write.csv(PreGTD, file="TerrorData/Pregtd.csv")
 rm(WC.UC.merge, WC.UC.time, GTDcountry, GTDcity, GTDyear, GTD2, WC.UC.full)
+

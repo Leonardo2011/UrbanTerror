@@ -28,8 +28,9 @@ ipak <- function(pkg){
   sapply(pkg, require, character.only = TRUE)
 }
 
-packages <- c("foreign", "car", "RCurl", "ggplot2", "WDI", "httr", "iterators", "dplyr", "plyr", "stargazer",
-              "XML", "maps", "ggmap", "Imap", "geosphere", "maptools", "rgeos", "foreach", "DataCombine", "mapproj")
+packages <- c("foreign", "car", "RCurl", "ggplot2", "WDI", "rtiff", "httr", "iterators", "dplyr", "plyr", 
+              "stargazer", "rgdal", "sp", "dismo","XML", "maps", "ggmap", "Imap", "geonames", "GSIF", "tiff",
+              "raster", "gdalUtils","geosphere", "maptools", "rgeos", "foreach", "DataCombine", "R.utils")
+
 ipak(packages)
-rm(packages)
-rm(ipak)
+rm(packages, ipak)
