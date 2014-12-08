@@ -1,6 +1,9 @@
 Hertie School of Governance
+
 MPP-E1180: Introduction to Collaborative Social Science Data Analysis
+
 Fall 2014
+
 Instructor: Christopher Gandrud
 
 
@@ -10,7 +13,6 @@ Instructor: Christopher Gandrud
 Lukas Bretzinger, Cameron Reed, Sascha Schuster
 ===========
 
-Lukas Bretzinger, Cameron Reed, Sascha Schuster
 
 
 
