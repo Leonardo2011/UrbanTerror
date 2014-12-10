@@ -442,5 +442,36 @@ GTD$nwound <- recode(GTD$nwound, "NA=0")
 GTD["HUMscale"] <- GTD$nkill+GTD$nwound
 GTD$HUMscale <- as.numeric(GTD$HUMscale)
 
-#create cache GTD.csv (last: 15.11.2014)
+# Introduce continuous date variables of the form yyyy-mm-dd, where every attack without month and day assigned to it in the GTD
+# is treated as having occurred Jan 1 that year.
+
+GTD$imonth <- as.character(GTD$imonth)
+GTD$imonth[GTD$imonth == "1"] <-"01"
+GTD$imonth[GTD$imonth == "2"] <-"02"
+GTD$imonth[GTD$imonth == "3"] <-"03"
+GTD$imonth[GTD$imonth == "4"] <-"04"
+GTD$imonth[GTD$imonth == "5"] <-"05"
+GTD$imonth[GTD$imonth == "6"] <-"06"
+GTD$imonth[GTD$imonth == "7"] <-"07"
+GTD$imonth[GTD$imonth == "8"] <-"08"
+GTD$imonth[GTD$imonth == "9"] <-"09"
+GTD$imonth[GTD$imonth == "0"] <-"01"
+
+GTD$iday <- as.character(GTD$iday)
+GTD$iday[GTD$iday == "1"] <- "01"
+GTD$iday[GTD$iday == "2"] <- "02"
+GTD$iday[GTD$iday == "3"] <- "03"
+GTD$iday[GTD$iday == "4"] <- "04"
+GTD$iday[GTD$iday == "5"] <- "05"
+GTD$iday[GTD$iday == "6"] <- "06"
+GTD$iday[GTD$iday == "7"] <- "07"
+GTD$iday[GTD$iday == "8"] <- "08"
+GTD$iday[GTD$iday == "9"] <- "09"
+GTD$iday[GTD$iday == "0"] <- "01"
+GTD$iday[GTD$iday == "-99"] <- "01"
+
+GTD$Date <- paste(GTD$iyear, GTD$imonth, GTD$iday,sep="-")
+GTD$Date <- as.Date(GTD$Date)
+
+#create cache GTD.csv
 write.csv(GTD, "Cache/GTD.csv")
