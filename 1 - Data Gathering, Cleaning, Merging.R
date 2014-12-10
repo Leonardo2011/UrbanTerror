@@ -292,12 +292,20 @@ WC.UC.full$nldi.MAX <- NULL
 
 
 # Plus Countries Maximum for the Population Density
-R.density.MAX<- ifelse(!is.na(WC.UC.full$nldi), as.numeric(WC.UC.full$nldi), 0)
-R.density.MAX<-aggregate(R.NLDI.MAX, by=list(WC.UC.full$country.etc), FUN=max)
-colnames(R.density.MAX)[1] <- "country_txt"
-colnames(R.density.MAX)[2] <- "nldi.MAX"
-GTDr <- merge(GTDr, R.density.MAX, by=c("country_txt"), all.x=TRUE)
-rm(R.NLDI.MAX)
+Rank.Country.MAX<-aggregate(G2$RANK.Country, by=list(G2$year, G2$country.etc), FUN=max)
+colnames(Rank.Country.MAX)[1] <- "iyear"
+colnames(Rank.Country.MAX)[2] <- "country_txt"
+colnames(Rank.Country.MAX)[3] <- "Rank.C.MAX"
+GTDr <- merge(GTD, Rank.Country.MAX, by=c("iyear", "country_txt"), all.x=TRUE)
+
+
+R.density.MAX<- ifelse(!is.na(WC.UC.full$density), as.numeric(WC.UC.full$density), 0)
+R.density.MAX<-aggregate(R.density.MAX, by=list(WC.UC.full$year, WC.UC.full$country.etc), FUN=max)
+colnames(R.density.MAX)[1] <- "iyear"
+colnames(R.density.MAX)[2] <- "country_txt"
+colnames(R.density.MAX)[3] <- "density.MAX"
+GTDr <- merge(GTDr, R.density.MAX, by=c("iyear", "country_txt"), all.x=TRUE)
+rm(R.density.MAX)
 
 
 # Plus Countries Maximum for the Night Light Development Index for 2006

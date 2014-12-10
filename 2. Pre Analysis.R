@@ -20,7 +20,9 @@ Stat1GTD <- subset(PreGTD, select=c(iyear, country_txt, region_txt, pop.that.yea
 Stat1GTD["DV.Target.Urban"] <- (Stat1GTD$Rank01.C*0.25)  + (Stat1GTD$Rel.CS*0.25) + (Stat1GTD$urbn.cover/100*0.25) + (Stat1GTD$light/Stat1GTD$light.MAX*0.25)
 Stat1GTD["DV.Target.Crowded"] <-(Stat1GTD$density/Stat1GTD$density.MAX*0.60) + (Stat1GTD$density.growth/Stat1GTD$density.growth.MAX*0.30) + (Stat1GTD$nldi/Stat1GTD$nldi.MAX*0.10)
 Stat1GTD["DV.Target.Coastal"] <- ifelse(Stat1GTD$coast.dist.MIN >= 30, NA, Stat1GTD$coast.dist/Stat1GTD$coast.dist.MAX)
-Stat1GTD["DV.Target.Connected"] <- (((Stat1GTD$access/Stat1GTD$access.MAX)-1)*-1)*0.5 + (Stat1GTD$light/Stat1GTD$light.MAX*0.25) + (Stat1GTD$city.gdp/Stat1GTD$gdp.MAX*0.25)
+
+#needs fix
+#Stat1GTD["DV.Target.Connected"] <- (((Stat1GTD$access/Stat1GTD$access.MAX)-1)*-1)*0.5 + (Stat1GTD$light/Stat1GTD$light.MAX*0.25) + (Stat1GTD$city.gdp/Stat1GTD$gdp.MAX*0.25)
   
 Stat1GTD["IV.Time"] <- Stat1GTD$iyear-1998
 Stat1GTD["IV.Urban.Share"] <- Stat1GTD$SP.URB.TOTL.IN.ZS
