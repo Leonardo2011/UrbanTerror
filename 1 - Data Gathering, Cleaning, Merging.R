@@ -290,6 +290,16 @@ WC.UC.full$nldi.MAX <- NULL
 
 ##### Add some Maxima to the GTD #######
 
+
+# Plus Countries Maximum for the Population Density
+R.density.MAX<- ifelse(!is.na(WC.UC.full$nldi), as.numeric(WC.UC.full$nldi), 0)
+R.density.MAX<-aggregate(R.NLDI.MAX, by=list(WC.UC.full$country.etc), FUN=max)
+colnames(R.density.MAX)[1] <- "country_txt"
+colnames(R.density.MAX)[2] <- "nldi.MAX"
+GTDr <- merge(GTDr, R.density.MAX, by=c("country_txt"), all.x=TRUE)
+rm(R.NLDI.MAX)
+
+
 # Plus Countries Maximum for the Night Light Development Index for 2006
 R.NLDI.MAX<- ifelse(!is.na(WC.UC.full$nldi), as.numeric(WC.UC.full$nldi), 0)
 R.NLDI.MAX<-aggregate(R.NLDI.MAX, by=list(WC.UC.full$country.etc), FUN=max)
