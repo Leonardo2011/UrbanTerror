@@ -16,7 +16,7 @@ bibliography: UTBiblio.bib
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
-PreGTD <- read.csv("PreAnalysis/pregtd.csv", header=TRUE)
+PreGTD <- read.csv("TerrorData/Pregtd.csv", header=TRUE)
 ```
 
 #Data Collection Process
