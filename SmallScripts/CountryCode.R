@@ -251,7 +251,7 @@ X<-gsub("^ZA$","SouthAfrica",X, ignore.case=TRUE)
 X<-gsub("^ZM$","Zambia",X, ignore.case=TRUE)
 X<-gsub("^ZW$","Zimbabwe",X, ignore.case=TRUE)
 X<-gsub("^XK$","Kosovo",X, ignore.case=TRUE)
-
+X <- ifelse(is.na(X), as.character("Namibia"), X)
 X<-gsub("\\,", "",X, ignore.case=TRUE)
 worldcities2013$Country <- X
 rm(X)

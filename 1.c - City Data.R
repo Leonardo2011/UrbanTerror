@@ -245,6 +245,8 @@ if(file.exists("Cache/world.cities.csv"))
   source('SmallScripts/CleanSpecialCharacters.R')
   world.cities$country.etc <- X
   rm(X)
+
+  
   
   #create cache world.cities.csv
   write.csv(world.cities, "Cache/world.cities.csv")
@@ -342,9 +344,14 @@ rm(LC)
 write.csv(WC.UC.dist, "Cache/WC.UC.dist.old.csv")
 
 
+
+
+
+
 #############################################################################################################
 ################################################ 4. Manipulating  ###########################################
 #############################################################################################################
+#WC.UC.dist <- read.csv("Cache/WC.UC.dist.old.csv")
 
 
 # Country level data from the World Bank Development Indicators (WDI) and the The Correlates of War (COW) project data on wars.
@@ -434,7 +441,7 @@ WC.UC.dist["old.pop"] <- WC.UC.dist$pop
 WC.UC.dist$pop <- G$realpop
 
 WC.UC.dist["old.name"] <- as.character(WC.UC.dist$name)
-WC.UC.dist$name <- ifelse((G$part.of.urban.center==TRUE), G$UC, WC.UC.dist$old.name)
+WC.UC.dist$name <- ifelse((G$part.of.urban.center==TRUE), as.character(G$UC), as.character(WC.UC.dist$old.name))
 
 rm(G.SC.SUMS2, G.SC.SUMS)
 rm(G)
@@ -465,7 +472,14 @@ Rank.COASTDIST.MIN<-aggregate(C$coast.dist, by=list(C$country.etc), FUN=min)
 colnames(Rank.COASTDIST.MIN)[1] <- "country.etc"
 colnames(Rank.COASTDIST.MIN)[2] <- "coast.dist.MIN"
 C <- merge(C, Rank.COASTDIST.MIN, by=c("country.etc"), all.x=TRUE)
-rm(Rank.COASTDIST.MIN, RASTERcoastdist)
+rm(Rank.COASTDIST.MIN)
+
+# Plus Countries Maximum
+Rank.COASTDIST.MAX<-aggregate(C$coast.dist, by=list(C$country.etc), FUN=max)
+colnames(Rank.COASTDIST.MAX)[1] <- "country.etc"
+colnames(Rank.COASTDIST.MAX)[2] <- "coast.dist.MAX"
+C <- merge(C, Rank.COASTDIST.MAX, by=c("country.etc"), all.x=TRUE)
+rm(Rank.COASTDIST.MAX, RASTERcoastdist)
 
 
 ###
@@ -473,7 +487,8 @@ rm(Rank.COASTDIST.MIN, RASTERcoastdist)
 # http://worldgrids.org/doku.php?id=wiki:g19esa3
 
 RASTERurban <- raster("Downloaded_Data/G19ESA3a.tif")
-RASTERurban <- aggregate(RASTERurban, fact=20, fun=max, na.rm=TRUE)
+RASTERurban <- aggregate(RASTERurban, fact=20, fun=max, na.rm=TRUE) # 1km to 20km raster max
+RASTERurban <- aggregate(RASTERurban, fact=2, fun=mean, na.rm=TRUE) # 20km to 40km raster mean
 p1 <- data.frame(lon=C$lon, lat=C$lat)
 p1["urbn.cover"] <- raster::extract(RASTERurban, p1, method='bilinear')
 C["urbn.cover"] <- round(p1$urbn.cover)
@@ -490,6 +505,15 @@ p1["access"] <- raster::extract(RASTERacess, p1)
 C["access"] <- round(p1$access)
 unlink("Downloaded_Data/GACGEM2a.tif")
 
+# Plus Countries Maximum
+Rank.ACCESS.MAX<- ifelse(!is.na(C$access), as.numeric(C$access), 0)
+Rank.ACCESS.MAX<-aggregate(Rank.ACCESS.MAX, by=list(C$country.etc), FUN=max)
+colnames(Rank.ACCESS.MAX)[1] <- "country.etc"
+colnames(Rank.ACCESS.MAX)[2] <- "access.MAX"
+C <- merge(C, Rank.ACCESS.MAX, by=c("country.etc"), all.x=TRUE)
+rm(Rank.ACCESS.MAX, RASTERacess)
+
+
 
 ###
 # Stable light shining at night in mean reflection levels 1-63 from 1992 to 2010 
@@ -505,7 +529,7 @@ C["light"] <- round(p1$light)
 Rank.LIGHT.MAX<- ifelse(!is.na(C$light), as.numeric(C$light), 0)
 Rank.LIGHT.MAX<-aggregate(Rank.LIGHT.MAX, by=list(C$country.etc), FUN=max)
 colnames(Rank.LIGHT.MAX)[1] <- "country.etc"
-colnames(Rank.LIGHT.MAX)[2] <- "LIGHT.MAX"
+colnames(Rank.LIGHT.MAX)[2] <- "light.MAX"
 C <- merge(C, Rank.LIGHT.MAX, by=c("country.etc"), all.x=TRUE)
 rm(Rank.LIGHT.MAX, RASTERlight)
 
@@ -518,7 +542,8 @@ download.file("http://ngdc.noaa.gov/eog/data/GDP/GDP_grid_flt.tif.gz", "Download
 gunzip("Downloaded_Data/GDP_grid_flt.tif.gz", destname="Downloaded_Data/GDP_grid_flt.tif")
 
 RASTERgdp <- raster("Downloaded_Data/GDP_grid_flt.tif")
-RASTERgdp <- aggregate(RASTERgdp, fact=10, fun=max, na.rm=TRUE) # take 10km Radius max
+RASTERgdp <- aggregate(RASTERgdp, fact=10, fun=max, na.rm=TRUE) # 1 to 10km Radius max
+RASTERgdp <- aggregate(RASTERgdp, fact=2, fun=mean, na.rm=TRUE) # 10km to 20km raster mean
 p1 <- data.frame(lon=C$lon, lat=C$lat)
 p1["gdp"] <- raster::extract(RASTERgdp, p1, method='bilinear')
 C["city.gdp"] <- round(p1$gdp)
@@ -632,6 +657,7 @@ colnames(Rank.POP10.MAX)[1] <- "country.etc"
 colnames(Rank.POP10.MAX)[2] <- "dens.10.MAX"
 C <- merge(C, Rank.POP10.MAX, by=c("country.etc"), all.x=TRUE)
 rm(Rank.POP10.MAX, RASTER10pop)
+
 
 WC.UC.dist.gis <- C
 rm(C, p1)

@@ -59,6 +59,20 @@ WC.UC.full<- merge(X, WC.UC.dist, by=c("merge"), all.x=TRUE)
 WC.UC.full <- merge(WC.UC.full, CountryData, by.x=c("country.etc", "Time"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
 rm(X)
 
+#lossing some weight
+WC.UC.full$X.1 <- NULL
+WC.UC.full$X.x <- NULL
+WC.UC.full$Region <- NULL
+WC.UC.full$X.x <- NULL
+WC.UC.full$X.y <- NULL
+WC.UC.full$EN.RUR.DNST <- NULL
+WC.UC.full$SP.RUR.TOTL <- NULL
+WC.UC.full$SP.RUR.TOTL.ZG <- NULL
+WC.UC.full$SP.RUR.TOTL.ZS <- NULL
+WC.UC.full$EN.POP.DNST <- NULL
+WC.UC.full$SP.URB.GROW <- NULL
+
+
 # minor cleanups 
 WC.UC.full$part.of.urban.center[is.na(WC.UC.full$part.of.urban.center)] <- FALSE
 WC.UC.full$in.urban.centers.environment[is.na(WC.UC.full$in.urban.centers.environment)] <- FALSE
@@ -100,7 +114,7 @@ G2$Area <-ifelse(G2$largest.UC==0 & (((G2$EN.URB.MCTY - G2$EN.URB.LCTY.UR)/(G2$M
 G2["inUC"] <- ifelse((G2$WC.UC.dist.km <= (15+(((G2$Area)/pi)**0.5))), 1, 0) # 20km + radius of UC as circle
 G2["aroundUC"] <- ifelse((G2$WC.UC.dist.km <= (30+(((G2$Area)/pi)**0.5))), 1, 0) # 40km + radius of UC as circle
 G2$inUC[is.na(G2$inUC)]<- 0 
-G2$name <- ifelse((G2$inUC==1), G2$name, G2$old.name)
+G2$name <- ifelse((G2$inUC==1), as.character(G2$name), as.character(G2$old.name))
 
 #in case we only have very limited numers on the country population, we put in some first assumptions based on total population
 # and UC population
@@ -160,7 +174,7 @@ GX <- G2
 GX <- GX[order(GX$mergerr, GX$capital, -GX$pop.that.year),]
 GX <- GX[!duplicated(GX$mergerr), ]
 GXX <- GX[order(GX$country.etc, GX$year, -GX$pop.that.year, -GX$long),]
-GXX["RANK.Country"] <- unlist(with(GXX, tapply(-pop.that.year, list(Time, country.etc), function(x) rank(x, ties.method= "min"))))
+GXX["RANK.Country"] <- unlist(with(GXX, tapply(-pop.that.year, list(year, country.etc), function(x) rank(x, ties.method= "min"))))
 GXX <- subset(GXX, select=c(mergerr, RANK.Country), row.names=NULL)
 G2 <- merge(G2, GXX, by=c("mergerr"), all.x=TRUE)
 rm(GXX)
@@ -192,7 +206,6 @@ WC.UC.full<-G2
 rm(G2)
 
 ###### Merge combined set with GTD ######
-
 
 # merge
 GTD2 <- merge(GTDr, CountryData, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
@@ -256,12 +269,12 @@ PreGTD["merge"]<- PreGTD$merge.x
 
 
 # limit and order the new PreGTD
-PreGTD <- subset(PreGTD, select=c(eventid, iyear, imonth, iday, country_txt, region_txt, GTD.city, WCUC.city, WCUC.city.old, 
+PreGTD <- subset(PreGTD, select=c(eventid, iyear, imonth, iday, country_txt, region_txt, GTD.city, WCUC.city.old, WCUC.city
                                   latitude, longitude, pop.that.year, Rel.CS, inUC, aroundUC, RANK.Country, Rank.C.MAX, Rank01.C, 
                                   RANK.World, Rank.W.MAX, Rank01.W, capital, largestC, Closest.Urban.Center,largest.UC, 
                                   coastalMC, WC.UC.dist.km, attacktype1, targtype1, targsubtype1, weaptype1, weapsubtype1, 
                                   TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, old.pop, 
-                                  merge, original.city, coast.dist, coast.dist.MIN, access, access.MIN, light, LIGHT.MAX, nldi, 
+                                  merge, original.city, coast.dist, coast.dist.MIN, access, light, LIGHT.MAX, nldi, 
                                   nldi.MAX, urbn.cover, city.gdp, gdp.MAX, dens.90, dens.90.MAX, dens.95, dens.95.MAX, dens.00, 
                                   dens.00.MAX, dens.05, dens.05.MAX, dens.10, dens.10.MAX))
 
