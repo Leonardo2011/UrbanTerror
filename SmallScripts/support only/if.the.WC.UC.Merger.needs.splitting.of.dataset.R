@@ -45,12 +45,12 @@ WC.UC.dist1$capital <- as.numeric(WC.UC.dist1$capital)
 WC.UC.dist1$CityID <- NULL
 
 #Housekeeping
-X<-WC.UC.dist1$name
+X<-as.character(WC.UC.dist1$name)
 source('SmallScripts/CleanSpecialCharacters.R')
 WC.UC.dist1$name <- X
 rm(X)
 
-X<-WC.UC.dist1$country.etc
+X<-as.character(WC.UC.dist1$country.etc)
 source('SmallScripts/CleanSpecialCharacters.R')
 source('SmallScripts/CountryCleaninginCitySet.R')
 WC.UC.dist1$country.etc <- X
@@ -107,12 +107,12 @@ WC.UC.dist2$capital <- as.numeric(WC.UC.dist2$capital)
 WC.UC.dist2$CityID <- NULL
 
 #Housekeeping
-X<-WC.UC.dist2$name
+X<-as.character(WC.UC.dist2$name)
 source('SmallScripts/CleanSpecialCharacters.R')
 WC.UC.dist2$name <- X
 rm(X)
 
-X<-WC.UC.dist2$country.etc
+X<-as.character(WC.UC.dist2$country.etc)
 source('SmallScripts/CleanSpecialCharacters.R')
 source('SmallScripts/CountryCleaninginCitySet.R')
 WC.UC.dist2$country.etc <- X

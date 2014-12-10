@@ -466,20 +466,7 @@ RASTERcoastdist <- raster("Downloaded_Data/DICGSH1a.tif")
 p1 <- data.frame(lon=C$lon, lat=C$lat)
 p1["coast.dist"] <- raster::extract(RASTERcoastdist, p1)
 C["coast.dist"] <- ifelse(p1$coast.dist>=0, 0, round((p1$coast.dist^2)^0.5))
-
-# Plus Countries Minimum
-Rank.COASTDIST.MIN<-aggregate(C$coast.dist, by=list(C$country.etc), FUN=min)
-colnames(Rank.COASTDIST.MIN)[1] <- "country.etc"
-colnames(Rank.COASTDIST.MIN)[2] <- "coast.dist.MIN"
-C <- merge(C, Rank.COASTDIST.MIN, by=c("country.etc"), all.x=TRUE)
-rm(Rank.COASTDIST.MIN)
-
-# Plus Countries Maximum
-Rank.COASTDIST.MAX<-aggregate(C$coast.dist, by=list(C$country.etc), FUN=max)
-colnames(Rank.COASTDIST.MAX)[1] <- "country.etc"
-colnames(Rank.COASTDIST.MAX)[2] <- "coast.dist.MAX"
-C <- merge(C, Rank.COASTDIST.MAX, by=c("country.etc"), all.x=TRUE)
-rm(Rank.COASTDIST.MAX, RASTERcoastdist)
+rm(RASTERcoastdist)
 
 
 ###
@@ -504,16 +491,7 @@ p1 <- data.frame(lon=C$lon, lat=C$lat)
 p1["access"] <- raster::extract(RASTERacess, p1)
 C["access"] <- round(p1$access)
 unlink("Downloaded_Data/GACGEM2a.tif")
-
-# Plus Countries Maximum
-Rank.ACCESS.MAX<- ifelse(!is.na(C$access), as.numeric(C$access), 0)
-Rank.ACCESS.MAX<-aggregate(Rank.ACCESS.MAX, by=list(C$country.etc), FUN=max)
-colnames(Rank.ACCESS.MAX)[1] <- "country.etc"
-colnames(Rank.ACCESS.MAX)[2] <- "access.MAX"
-C <- merge(C, Rank.ACCESS.MAX, by=c("country.etc"), all.x=TRUE)
-rm(Rank.ACCESS.MAX, RASTERacess)
-
-
+rm(RASTERacess)
 
 ###
 # Stable light shining at night in mean reflection levels 1-63 from 1992 to 2010 
@@ -524,15 +502,7 @@ RASTERlight <- aggregate(RASTERlight, fact=2, fun=max, na.rm=TRUE)
 p1 <- data.frame(lon=C$lon, lat=C$lat)
 p1["light"] <- raster::extract(RASTERlight, p1, method='bilinear')
 C["light"] <- round(p1$light)
-
-# Plus Countries Maximum
-Rank.LIGHT.MAX<- ifelse(!is.na(C$light), as.numeric(C$light), 0)
-Rank.LIGHT.MAX<-aggregate(Rank.LIGHT.MAX, by=list(C$country.etc), FUN=max)
-colnames(Rank.LIGHT.MAX)[1] <- "country.etc"
-colnames(Rank.LIGHT.MAX)[2] <- "light.MAX"
-C <- merge(C, Rank.LIGHT.MAX, by=c("country.etc"), all.x=TRUE)
-rm(Rank.LIGHT.MAX, RASTERlight)
-
+rm(RASTERlight)
 
 ###
 # Economic activity in millions of dollars per km2 (2006)
@@ -547,14 +517,7 @@ RASTERgdp <- aggregate(RASTERgdp, fact=2, fun=mean, na.rm=TRUE) # 10km to 20km r
 p1 <- data.frame(lon=C$lon, lat=C$lat)
 p1["gdp"] <- raster::extract(RASTERgdp, p1, method='bilinear')
 C["city.gdp"] <- round(p1$gdp)
-
-# Plus Countries Maximum
-Rank.GDP.MAX<-aggregate(C$city.gdp, by=list(C$country.etc), FUN=max)
-colnames(Rank.GDP.MAX)[1] <- "country.etc"
-colnames(Rank.GDP.MAX)[2] <- "gdp.MAX"
-C <- merge(C, Rank.GDP.MAX, by=c("country.etc"), all.x=TRUE)
-rm(Rank.GDP.MAX, RASTERgdp)
-
+rm(RASTERgdp)
 
 ###
 # The Night Light Development Index for 2006, exquality in distribution of light (0-1 Lorenz Curve)
@@ -564,14 +527,7 @@ RASTERnldi <- raster("Downloaded_Data/NLDI_2006_0p25_rev20111230.tif")
 p1 <- data.frame(lon=C$lon, lat=C$lat)
 p1["nldi"] <- raster::extract(RASTERnldi, p1, method='bilinear')
 C["nldi"] <- ifelse(p1$nldi<=0 | p1$nldi>=1, NA, as.numeric(p1$nldi))
-
-# Plus Countries Maximum
-Rank.NLDI.MAX<- ifelse(!is.na(C$nldi), as.numeric(C$nldi), 0)
-Rank.NLDI.MAX<-aggregate(Rank.NLDI.MAX, by=list(C$country.etc), FUN=max)
-colnames(Rank.NLDI.MAX)[1] <- "country.etc"
-colnames(Rank.NLDI.MAX)[2] <- "nldi.MAX"
-C <- merge(C, Rank.NLDI.MAX, by=c("country.etc"), all.x=TRUE)
-rm(Rank.NLDI.MAX, RASTERnldi)
+rm(RASTERnldi)
 
 
 ###
@@ -670,4 +626,3 @@ unlink("Downloaded_Data/GDP_grid_flt.tif")
 unlink("Downloaded_Data/LNMDMS2a.tif")
 unlink("Downloaded_Data/DICGSH1a.tif")
 unlink("Downloaded_Data/G19ESA3a.tif")
-
