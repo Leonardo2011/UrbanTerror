@@ -21,9 +21,27 @@ Stat1GTD["DV.Target.Urban"] <- (Stat1GTD$Rank01.C*0.25)  + (Stat1GTD$Rel.CS*0.25
 Stat1GTD["DV.Target.Crowded"] <-(Stat1GTD$density/Stat1GTD$density.MAX*0.60) + (Stat1GTD$density.growth/Stat1GTD$density.growth.MAX*0.30) + (Stat1GTD$nldi/Stat1GTD$nldi.MAX*0.10)
 Stat1GTD["DV.Target.Coastal"] <- ifelse(Stat1GTD$coast.dist.MIN >= 30, NA, Stat1GTD$coast.dist/Stat1GTD$coast.dist.MAX)
 Stat1GTD["DV.Target.Connected"] <- (((Stat1GTD$access/Stat1GTD$access.MAX)-1)*-1)*0.5 + (Stat1GTD$light/Stat1GTD$light.MAX*0.25) + (Stat1GTD$city.gdp/Stat1GTD$gdp.MAX*0.25)
-  
+
+DT <- data.table(Stat1GTD)
+DVurb <- data.frame(DT[,list(DV.Target.Urban = weighted.mean(DV.Target.Urban, (HUMscale^04 + PROPscale^02), rm.na=TRUE)),by=list(country_txt, iyear)])
+DVcro <- data.frame(DT[,list(DV.Target.Crowded = weighted.mean(DV.Target.Crowded, (HUMscale^04 + PROPscale^02), rm.na=TRUE)),by=list(country_txt, iyear)])
+DVcoa <- data.frame(DT[,list(DV.Target.Coastal = weighted.mean(DV.Target.Coastal, (HUMscale^04 + PROPscale^02), rm.na=TRUE)),by=list(country_txt, iyear)])
+DVcon <- data.frame(DT[,list(DV.Target.Connected = weighted.mean(DV.Target.Connected, (HUMscale^04 + PROPscale^02), rm.na=TRUE)),by=list(country_txt, iyear)])
+
+Dependent <- merge(DVurb, DVcro, by=c("country_txt", "iyear"), all=TRUE)
+Dependent <- merge(Dependent, DVcoa, by=c("country_txt", "iyear"), all=TRUE)
+Dependent <- merge(Dependent, DVcon, by=c("country_txt", "iyear"), all=TRUE)
+rm(DVurb, DVcro, DVcoa, DVcon)
+
+
+
+
 Stat1GTD["IV.Time"] <- Stat1GTD$iyear-1998
 Stat1GTD["IV.Urban.Share"] <- Stat1GTD$SP.URB.TOTL.IN.ZS
 Stat1GTD["IV.Urban.Center.Share"] <- Stat1GTD$EN.URB.MCTY.TL.ZS
 
 
+
+
+
+coplot(DV.Target.Urban ~ iyear|country_txt, type="l", Dependent)
