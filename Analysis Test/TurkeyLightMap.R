@@ -27,6 +27,10 @@ turkeymap$x.y <- NULL
 turkeymap$x.x <- NULL 
 
 unzip("Downloaded_Data/Downloaded_Raster_Data.zip", exdir="Downloaded_Data")
+unlink("Downloaded_Data/NLDI_2006_0p25_rev20111230.tif")
+unlink("Downloaded_Data/GDP_grid_flt.tif")
+unlink("Downloaded_Data/DICGSH1a.tif")
+unlink("Downloaded_Data/G19ESA3a.tif")
 
 # Stable light shining at night in mean reflection levels 1-63 from 1992 to 2010
 # http://worldgrids.org/doku.php?id=wiki:layers
@@ -44,12 +48,23 @@ LightMap <- Turkey +
           stat_density2d(aes(x = lon, y = lat, alpha =..level.., fill=..level..), data = YYY, geom = "polygon") +
           geom_point(aes(x = longitude, y = latitude, size=sum.hum, color=turkeymap$inUC), data = turkeymap, size=3) + 
           theme(legend.position="none") + 
-          scale_fill_gradient(low = "black", high= "white")
+          scale_fill_gradient(low = "black", high= "white") +
+          annotate("text", x=29.8, y=41.2, label="Istanbul", colour="red", size=8) + 
+          annotate("text", x=33.7, y=40.2, label="Ankara", colour="red", size = 8)
 
-
-unlink("Downloaded_Data/NLDI_2006_0p25_rev20111230.tif")
-unlink("Downloaded_Data/GDP_grid_flt.tif")
 unlink("Downloaded_Data/LNMDMS2a.tif")
-unlink("Downloaded_Data/DICGSH1a.tif")
-unlink("Downloaded_Data/G19ESA3a.tif")
 
+
+RASTERTravel<- raster("Downloaded_Data/GACGEM2a.tif")
+Travel <- rasterToPoints(RASTERTravel)
+Travelframe <- data.frame(Travel)
+colnames(Travelframe) <- c("lon", "lat", "Time")
+Travelframe2 <- subset(Travelframe, lon >=27.9 & lon <= 34.9 & lat >= 36.2 & lat <=41.7)
+Travelframe2$Time <- as.numeric(Travelframe2$Time)
+
+Travelframe3 <- subset(Travelframe2, Time <= 200)
+
+TravelMap <- Turkey + stat_density2d(aes(x = lon, y = lat, alpha =..level.., fill=..level..), data = Travelframe3, geom = "polygon") +
+  geom_point(aes(x = longitude, y = latitude, size=sum.hum, color=turkeymap$inUC), data = turkeymap, size=3) + 
+  theme(legend.position="none") + 
+  scale_fill_gradient(low = "black", high= "white")
