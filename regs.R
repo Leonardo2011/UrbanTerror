@@ -19,10 +19,12 @@ ols4 <- lm(DV.Target.Crowded ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear +
              IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear)
 ols5 <- lm(DV.Kilcullen ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
              IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear)
+summary(ols5)
+
 
 #pooling ols model
 pols1 <- plm(DV.Target.Urban ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
-              IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich, model="pooling")
+              IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich, model="pooling", effects="twoway")
 summary(pols1)
 pols2 <- plm(DV.Target.Connected ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
               IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich, model="pooling")
@@ -33,22 +35,45 @@ pols4 <- plm(DV.Target.Crowded ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear +
 pols5 <- plm(DV.Kilcullen ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
               IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich, model="pooling")
 
+
+
+
+
+gleich$inturbshare <- gleich$iyear*gleich$IV.Urban.Share
+gleich$intcoastaldist <- gleich$iyear*gleich$IV.Pop.Coastal.Dist
+
 ##least squares dummary variable model
-fixed.dum1 <- lm(DV.Target.Urban ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
-                   IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich)
-summary(fixed.dum1)
-fixed.dum2 <- lm(DV.Target.Connected ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
-                   IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich)
-fixed.dum3 <- lm(DV.Target.Coastal ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
-                   IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich)
-fixed.dum4 <- lm(DV.Target.Crowded ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
-                   IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich)
-fixed.dum5 <- lm(DV.Kilcullen ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
-                   IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich)
+fixed.dum1 <- lm(DV.Target.Urban ~ iyear + IV.Urban.Share + inturbshare + IV.Pop.Coastal.Dist + 
+                   intcoastaldist + iyear*factor(country) + 
+                   IV.Urban.Share*factor(country) + inturbshare*factor(country) + 
+                   IV.Pop.Coastal.Dist*factor(country) + intcoastaldist*factor(country) + 
+                   factor(country) - 1, data=gleich)
+fixed.dum2 <- lm(DV.Target.Connected ~ iyear + IV.Urban.Share + inturbshare + IV.Pop.Coastal.Dist + 
+                   intcoastaldist + iyear*factor(country) + 
+                   IV.Urban.Share*factor(country) + inturbshare*factor(country) + 
+                   IV.Pop.Coastal.Dist*factor(country) + intcoastaldist*factor(country) + 
+                   factor(country) - 1, data=gleich)
+fixed.dum3 <- lm(DV.Target.Coastal ~ iyear + IV.Urban.Share + inturbshare + IV.Pop.Coastal.Dist + 
+                   intcoastaldist + iyear*factor(country) + 
+                   IV.Urban.Share*factor(country) + inturbshare*factor(country) + 
+                   IV.Pop.Coastal.Dist*factor(country) + intcoastaldist*factor(country) + 
+                   factor(country) - 1, data=gleich)
+fixed.dum4 <- lm(DV.Target.Crowded ~ iyear + IV.Urban.Share + inturbshare + IV.Pop.Coastal.Dist + 
+                   intcoastaldist + iyear*factor(country) + 
+                   IV.Urban.Share*factor(country) + inturbshare*factor(country) + 
+                   IV.Pop.Coastal.Dist*factor(country) + intcoastaldist*factor(country) + 
+                   factor(country) - 1, data=gleich)
+fixed.dum5 <- lm(DV.Kilcullen ~ iyear + IV.Urban.Share + inturbshare + IV.Pop.Coastal.Dist + 
+                   intcoastaldist + iyear*factor(country) + 
+                   IV.Urban.Share*factor(country) + inturbshare*factor(country) + 
+                   IV.Pop.Coastal.Dist*factor(country) + intcoastaldist*factor(country) + 
+                   factor(country) - 1, data=gleich)
 
 #within estimation(captures fixed effects)
-fixed.within1 <- plm(DV.Target.Urban ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
-                       IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich, model="within")
+library(plm)
+install.packages("plm")
+fixed.within1 <- plm(DV.Target.Urban ~ iyear + IV.Urban.Share + iyear*IV.Urban.Share + 
+                       IV.Pop.Coastal.Dist + iyear*IV.Pop.Coastal.Dist + factor(country) - 1, index=c("country", "iyear"), data=gleich, model="within")
 summary(fixed.within1)
 fixed.within2 <- plm(DV.Target.Connected ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
                        IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich, model="within")
