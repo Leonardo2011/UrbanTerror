@@ -25,8 +25,6 @@ turkeymap["sum.prop"]<-turkeymap$x
 turkeymap$x <- NULL
 turkeymap$x.y <- NULL
 turkeymap$x.x <- NULL 
-Turkey+ geom_point(aes(x = longitude, y = latitude, size=sum.hum, color=turkeymap$inUC), data = turkeymap, size=5) + theme(legend.position="none")
-
 
 unzip("Downloaded_Data/Downloaded_Raster_Data.zip", exdir="Downloaded_Data")
 
