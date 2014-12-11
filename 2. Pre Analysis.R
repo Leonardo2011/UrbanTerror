@@ -8,12 +8,12 @@ PreGTD <-PreGTD[order(-PreGTD$eventid, na.last=TRUE) , ]
 
 
 # take out what we need
-Stat1GTD <- subset(PreGTD, select=c(iyear, country_txt, region_txt, pop.that.year, Rel.CS, inUC, aroundUC, Rank01.C, 
+Stat1GTD <- subset(PreGTD, select=c(eventid, iyear, country_txt, region_txt, pop.that.year, Rel.CS, inUC, aroundUC, Rank01.C, 
                                   Rank01.W, capital, largestC, largest.UC, WC.UC.dist.km, TUPscale, PROPscale, HUMscale, 
                                   Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, coast.dist, coast.dist.MIN, coast.dist.MAX, 
                                   access, access.MAX, light, light.MAX, nldi, nldi.MAX, urbn.cover, city.gdp, gdp.MAX, density, 
                                   density.MAX, density.growth, density.growth.MAX, EN.URB.MCTY.TL.ZS, SP.URB.TOTL.IN.ZS, 
-                                  EN.URB.LCTY.UR.ZS), iyear>=1998 & iyear<=2011)
+                                  EN.URB.LCTY.UR.ZS, latitude, longitude,  WCUC.city.old), iyear>=1998 & iyear<=2011)
 
 
 # In order to build our varibales, we should exclude the influence of negative components, if there are any
@@ -39,17 +39,17 @@ Stat1GTD["DV.Target.Crowded"] <- (nonnegative(Stat1GTD$density/Stat1GTD$density.
                                   + nonnegative(Stat1GTD$nldi/Stat1GTD$nldi.MAX*0.10))
 
 ### Third Dependent Variable: >Connected< 
-# 50% (Country relative) Travel Distance to larger City -> Connected as Proximity to Larger Cities
-# 25% (Country relative) Travel Location's Nightlights -> Connected as Electrified
-# 25% (Country relative) Locations GDP -> Connected as Productive
+# 50% (Country relative) Travel Distance to larger City -> Connected as Proximity to Larger Cities  (not time variant)
+# 25% (Country relative) Travel Location's Nightlights -> Connected as Electrified                  (not time variant)
+# 25% (Country relative) Locations GDP -> Connected as Productive                                   (not time variant)
 Stat1GTD["DV.Target.Connected"] <- (nonnegative((((Stat1GTD$access/Stat1GTD$access.MAX)-1)*-1)*0.5) 
                                     + nonnegative(Stat1GTD$light/Stat1GTD$light.MAX*0.25) 
                                     + nonnegative(Stat1GTD$city.gdp/Stat1GTD$gdp.MAX*0.25))
 
 ### Forth Dependent Variable: >Coastal< 
-# 100% (Country relative) Distance to the Coast, whereas landlocked countries are NA
+# 100% (Country relative) Distance to the Coast, whereas landlocked countries are NA                (not time variant)
 Stat1GTD["DV.Target.Coastal"] <- ifelse(Stat1GTD$coast.dist.MIN >= 30, NA, 
-                                        nonnegative(Stat1GTD$coast.dist/Stat1GTD$coast.dist.MAX))
+                                        nonnegative(((Stat1GTD$coast.dist/Stat1GTD$coast.dist.MAX)-1)*-1))
 rm(nonnegative)
 
 # Now we take aggregated means (country-years), not without putting a weight on the aggregation (Victims^04 + Damage^02))                              
@@ -61,11 +61,14 @@ DVcon <- data.frame(DT[,list(DV.Target.Connected = weighted.mean(DV.Target.Conne
 Dependent <- merge(DVurb, DVcro, by=c("country_txt", "iyear"), all=TRUE)
 Dependent <- merge(Dependent, DVcoa, by=c("country_txt", "iyear"), all=TRUE)
 Dependent <- merge(Dependent, DVcon, by=c("country_txt", "iyear"), all=TRUE)
+
+
 rm(DT, DVurb, DVcro, DVcoa, DVcon)
 
 
+#YYY <- subset(Stat1GTD, longitude >=27.9 & longitude <= 34.9 & latitude >= 36.2 & latitude <=41.7)
+#YYY <- YYY[order(-YYY$HUMscale, na.last=TRUE) , ]
 
+#write.csv(YYY, file="turkytile.csv")
 
-
-
-coplot(DV.Target.Coastal ~ iyear|country_txt, type="l", Dependent)
+#coplot(DV.Target.Urban ~ iyear|country_txt, type="l", Dependent)
