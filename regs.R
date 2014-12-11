@@ -13,16 +13,14 @@ packages <- c("foreign", "car", "RCurl", "ggplot2", "WDI", "rtiff", "httr", "ite
 ipak(packages)
 rm(packages, ipak)
 
-PreGTD_in_Memory <- getURL("https://rawgit.com/LBRETZIN/UrbanTerror/master/TerrorData/Pregtd.csv", ssl.verifypeer=0L, followlocation=1L)
-writeLines(PreGTD_in_Memory,'Pregtd.csv')
-rm(PreGTD_in_Memory)
+#PreGTD_in_Memory <- getURL("https://rawgit.com/LBRETZIN/UrbanTerror/master/TerrorData/Pregtd.csv", ssl.verifypeer=0L, followlocation=1L)
+#writeLines(PreGTD_in_Memory,'Pregtd.csv')
+#rm(PreGTD_in_Memory)
 
 #Load the Pre-Analysis Global Terrorism Database
 PreGTD <- read.csv("TerrorData/Pregtd.csv", header=TRUE)
 PreGTD <-PreGTD[order(-PreGTD$eventid, na.last=TRUE) , ]
 
-install.packages("data.table")
-library(data.table)
 # take out what we need
 Stat1GTD <- subset(PreGTD, select=c(eventid, iyear, country_txt, region_txt, pop.that.year, Rel.CS, inUC, aroundUC, Rank01.C, 
                                     Rank01.W, capital, largestC, largest.UC, WC.UC.dist.km, TUPscale, PROPscale, HUMscale, 
@@ -34,7 +32,6 @@ Stat1GTD <- subset(PreGTD, select=c(eventid, iyear, country_txt, region_txt, pop
 
 # In order to build our varibales, we should exclude the influence of negative components, if there are any
 nonnegative <- function(x) ifelse(x<0, 0, x)
-
 
 ### First Dependent Variable: >Urban< 
 # 25% (Country relative) City Rank -> Urban as Log Size                             (time variant)
@@ -77,14 +74,10 @@ DVcon <- data.frame(DT[,list(DV.Target.Connected = weighted.mean(DV.Target.Conne
 Dependent <- merge(DVurb, DVcro, by=c("country_txt", "iyear"), all=TRUE)
 Dependent <- merge(Dependent, DVcoa, by=c("country_txt", "iyear"), all=TRUE)
 Dependent <- merge(Dependent, DVcon, by=c("country_txt", "iyear"), all=TRUE)
-
-
-rm(DT, DVurb, DVcro, DVcoa, DVcon)
+rm(DT, DVurb, DVcro, DVcoa, DVcon, Stat1GTD)
 
 
 ###include the WDI data and clean it
-install.packages("WDI")
-library(WDI)
 WDIData <- WDI(indicator=c('EN.URB.MCTY.TL.ZS',
                            'SP.URB.TOTL.IN.ZS'),
                country="all", start=1970, end=2013, extra=FALSE)
@@ -107,6 +100,7 @@ X<-gsub(" ","",X)
 X <- tolower(X)
 WDIData$country <- X
 
+####################################################################################################################
 
 gleich <- merge(Dependent, WDIData, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE)
 
