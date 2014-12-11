@@ -8,17 +8,61 @@ library(plm)
 gleich <- plm.data(gleich, index=c("country","iyear"))
 summary(gleich)
 
-
-m1 <- plm(y1 ~ wage + capital + lag(output,1) + capital:lag(output,1), 
-          data = EmplUK, model="within", effect="twoway", index=c("firm","year"))
-
 attach(gleich)
-y1 <- cbind(DV.Target.Urban, DV.Target.Crowded)  
-wint1<-lm(y1 ~ IV.Urban.Share+iyear+IV.Urban.Share:iyear, data=gleich)
-summary(int1)
+ols1 <- lm(DV.Target.Urban ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+           IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear)
+ols2 <- lm(DV.Target.Connected ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+             IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear)
+ols3 <- lm(DV.Target.Coastal ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+             IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear)
+ols4 <- lm(DV.Target.Crowded ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+             IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear)
+ols5 <- lm(DV.Kilcullen ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+             IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear)
 
+#pooling ols model
+pols1 <- plm(DV.Target.Urban ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+              IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich, model="pooling")
+summary(pols1)
+pols2 <- plm(DV.Target.Connected ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+              IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich, model="pooling")
+pols3 <- plm(DV.Target.Coastal ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+              IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich, model="pooling")
+pols4 <- plm(DV.Target.Crowded ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+              IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich, model="pooling")
+pols5 <- plm(DV.Kilcullen ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+              IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich, model="pooling")
+
+##least squares dummary variable model
+fixed.dum1 <- lm(DV.Target.Urban ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+                   IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich)
+summary(fixed.dum1)
+fixed.dum2 <- lm(DV.Target.Connected ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+                   IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich)
+fixed.dum3 <- lm(DV.Target.Coastal ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+                   IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich)
+fixed.dum4 <- lm(DV.Target.Crowded ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+                   IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich)
+fixed.dum5 <- lm(DV.Kilcullen ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+                   IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich)
+
+#within estimation(captures fixed effects)
+fixed.within1 <- plm(DV.Target.Urban ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+                       IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich, model="within")
+summary(fixed.within1)
+fixed.within2 <- plm(DV.Target.Connected ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+                       IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich, model="within")
+fixed.within3 <- plm(DV.Target.Coastal ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+                       IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich, model="within")
+fixed.within4 <- plm(DV.Target.Crowded ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+                       IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich, model="within")
+fixed.within5 <- plm(DV.Kilcullen ~ iyear + IV.Urban.Share + IV.Urban.Share*iyear + 
+                       IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist*iyear + factor(country) - 1, data=gleich, model="within")
+
+
+summary(fixed.dum1)
 library(stargazer)
-stargazer(ols, fixed, fixed.dum, type="html")
+stargazer(pols1,pols2,pols3,pols4,pols5,fixed.dum1,fixed.dum2,fixed.dum3,fixed.dum4,fixed.dum5, type="html")
 
 
 x1 <- cbind(iyear, IV.Urban.Share, int1)
