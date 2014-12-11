@@ -72,7 +72,6 @@ WC.UC.full$SP.RUR.TOTL.ZS <- NULL
 WC.UC.full$EN.POP.DNST <- NULL
 WC.UC.full$SP.URB.GROW <- NULL
 
-
 # minor cleanups 
 WC.UC.full$part.of.urban.center[is.na(WC.UC.full$part.of.urban.center)] <- FALSE
 WC.UC.full$in.urban.centers.environment[is.na(WC.UC.full$in.urban.centers.environment)] <- FALSE
@@ -204,7 +203,6 @@ GTDr <- merge(GTDr, Rank.World.MAX, by=c("iyear"), all.x=TRUE)
 rm(Rank.World.MAX)
 
 WC.UC.full<-G2
-rm(G2)
 
 
 ###### Break the population density data for 1990, 1995, 2000, 2005 and 2010 down to all years ######
@@ -223,18 +221,6 @@ WC.UC.full["density"] <- ifelse(WC.UC.full$n<=5, WC.UC.full$dens.90+(WC.UC.full$
                                                                                   ((WC.UC.full$dens.10-WC.UC.full$dens.05)+
                                                                                      ((WC.UC.full$dens.10-WC.UC.full$dens.05)/5))), 0))))) 
 
-WC.UC.full["density.MAX"] <- ifelse(WC.UC.full$n<=5, WC.UC.full$dens.90.MAX+(WC.UC.full$n/5*(WC.UC.full$dens.95.MAX-WC.UC.full$dens.90.MAX)), 
-                                    ifelse(WC.UC.full$n>=5 & WC.UC.full$n<=10, 
-                                           WC.UC.full$dens.95.MAX+((WC.UC.full$n-5)/5*(WC.UC.full$dens.00.MAX-WC.UC.full$dens.95.MAX)), 
-                                           ifelse(WC.UC.full$n>=10 & WC.UC.full$n<=15, 
-                                                  WC.UC.full$dens.00.MAX+((WC.UC.full$n-10)/5*(WC.UC.full$dens.05.MAX-WC.UC.full$dens.00.MAX)),
-                                                  ifelse(WC.UC.full$n>=15 & WC.UC.full$n<=20, 
-                                                         WC.UC.full$dens.05.MAX+((WC.UC.full$n-15)/5*(WC.UC.full$dens.10.MAX-WC.UC.full$dens.05.MAX)),
-                                                         ifelse(WC.UC.full$n>=20, 
-                                                                WC.UC.full$dens.10.MAX+((WC.UC.full$n-20)/5*
-                                                                                          ((WC.UC.full$dens.10.MAX-WC.UC.full$dens.05.MAX)+
-                                                                                             ((WC.UC.full$dens.10.MAX-WC.UC.full$dens.05.MAX)/5))), 0)))))
-
 
 WC.UC.full["density.growth"] <- ifelse(!is.na(WC.UC.full$dens.90) & WC.UC.full$dens.90!=0 & !is.na(WC.UC.full$dens.95) & WC.UC.full$n<=5 & WC.UC.full$n>=0, 
                                        (WC.UC.full$dens.95-WC.UC.full$dens.90)/WC.UC.full$dens.90, 0)                                  
@@ -246,14 +232,6 @@ WC.UC.full$density.growth <- ifelse(!is.na(WC.UC.full$dens.00) & WC.UC.full$dens
                                     (WC.UC.full$dens.10-WC.UC.full$dens.00)/WC.UC.full$dens.00, WC.UC.full$density.growth)  
 
 
-
-# find maximum density growth for each year and add
-density.growth.MAX<-aggregate(WC.UC.full$density.growth, by=list(WC.UC.full$Time, WC.UC.full$country.etc), FUN=max)
-colnames(density.growth.MAX)[1] <- "iyear"
-colnames(density.growth.MAX)[2] <- "country_txt"
-colnames(density.growth.MAX)[3] <- "density.growth.MAX"
-GTDr <- merge(GTDr, density.growth.MAX, by=c("iyear", "country_txt"), all.x=TRUE)
-rm(density.growth.MAX)
 
 # VarDrop
 WC.UC.full$Extra.WAR.In <- NULL
@@ -292,13 +270,6 @@ WC.UC.full$nldi.MAX <- NULL
 
 
 # Plus Countries Maximum for the Population Density
-Rank.Country.MAX<-aggregate(G2$RANK.Country, by=list(G2$year, G2$country.etc), FUN=max)
-colnames(Rank.Country.MAX)[1] <- "iyear"
-colnames(Rank.Country.MAX)[2] <- "country_txt"
-colnames(Rank.Country.MAX)[3] <- "Rank.C.MAX"
-GTDr <- merge(GTD, Rank.Country.MAX, by=c("iyear", "country_txt"), all.x=TRUE)
-
-
 R.density.MAX<- ifelse(!is.na(WC.UC.full$density), as.numeric(WC.UC.full$density), 0)
 R.density.MAX<-aggregate(R.density.MAX, by=list(WC.UC.full$year, WC.UC.full$country.etc), FUN=max)
 colnames(R.density.MAX)[1] <- "iyear"
@@ -306,6 +277,15 @@ colnames(R.density.MAX)[2] <- "country_txt"
 colnames(R.density.MAX)[3] <- "density.MAX"
 GTDr <- merge(GTDr, R.density.MAX, by=c("iyear", "country_txt"), all.x=TRUE)
 rm(R.density.MAX)
+
+
+# find maximum density growth for each year and add
+density.growth.MAX<-aggregate(WC.UC.full$density.growth, by=list(WC.UC.full$Time, WC.UC.full$country.etc), FUN=max)
+colnames(density.growth.MAX)[1] <- "iyear"
+colnames(density.growth.MAX)[2] <- "country_txt"
+colnames(density.growth.MAX)[3] <- "density.growth.MAX"
+GTDr <- merge(GTDr, density.growth.MAX, by=c("iyear", "country_txt"), all.x=TRUE)
+rm(density.growth.MAX)
 
 
 # Plus Countries Maximum for the Night Light Development Index for 2006
@@ -355,6 +335,16 @@ GTDr <- merge(GTDr, R.COASTDIST.MAX, by=c("country_txt"), all.x=TRUE)
 rm(R.COASTDIST.MAX)
 
 
+DT <- data.table(WC.UC.full)                
+Pop.Coast.Dist <- data.frame(DT[,list(Pop.Coast.Dist = weighted.mean(coast.dist, pop.that.year, rm.na=TRUE)),by=list(country.etc, Time)])
+GTDr <- merge(GTDr, Pop.Coast.Dist, by.x=c("iyear", "country_txt"), by.y=c("Time", "country.etc"), all.x=TRUE)
+
+WC.UC.full.towns <- subset(WC.UC.full, pop.that.year<= 5000)
+DT <- data.table(WC.UC.full.towns)                
+Small.Town.Pop.Coast.Dist <- data.frame(DT[,list(Town.Coast.Dist = weighted.mean(coast.dist, pop.that.year, rm.na=TRUE)),by=list(country.etc, Time)])
+GTDr <- merge(GTDr, Small.Town.Pop.Coast.Dist, by.x=c("iyear", "country_txt"), by.y=c("Time", "country.etc"), all.x=TRUE)
+
+rm(Pop.Coast.Dist, DT, Small.Town.Pop.Coast.Dist, WC.UC.full.towns)
 
 ###### Merge combined set with GTD ######
 
@@ -397,7 +387,7 @@ PreGTD <- subset(PreGTD, select=c(eventid, iyear, imonth, iday, Date, country_tx
                                   RANK.World, Rank.W.MAX, Rank01.W, capital, largestC, Closest.Urban.Center,largest.UC, 
                                   coastalMC, WC.UC.dist.km, attacktype1, targtype1, targsubtype1, weaptype1, weapsubtype1, 
                                   TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, old.pop, 
-                                  merge, original.city, coast.dist, coast.dist.MIN, coast.dist.MAX, access, access.MAX, light, 
+                                  merge, original.city, coast.dist, Pop.Coast.Dist, Town.Coast.Dist, coast.dist.MIN, coast.dist.MAX, access, access.MAX, light, 
                                   light.MAX, nldi, nldi.MAX, urbn.cover, city.gdp, gdp.MAX, density, density.MAX, density.growth, 
                                   density.growth.MAX, EN.URB.MCTY.TL.ZS, SP.URB.TOTL.IN.ZS, EN.URB.LCTY.UR.ZS))
 
@@ -431,8 +421,11 @@ PreGTD$RANK.World <- ifelse(is.na(PreGTD$RANK.World), as.numeric(PreGTD$Rank.Wor
 PreGTD$EN.URB.LCTY.UR.ZS <- as.numeric(PreGTD$EN.URB.LCTY.UR.ZS)
 PreGTD$SP.URB.TOTL.IN.ZS <- as.numeric(PreGTD$SP.URB.TOTL.IN.ZS)
 PreGTD$EN.URB.MCTY.TL.ZS <- as.numeric(PreGTD$EN.URB.MCTY.TL.ZS)
+PreGTD$coast.dist <- ifelse(is.na(PreGTD$coast.dist), as.numeric(PreGTD$Town.Coast.Dist), as.numeric(PreGTD$coast.dist))
 PreGTD$pop <- as.numeric(PreGTD$pop)
 
 # write a csv, just to be sure
 write.csv(PreGTD, file="TerrorData/Pregtd.csv")
-rm(WC.UC.merge, WC.UC.time, GTDcountry, GTDcity, GTDyear, GTD2, WC.UC.full)
+
+# the end
+rm(WC.UC.merge, WC.UC.time, GTDcountry, GTDcity, GTDyear, GTD2, WC.UC.full, G2, GTD, WC.UC.dist)

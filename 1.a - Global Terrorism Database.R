@@ -30,7 +30,7 @@ unlink("TerrorData/globalterrorismdb_0814dist.csv")
 
 GTD <- subset(rawGTD, select = c(eventid, iyear, imonth, iday, country, country_txt, region, provstate, region_txt, city, attacktype1, targtype1, targsubtype1,
                                  weaptype1, weapsubtype1, propextent, nkill, nwound, latitude, longitude), 
-              iyear >= 1970 & success == 1, na.strings = c("", " "))
+              iyear >= 1970, na.strings = c("", " "))
 rm(rawGTD)
 
 
@@ -430,17 +430,15 @@ GTD$TUPscale <- recode(GTD$TUPscale, "40:42 = 9; 9 = 0; 27:35 = 0; 37:39 = 0; 65
                        11 = 9", as.numeric.result=TRUE)
 
 #We introduce our second scale: "Extent of Property Damage (PROPscale)" and write it back into the GTD
-GTD["PROPscale"] <- GTD$propextent
-GTD$PROPscale <- as.numeric(GTD$PROPscale)
+GTD["PROPscale"] <- as.numeric(GTD$propextent)
 
 #Bring the values to the $ values coded in the originally coded categories. 
-GTD$PROPscale <- recode(GTD$PROPscale, "1=1000000000; 2=1000000; 3=1000; 4=0; NA=0")
+GTD$PROPscale <- recode(GTD$PROPscale, "1=1000000000; 2=1000000; 3=1000; 4=1; NA=1")
 
 # We introduce our third scale: "Extent of Human Damage (HUMscale)" which adds wounded and killed /and write it back into the GTD
 GTD$nkill <- recode(GTD$nkill, "NA=0")
 GTD$nwound <- recode(GTD$nwound, "NA=0")
-GTD["HUMscale"] <- GTD$nkill+GTD$nwound
-GTD$HUMscale <- as.numeric(GTD$HUMscale)
+GTD["HUMscale"] <- as.numeric(GTD$nkill+GTD$nwound)
 
 # Introduce continuous date variables of the form yyyy-mm-dd, where every attack without month and day assigned to it in the GTD
 # is treated as having occurred Jan 1 that year.
