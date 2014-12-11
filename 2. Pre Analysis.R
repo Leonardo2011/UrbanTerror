@@ -66,6 +66,45 @@ Dependent <- merge(Dependent, DVcon, by=c("country_txt", "iyear"), all=TRUE)
 rm(DT, DVurb, DVcro, DVcoa, DVcon)
 
 
+###include the WDI data and clean it
+WDIData <- WDI(indicator=c('EN.URB.MCTY.TL.ZS',
+                           'SP.URB.TOTL.IN.ZS'),
+               country="all", start=1970, end=2013, extra=FALSE)
+
+WDIData <- WDIData[order(WDIData$country, WDIData$year), ]
+
+X <- WDIData$country
+X <- as.character(X)
+X <- gsub("\\,","",X)
+X <- gsub("\\-","",X)
+X <- gsub("\\-","",X)
+X <- gsub("\\-","",X)
+X <- gsub("\\'","",X)
+X <- gsub("\\'","",X)
+X <- gsub("\\.","",X)
+X <- gsub("\\\\", "", X)
+X <- gsub("\\(","",X)
+X <- gsub("\\)","",X)
+X<-gsub(" ","",X)
+X <- tolower(X)
+WDIData$country <- X
+
+####################################################################################################################
+
+gleich <- merge(Dependent, WDIData, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE)
+
+gleich$iso2c <- NULL
+gleich["country"] <- gleich$country_txt
+gleich$country_txt <- NULL
+gleich["IV.Urban.Share"] <- gleich$SP.URB.TOTL.IN.ZS
+gleich$SP.URB.TOTL.IN.ZS <- NULL
+gleich$SP.URB.TOTL.IN.ZS <- NULL
+gleich$EN.URB.MCTY.TL.ZS <- NULL
+
+write.csv(gleich, file="Analysis Test/Data/Analysis.Variables.csv")
+
+
+
 #YYY <- subset(Stat1GTD, longitude >=27.9 & longitude <= 34.9 & latitude >= 36.2 & latitude <=41.7)
 #YYY <- YYY[order(-YYY$HUMscale, na.last=TRUE) , ]
 
