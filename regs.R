@@ -6,11 +6,11 @@ gleich <- read.csv("Analysis Test/Data/Analysis.Variables.csv", header=TRUE)
 
 
 library(plm)
-gleich <- plm.data(gleich, index=c("country_txt","iyear"))
+gleich <- plm.data(gleich, index=c("country","iyear"))
 summary(gleich)
 
 attach(gleich)
-x1 <- cbind(EN.URB.MCTY.TL.ZS, SP.URB.TOTL.IN.ZS)
+x1 <- cbind(iyear, IV.Urban.Share)
 y1 <- cbind(DV.Target.Connected)  
 
 
@@ -26,13 +26,13 @@ abline(lm(gleich$y1~gleich$iyear),lwd=3, col="red")
 
 ###Model 2
 #Least squares dummy variable model...another way of using fixed effects, except by country too
-fixed.dum <-lm(y1 ~ x1 + factor(country_txt) - 1, data=gleich)
+fixed.dum <-lm(y1 ~ x1 + factor(country) - 1, data=gleich)
 summary(fixed.dum)
 
 #try to plot with a fitted, but cannot get it--does not matter
 yhat <- fixed.dum$fitted
 library(car)
-scatterplot(yhat~gleich$x1|gleich$country_txt, boxplots=FALSE, xlab="x1", ylab="yhat",smooth=FALSE)
+scatterplot(yhat~gleich$x1|gleich$country, boxplots=FALSE, xlab="x1", ylab="yhat",smooth=FALSE)
 abline(lm(gleich$y1~gleich$x1),lwd=3, col="red")
 
 ##put them in a table ready for stargazer
@@ -46,7 +46,7 @@ pFtest(fixed, ols)
 
 ###Model 3
 ###Within estimator....aka one-way fixed effects
-fixed<-plm(y1 ~ x1, index=c("country_txt", "iyear"), data=gleich, model="within")
+fixed<-plm(y1 ~ x1, index=c("country", "iyear"), data=gleich, model="within")
 summary(fixed)
 #look at constants for each country
 fixef(fixed)
