@@ -1,32 +1,41 @@
 ---
-title: 'Urban Terror: Data Gathering and Cleaning'
+title: 'Political Violence in the Urban Space: Evidence from the GTD'
 author: "Sascha Schuster, Lukas Bretzinger, Cameron Reed"
 date: "Thursday, November 13, 2014"
 output:
   html_document:
+    theme: flatly
+    highlight: espresso
     number_sections: yes
-    toc: yes
-  pdf_document:
-    toc: yes
-setspace: doublespacing
+    setspace: doublespacing
 bibliography: UTBiblio.bib
 ---
-
-# Introduction
+<p style='text-align: center;'>
+<img align="center" src="/Users/cameronreed/Desktop/GTDClean/megacity.jpg" /> 
+</p>
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
 PreGTD <- read.csv("PreAnalysis/pregtd.csv", header=TRUE)
 ```
+<br>
+<br>
 
-#Data Collection Process
+Populations, cities, and flows of people are rapidly outgrowing the spaces in which they live.
+
+<p style='text-align: center;'>(**Interactive Map of Attacks in the Near East**)</p>
+
+<p style='text-align: center;'>
+
+And how about this?
+
 
 ##Data Categories & Sources
 
 We use three main categories of data, which stem from a different number of sources and serve different purposes.
 
 ### Global Terrorism Database
-We have introduced the [GTD] (http://www.start.umd.edu/gtd/) [@GTD] extensively in the [last assignment](https://github.com/SaschaSchuster/CSSDA_Assignment2_UrbanTerror/blob/master/A2MarkdownDraft.pdf). It gives qualitative data on about over 120k terrorist attacks, including (in about 2/3 of the observations) information that can be used to georeference the attack.
+It gives qualitative data on about over 120k terrorist attacks, including (in about 2/3 of the observations) information that can be used to georeference the attack.
 
 ###Geolocated City-Data
 We used two open-source datasets of city level data that we need to establish a relation between the place of the attacks and their urbanity.
