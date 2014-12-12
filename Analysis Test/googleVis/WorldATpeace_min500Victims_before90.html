@@ -1,0 +1,185 @@
+<!-- GeoChart generated in R 3.1.1 by googleVis 0.5.6 package -->
+<!-- Fri Dec 12 16:21:56 2014 -->
+
+
+<!-- jsHeader -->
+<script type="text/javascript">
+ 
+// jsData 
+function gvisDataGeoChartID21e0740877d9 () {
+var data = new google.visualization.DataTable();
+var datajson =
+[
+ [
+ 33.88894,
+35.49442,
+"beirut",
+1675000,
+3774 
+],
+[
+ 24.86,
+67.01,
+"karachi",
+7147064,
+891 
+],
+[
+ 37.98,
+23.73,
+"athens",
+3069647,
+616 
+],
+[
+ 40.42,
+-3.71,
+"madrid",
+4413870,
+750 
+],
+[
+ 48.86,
+2.34,
+"paris",
+9330327,
+752 
+],
+[
+ -33.46,
+-70.64,
+"santiago",
+4615919,
+579 
+],
+[
+ 41.89,
+12.5,
+"rome",
+3394690,
+617 
+],
+[
+ 34.01,
+71.54,
+"peshawar",
+188929,
+771 
+],
+[
+ 4.63,
+-74.09,
+"bogota",
+4740448,
+1219 
+],
+[
+ 6.29,
+-75.54,
+"medellin",
+383045,
+756 
+],
+[
+ 31.78,
+35.22,
+"jerusalem",
+2053370,
+801 
+],
+[
+ 34.43667,
+35.84972,
+"tripoli",
+77939,
+957 
+],
+[
+ 54.6,
+-5.93,
+"belfast",
+345392,
+1329 
+] 
+];
+data.addColumn('number','Latitude');
+data.addColumn('number','Longitude');
+data.addColumn('string','WCUC.city');
+data.addColumn('number','Population');
+data.addColumn('number','Victims');
+data.addRows(datajson);
+return(data);
+}
+ 
+// jsDrawChart
+function drawChartGeoChartID21e0740877d9() {
+var data = gvisDataGeoChartID21e0740877d9();
+var options = {};
+options["width"] =   1112;
+options["height"] =    694;
+options["colorAxis"] = {colors:['green', 'red']};
+options["legend"] = {textStyle: {color: 'black', fontSize: 16}};
+options["legend.numberFormat"] = {numberFormat:'.'};
+options["backgroundColor"] = "black";
+options["sizeAxis"] = {minValue: 1,  maxSize: 25};
+options["markerOpacity"] =    0.4;
+
+
+    var chart = new google.visualization.GeoChart(
+    document.getElementById('GeoChartID21e0740877d9')
+    );
+    chart.draw(data,options);
+    
+
+}
+  
+ 
+// jsDisplayChart
+(function() {
+var pkgs = window.__gvisPackages = window.__gvisPackages || [];
+var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
+var chartid = "geochart";
+  
+// Manually see if chartid is in pkgs (not all browsers support Array.indexOf)
+var i, newPackage = true;
+for (i = 0; newPackage && i < pkgs.length; i++) {
+if (pkgs[i] === chartid)
+newPackage = false;
+}
+if (newPackage)
+  pkgs.push(chartid);
+  
+// Add the drawChart function to the global list of callbacks
+callbacks.push(drawChartGeoChartID21e0740877d9);
+})();
+function displayChartGeoChartID21e0740877d9() {
+  var pkgs = window.__gvisPackages = window.__gvisPackages || [];
+  var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
+  window.clearTimeout(window.__gvisLoad);
+  // The timeout is set to 100 because otherwise the container div we are
+  // targeting might not be part of the document yet
+  window.__gvisLoad = setTimeout(function() {
+  var pkgCount = pkgs.length;
+  google.load("visualization", "1", { packages:pkgs, callback: function() {
+  if (pkgCount != pkgs.length) {
+  // Race condition where another setTimeout call snuck in after us; if
+  // that call added a package, we must not shift its callback
+  return;
+}
+while (callbacks.length > 0)
+callbacks.shift()();
+} });
+}, 100);
+}
+ 
+// jsFooter
+</script>
+ 
+<!-- jsChart -->  
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartGeoChartID21e0740877d9"></script>
+ 
+<!-- divChart -->
+  
+<div id="GeoChartID21e0740877d9" 
+  style="width: 1112; height: 694;">
+</div>

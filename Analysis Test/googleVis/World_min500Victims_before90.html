@@ -1,0 +1,325 @@
+<!-- GeoChart generated in R 3.1.1 by googleVis 0.5.6 package -->
+<!-- Fri Dec 12 16:22:00 2014 -->
+
+
+<!-- jsHeader -->
+<script type="text/javascript">
+ 
+// jsData 
+function gvisDataGeoChartID21e05fb96a23 () {
+var data = new google.visualization.DataTable();
+var datajson =
+[
+ [
+ 33.88894,
+35.49442,
+"beirut",
+1675000,
+5253 
+],
+[
+ 24.86,
+67.01,
+"karachi",
+7147064,
+892 
+],
+[
+ 37.98,
+23.73,
+"athens",
+3069647,
+616 
+],
+[
+ 40.42,
+-3.71,
+"madrid",
+4413870,
+750 
+],
+[
+ 31.64,
+74.87,
+"amritsar",
+304840,
+534 
+],
+[
+ 48.86,
+2.34,
+"paris",
+9330327,
+913 
+],
+[
+ -33.46,
+-70.64,
+"santiago",
+4615919,
+579 
+],
+[
+ 6.93,
+79.85,
+"colombo",
+614100,
+1827 
+],
+[
+ 41.89,
+12.5,
+"rome",
+3394690,
+617 
+],
+[
+ -26.19,
+28.04,
+"johannesburg",
+3708875,
+805 
+],
+[
+ 33.33,
+44.44,
+"baghdad",
+3997210,
+580 
+],
+[
+ -25.95,
+32.57,
+"maputo",
+775783,
+890 
+],
+[
+ 51.52,
+-0.1,
+"london",
+8053510,
+947 
+],
+[
+ -12.07,
+-77.05,
+"lima",
+5836537,
+1072 
+],
+[
+ 14.62,
+120.97,
+"manila",
+7972799,
+852 
+],
+[
+ 36.23,
+37.17,
+"aleppo",
+1660929,
+704 
+],
+[
+ 35.67,
+51.43,
+"tehran",
+6364827,
+2160 
+],
+[
+ 13.69,
+-89.19,
+"sansalvador",
+969631,
+1535 
+],
+[
+ 34.01,
+71.54,
+"peshawar",
+188929,
+774 
+],
+[
+ 14.64072,
+-90.51327,
+"guatemalacity",
+1448143,
+932 
+],
+[
+ 4.63,
+-74.09,
+"bogota",
+4740448,
+1219 
+],
+[
+ 6.29,
+-75.54,
+"medellin",
+383045,
+756 
+],
+[
+ 13.94,
+-89.03,
+"suchitoto",
+5394,
+669 
+],
+[
+ 31.78,
+35.22,
+"jerusalem",
+2053370,
+963 
+],
+[
+ 34.43667,
+35.84972,
+"tripoli",
+108723,
+1156 
+],
+[
+ 45.59456,
+-121.17868,
+"thedalles",
+16014,
+778 
+],
+[
+ 54.6,
+-5.93,
+"belfast",
+345392,
+1676 
+],
+[
+ 13.61,
+-85.82,
+"wiwili",
+4065,
+506 
+],
+[
+ 9.67,
+80.01,
+"jaffna",
+141323,
+717 
+],
+[
+ 7.71,
+81.69,
+"batticaloa",
+73568,
+653 
+],
+[
+ 8.58,
+81.22,
+"trincomalee",
+92497,
+792 
+],
+[
+ -13.17,
+-74.22,
+"ayacucho",
+88677,
+660 
+],
+[
+ 6.92,
+122.08,
+"zamboanga",
+299616,
+629 
+] 
+];
+data.addColumn('number','Latitude');
+data.addColumn('number','Longitude');
+data.addColumn('string','WCUC.city');
+data.addColumn('number','Population');
+data.addColumn('number','Victims');
+data.addRows(datajson);
+return(data);
+}
+ 
+// jsDrawChart
+function drawChartGeoChartID21e05fb96a23() {
+var data = gvisDataGeoChartID21e05fb96a23();
+var options = {};
+options["width"] =   1112;
+options["height"] =    694;
+options["colorAxis"] = {colors:['green', 'orange']};
+options["legend"] = {textStyle: {color: 'black', fontSize: 16}};
+options["legend.numberFormat"] = {numberFormat:'.'};
+options["backgroundColor"] = "black";
+options["sizeAxis"] = {minValue: 1,  maxSize: 25};
+options["markerOpacity"] =    0.4;
+
+
+    var chart = new google.visualization.GeoChart(
+    document.getElementById('GeoChartID21e05fb96a23')
+    );
+    chart.draw(data,options);
+    
+
+}
+  
+ 
+// jsDisplayChart
+(function() {
+var pkgs = window.__gvisPackages = window.__gvisPackages || [];
+var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
+var chartid = "geochart";
+  
+// Manually see if chartid is in pkgs (not all browsers support Array.indexOf)
+var i, newPackage = true;
+for (i = 0; newPackage && i < pkgs.length; i++) {
+if (pkgs[i] === chartid)
+newPackage = false;
+}
+if (newPackage)
+  pkgs.push(chartid);
+  
+// Add the drawChart function to the global list of callbacks
+callbacks.push(drawChartGeoChartID21e05fb96a23);
+})();
+function displayChartGeoChartID21e05fb96a23() {
+  var pkgs = window.__gvisPackages = window.__gvisPackages || [];
+  var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
+  window.clearTimeout(window.__gvisLoad);
+  // The timeout is set to 100 because otherwise the container div we are
+  // targeting might not be part of the document yet
+  window.__gvisLoad = setTimeout(function() {
+  var pkgCount = pkgs.length;
+  google.load("visualization", "1", { packages:pkgs, callback: function() {
+  if (pkgCount != pkgs.length) {
+  // Race condition where another setTimeout call snuck in after us; if
+  // that call added a package, we must not shift its callback
+  return;
+}
+while (callbacks.length > 0)
+callbacks.shift()();
+} });
+}, 100);
+}
+ 
+// jsFooter
+</script>
+ 
+<!-- jsChart -->  
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartGeoChartID21e05fb96a23"></script>
+ 
+<!-- divChart -->
+  
+<div id="GeoChartID21e05fb96a23" 
+  style="width: 1112; height: 694;">
+</div>

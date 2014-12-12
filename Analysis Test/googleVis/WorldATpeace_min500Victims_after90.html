@@ -1,0 +1,416 @@
+<!-- GeoChart generated in R 3.1.1 by googleVis 0.5.6 package -->
+<!-- Fri Dec 12 16:21:58 2014 -->
+
+
+<!-- jsHeader -->
+<script type="text/javascript">
+ 
+// jsData 
+function gvisDataGeoChartID21e027c758a5 () {
+var data = new google.visualization.DataTable();
+var datajson =
+[
+ [
+ 33.88894,
+35.49442,
+"beirut",
+2130079,
+1364 
+],
+[
+ 24.86,
+67.01,
+"karachi",
+15588347,
+5176 
+],
+[
+ -1.29,
+36.82,
+"nairobi",
+3627229,
+5004 
+],
+[
+ 12.11,
+15.05,
+"ndjamena",
+959944,
+1223 
+],
+[
+ 12,
+8.52,
+"kano",
+2127657,
+666.8 
+],
+[
+ 33.6,
+73.04,
+"rawalpindi",
+1032842,
+931 
+],
+[
+ 32.08088,
+34.78057,
+"telaviv",
+3432844,
+581 
+],
+[
+ 31.56,
+74.35,
+"lahore",
+3735319,
+2778 
+],
+[
+ 34.09,
+74.79,
+"srinagar",
+1218680,
+571 
+],
+[
+ -34.61,
+-58.37,
+"buenosaires",
+14825635,
+626 
+],
+[
+ 6.93,
+79.85,
+"colombo",
+699640,
+1134 
+],
+[
+ -26.19,
+28.04,
+"johannesburg",
+8864103,
+994 
+],
+[
+ 36.77,
+3.04,
+"algiers",
+2463271,
+619.5 
+],
+[
+ 15.38,
+44.21,
+"sanaa",
+2686756,
+1317 
+],
+[
+ 14.62,
+120.97,
+"manila",
+12539764,
+539 
+],
+[
+ 36.23,
+37.17,
+"aleppo",
+3403089,
+1111 
+],
+[
+ 2.05,
+45.33,
+"mogadishu",
+1847296,
+2995.33 
+],
+[
+ 33.5,
+36.32,
+"damascus",
+2396199,
+2747.34 
+],
+[
+ 34.01,
+71.54,
+"peshawar",
+722096,
+3580 
+],
+[
+ 4.63,
+-74.09,
+"bogota",
+9283086,
+1009 
+],
+[
+ 22.3384,
+91.83168,
+"chittagong",
+1074746,
+906 
+],
+[
+ 26.19,
+91.75,
+"guwahati",
+1129331,
+588 
+],
+[
+ 35.67,
+139.77,
+"tokyo",
+34668636,
+5532 
+],
+[
+ 6.29,
+-75.54,
+"medellin",
+1055620,
+1386 
+],
+[
+ 41.1,
+29,
+"istanbul",
+13689079,
+1207 
+],
+[
+ 23.7,
+90.39,
+"dhaka",
+16389029,
+1836 
+],
+[
+ 18.96,
+72.82,
+"mumbai",
+21935142,
+1602 
+],
+[
+ 34.16,
+71.73,
+"charsadda",
+127279,
+541 
+],
+[
+ 33.6,
+71.44,
+"kohat",
+204220,
+574 
+],
+[
+ 31.78,
+35.22,
+"jerusalem",
+3432844,
+1011 
+],
+[
+ 34.43667,
+35.84972,
+"tripoli",
+353258,
+848 
+],
+[
+ 33.54,
+71.05,
+"hangu",
+48799,
+590 
+],
+[
+ 22.42114,
+87.32257,
+"medinipur",
+205579,
+576 
+],
+[
+ 36.24,
+137.97,
+"matsumoto",
+107311,
+507 
+],
+[
+ 6.55,
+101.29,
+"yala",
+254069,
+602 
+],
+[
+ 43.19217,
+44.54313,
+"beslan",
+36762,
+1071 
+],
+[
+ 7,
+100.47,
+"hatyai",
+476592,
+632 
+],
+[
+ 31.83,
+70.9,
+"deraismailkhan",
+135567,
+929 
+],
+[
+ 11.85,
+13.16,
+"maiduguri",
+657262,
+1181 
+],
+[
+ 8.58,
+81.22,
+"trincomalee",
+109775,
+570 
+],
+[
+ 42.98,
+47.5,
+"makhachkala",
+577144,
+744 
+],
+[
+ 13.12871,
+45.38073,
+"zinjibar",
+19144,
+637 
+],
+[
+ 11.75,
+11.96,
+"damaturu",
+369461,
+512.4 
+],
+[
+ 6.92,
+122.08,
+"zamboanga",
+612648,
+526 
+],
+[
+ 30.21,
+67.02,
+"quetta",
+576076,
+3451.75 
+],
+[
+ 9.35,
+42.79,
+"jijiga",
+56375,
+536 
+] 
+];
+data.addColumn('number','Latitude');
+data.addColumn('number','Longitude');
+data.addColumn('string','WCUC.city');
+data.addColumn('number','Population');
+data.addColumn('number','Victims');
+data.addRows(datajson);
+return(data);
+}
+ 
+// jsDrawChart
+function drawChartGeoChartID21e027c758a5() {
+var data = gvisDataGeoChartID21e027c758a5();
+var options = {};
+options["width"] =   1112;
+options["height"] =    694;
+options["colorAxis"] = {colors:['green', 'orange']};
+options["legend"] = {textStyle: {color: 'black', fontSize: 16}};
+options["legend.numberFormat"] = {numberFormat:'.'};
+options["backgroundColor"] = "black";
+options["sizeAxis"] = {minValue: 1,  maxSize: 25};
+options["markerOpacity"] =    0.4;
+
+
+    var chart = new google.visualization.GeoChart(
+    document.getElementById('GeoChartID21e027c758a5')
+    );
+    chart.draw(data,options);
+    
+
+}
+  
+ 
+// jsDisplayChart
+(function() {
+var pkgs = window.__gvisPackages = window.__gvisPackages || [];
+var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
+var chartid = "geochart";
+  
+// Manually see if chartid is in pkgs (not all browsers support Array.indexOf)
+var i, newPackage = true;
+for (i = 0; newPackage && i < pkgs.length; i++) {
+if (pkgs[i] === chartid)
+newPackage = false;
+}
+if (newPackage)
+  pkgs.push(chartid);
+  
+// Add the drawChart function to the global list of callbacks
+callbacks.push(drawChartGeoChartID21e027c758a5);
+})();
+function displayChartGeoChartID21e027c758a5() {
+  var pkgs = window.__gvisPackages = window.__gvisPackages || [];
+  var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
+  window.clearTimeout(window.__gvisLoad);
+  // The timeout is set to 100 because otherwise the container div we are
+  // targeting might not be part of the document yet
+  window.__gvisLoad = setTimeout(function() {
+  var pkgCount = pkgs.length;
+  google.load("visualization", "1", { packages:pkgs, callback: function() {
+  if (pkgCount != pkgs.length) {
+  // Race condition where another setTimeout call snuck in after us; if
+  // that call added a package, we must not shift its callback
+  return;
+}
+while (callbacks.length > 0)
+callbacks.shift()();
+} });
+}, 100);
+}
+ 
+// jsFooter
+</script>
+ 
+<!-- jsChart -->  
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartGeoChartID21e027c758a5"></script>
+ 
+<!-- divChart -->
+  
+<div id="GeoChartID21e027c758a5" 
+  style="width: 1112; height: 694;">
+</div>

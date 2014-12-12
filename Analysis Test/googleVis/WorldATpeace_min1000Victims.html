@@ -1,0 +1,276 @@
+<!-- GeoChart generated in R 3.1.1 by googleVis 0.5.6 package -->
+<!-- Fri Dec 12 16:21:55 2014 -->
+
+
+<!-- jsHeader -->
+<script type="text/javascript">
+ 
+// jsData 
+function gvisDataGeoChartID21e0245a3f0b () {
+var data = new google.visualization.DataTable();
+var datajson =
+[
+ [
+ 33.88894,
+35.49442,
+"beirut",
+2130079,
+5138 
+],
+[
+ 24.86,
+67.01,
+"karachi",
+15588347,
+6067 
+],
+[
+ -1.29,
+36.82,
+"nairobi",
+3627229,
+5235 
+],
+[
+ 12.11,
+15.05,
+"ndjamena",
+959944,
+1223 
+],
+[
+ 33.6,
+73.04,
+"rawalpindi",
+1032842,
+1123 
+],
+[
+ 40.42,
+-3.71,
+"madrid",
+6044437,
+1192 
+],
+[
+ 31.56,
+74.35,
+"lahore",
+3735319,
+3096 
+],
+[
+ 6.93,
+79.85,
+"colombo",
+699640,
+1140 
+],
+[
+ -26.19,
+28.04,
+"johannesburg",
+8864103,
+1053 
+],
+[
+ 15.38,
+44.21,
+"sanaa",
+2686756,
+1318 
+],
+[
+ 36.23,
+37.17,
+"aleppo",
+3403089,
+1374 
+],
+[
+ 2.05,
+45.33,
+"mogadishu",
+1847296,
+2999.33 
+],
+[
+ 33.5,
+36.32,
+"damascus",
+2396199,
+2748.34 
+],
+[
+ 34.01,
+71.54,
+"peshawar",
+722096,
+4351 
+],
+[
+ 4.63,
+-74.09,
+"bogota",
+9283086,
+2228 
+],
+[
+ 35.67,
+139.77,
+"tokyo",
+34668636,
+5562 
+],
+[
+ 6.29,
+-75.54,
+"medellin",
+1055620,
+2142 
+],
+[
+ 41.1,
+29,
+"istanbul",
+13689079,
+1660 
+],
+[
+ 23.7,
+90.39,
+"dhaka",
+16389029,
+2187 
+],
+[
+ 18.96,
+72.82,
+"mumbai",
+21935142,
+1611 
+],
+[
+ 31.78,
+35.22,
+"jerusalem",
+3432844,
+1812 
+],
+[
+ 34.43667,
+35.84972,
+"tripoli",
+353258,
+1805 
+],
+[
+ 54.6,
+-5.93,
+"belfast",
+363548,
+1731 
+],
+[
+ 43.19217,
+44.54313,
+"beslan",
+36762,
+1071 
+],
+[
+ 11.85,
+13.16,
+"maiduguri",
+657262,
+1181 
+],
+[
+ 30.21,
+67.02,
+"quetta",
+576076,
+3534.75 
+] 
+];
+data.addColumn('number','Latitude');
+data.addColumn('number','Longitude');
+data.addColumn('string','WCUC.city');
+data.addColumn('number','Population');
+data.addColumn('number','Victims');
+data.addRows(datajson);
+return(data);
+}
+ 
+// jsDrawChart
+function drawChartGeoChartID21e0245a3f0b() {
+var data = gvisDataGeoChartID21e0245a3f0b();
+var options = {};
+options["width"] =   1112;
+options["height"] =    694;
+options["colorAxis"] = {colors:['green', 'darkred']};
+options["legend"] = {textStyle: {color: 'black', fontSize: 16}};
+options["legend.numberFormat"] = {numberFormat:'.'};
+options["backgroundColor"] = "black";
+options["sizeAxis"] = {minValue: 1,  maxSize: 25};
+options["markerOpacity"] =    0.4;
+
+
+    var chart = new google.visualization.GeoChart(
+    document.getElementById('GeoChartID21e0245a3f0b')
+    );
+    chart.draw(data,options);
+    
+
+}
+  
+ 
+// jsDisplayChart
+(function() {
+var pkgs = window.__gvisPackages = window.__gvisPackages || [];
+var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
+var chartid = "geochart";
+  
+// Manually see if chartid is in pkgs (not all browsers support Array.indexOf)
+var i, newPackage = true;
+for (i = 0; newPackage && i < pkgs.length; i++) {
+if (pkgs[i] === chartid)
+newPackage = false;
+}
+if (newPackage)
+  pkgs.push(chartid);
+  
+// Add the drawChart function to the global list of callbacks
+callbacks.push(drawChartGeoChartID21e0245a3f0b);
+})();
+function displayChartGeoChartID21e0245a3f0b() {
+  var pkgs = window.__gvisPackages = window.__gvisPackages || [];
+  var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
+  window.clearTimeout(window.__gvisLoad);
+  // The timeout is set to 100 because otherwise the container div we are
+  // targeting might not be part of the document yet
+  window.__gvisLoad = setTimeout(function() {
+  var pkgCount = pkgs.length;
+  google.load("visualization", "1", { packages:pkgs, callback: function() {
+  if (pkgCount != pkgs.length) {
+  // Race condition where another setTimeout call snuck in after us; if
+  // that call added a package, we must not shift its callback
+  return;
+}
+while (callbacks.length > 0)
+callbacks.shift()();
+} });
+}, 100);
+}
+ 
+// jsFooter
+</script>
+ 
+<!-- jsChart -->  
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartGeoChartID21e0245a3f0b"></script>
+ 
+<!-- divChart -->
+  
+<div id="GeoChartID21e0245a3f0b" 
+  style="width: 1112; height: 694;">
+</div>
