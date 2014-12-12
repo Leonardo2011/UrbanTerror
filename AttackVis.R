@@ -16,6 +16,19 @@ ExA$latitude <- as.numeric(ExA$latitude)
 ExA$longitude <- as.numeric(ExA$longitude)
 ExA$Relative Light <- ExA$light/ExA$light.MAX
 
+# Attack Summaries:
+# 200807270020: On Sunday, two bombs exploded minutes apart in one of Istanbul's busy shopping districts on the European side. Though the Kurdistan Workers Party denied responsibility for the attack, officials continually accuse them of direct involvement. 
+# 200608280001: Four people were killed and approximately 65 were injured when a bomb attached to a motorcycle detonated in Antalya, Turkey. No one claimed responsibility for the attack.
+# 199811270002: A bomb exploded on a bus near Kirikkale, Turkey. The explosion killed four passengers and injured 20 others. The bomb was placed in the luggage department of the bus. There was no claim of responsibility for this attack.
+# 200608280002: A car filled with explosives exploded 80 meters from the Russian Consulate General in Antalya, Turkey, killing three people and wounding at least 20 more. No one claimed responsibility for the attack, but authorities believed the Kurdish separatists were to blame. 
+# 199903050002: A car bomb attack targeted the Cankiri Provincial Governor, Ayhan Cevik, while he was driving in Cankiri, Turkey. Four people were killed and the Governor and nine others were wounded. The Turkish Workers and Peasants Liberation Army (TKP/ML-TIKKO) claimed responsibility for the attack
+# 200308010004: An unnamed leftist organization detonated an explosive device in the garden of the Justice Ministry's Center of Education for Judge and Prosecutor Candidates in Ankara, Turkey. Eleven people, including policemen and judges, were injured in the explosion. Although a group claimed responsibility for the attack, Turkey's Interior Minister, Abdulkadir Aksu, did not publicly reveal the perpetrator group's name
+# 199907300003: A total of four village guards were killed in Gurpinar, Turkey, when a group of perpetrators attacked the guards who were protecting the Telekom employees. Officials reported that the employees where the target of this attack. 
+# 199809090001: In one of two related attacks, rebels from the Kurdistan Workers Party (PKK) attacked the Imamli settlement unit in the village of Kuyucak, Turkey, killing one person and injuring three (Mustafa, Hilmi and Nuriye Atici). The perpetrators fled after this incident.
+# 199910180002: Unknown perpetrators set a Greek citizen's house on fire in the village of Bademli on Gokceada island, Turkey. A small child died in the fire. 
+# 200311140004: Two car bombings by the militant Islamic group, Great East Islamic Raiders Front (IBDA-C - Islami Buyuk Dogu Akincilar Cephesi), on synagogues in Istanbul, Turkey, killed at least twenty people and injured 302 others. One of the two almost simultaneous blasts occurred at the Beth Israel Synagogue, damaging the building and several cars. Numerous people were reportedly killed and injured in the bombing. The group identified itself in a telephone call to the Anadolu News Agency. 
+
+
 # Formatting the table so it does look nicely in Rmarkdwon and represents the right things
 Rmdattacks <- subset(ExA, select = c(Date, inUC, HUMscale, access, access.MAX, light, light.MAX, density, density.MAX, coast.dist, coast.dist.MAX, original.city, latitude))
 #ordering attacks from North to South
@@ -41,7 +54,7 @@ Rmdattacks$coast.dist <- NULL
 Rmdattacks$coast.dist.MAX <- NULL
 Rmdattacks$Date <- NULL
 Rmdattacks$original.city <- NULL
-colnames(Rmdattacks) <- c("On UC", "Killed & Wounded", "Rel. Access", "Rel. Light", "Rel. Density", "Rel. Prox. Coast", "Date & Place")
+colnames(Rmdattacks) <- c("On.UC", "Killed.Wounded", "Rel.Access", "Rel.Light", "Rel.Density", "Rel.Prox.Coast", "Date.Place")
 Rmdattacks <- Rmdattacks[c(7,1,2,4,3,6,5) ]
 
 

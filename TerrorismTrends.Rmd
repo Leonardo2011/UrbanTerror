@@ -9,14 +9,15 @@ output:
     number_sections: yes
     toc: yes
 setspace: doublespacing
-bibliography: UTBiblio.bib
+
 ---
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE, results='asis'}
 #Loading required packages
 source("0 - Loading Packages.R", chdir=FALSE)
-#Loading created GTD. Due to the intensive computation processes involved, we use a before created .csv file. The code is reproducible however and can be run from "2. Pre Analysis.R"
 GTD <- read.csv("TerrorData/Pregtd.csv")
+Rmdattacks <- read.csv("Rmdattacks.csv")
+knitr::kable(Rmdattacks, format = "markdown")
 ```
 
 
