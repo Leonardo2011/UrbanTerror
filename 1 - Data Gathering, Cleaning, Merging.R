@@ -424,6 +424,59 @@ PreGTD$EN.URB.MCTY.TL.ZS <- as.numeric(PreGTD$EN.URB.MCTY.TL.ZS)
 PreGTD$coast.dist <- ifelse(is.na(PreGTD$coast.dist), as.numeric(PreGTD$Town.Coast.Dist), as.numeric(PreGTD$coast.dist))
 PreGTD$pop <- as.numeric(PreGTD$pop)
 
+
+######################### 
+##### For the sake of later simplicity, we build in the first dependent Variables at this point
+# In order to build our Varibales, we should exclude the influence of negative components, if there are any
+nonnegative <- function(x) ifelse(x<0, 0, x)
+
+### First Dependent Variable: >Urban< 
+# 25% (Country relative) City Rank -> Urban as Log Size                             (time variant)
+# 25% (Country relative) City Population -> Urban as Size                           (time variant)
+# 25% (Country relative) Location's Urban Landcover -> Urban as Surface             (not time variant)
+# 25% (Country relative) Location's Nightlights -> Urban as Life                    (not time variant, but data is out there)
+PreGTD["DV.Target.Urban"] <- (nonnegative(PreGTD$Rank01.C*25)  
+                                + nonnegative(PreGTD$Rel.CS*25) 
+                                + nonnegative(PreGTD$urbn.cover/100*25)
+                                + nonnegative(PreGTD$light/PreGTD$light.MAX*25))
+
+### Second Dependent Variable: >Crowded< 
+# 60% (Country relative) Location's Population Density -> Crowded as Density                        (time variant)
+# 30% (Country relative) Location's Population Density Growth over past years -> Crowded as Growth  (time variant)
+# 10% (Country relative) Night Light Development Index (NLDI) -> Crowded as Inequality              (not time variant)
+PreGTD["DV.Target.Crowded"] <- (nonnegative(PreGTD$density/PreGTD$density.MAX*60) 
+                                  + nonnegative(PreGTD$density.growth/PreGTD$density.growth.MAX*30) 
+                                  + nonnegative(PreGTD$nldi/PreGTD$nldi.MAX*10))
+
+### Third Dependent Variable: >Connected< 
+# 50% (Country relative) Travel Distance to larger City -> Connected as Proximity to Larger Cities  (not time variant)
+# 25% (Country relative) Travel Location's Nightlights -> Connected as Electrified                  (not time variant)
+# 25% (Country relative) Locations GDP -> Connected as Productive                                   (not time variant)
+PreGTD["DV.Target.Connected"] <- (nonnegative((((PreGTD$access/PreGTD$access.MAX)-1)*-1)*50) 
+                                    + nonnegative(PreGTD$light/PreGTD$light.MAX*25) 
+                                    + nonnegative(PreGTD$city.gdp/PreGTD$gdp.MAX*25))
+
+### Forth Dependent Variable: >Coastal< 
+# 100% (Country relative) Distance to the Coast, whereas landlocked countries are NA                (not time variant)
+PreGTD["DV.Target.Coastal"] <- ifelse(PreGTD$coast.dist.MIN >= 20, NA, 
+                                        nonnegative(((PreGTD$coast.dist/PreGTD$coast.dist.MAX)-1)*-100))
+rm(nonnegative)
+
+### Fifth Dependent Variable: >Kilcullen< 
+# The combination of all four variables, or three in case of landlocked countries                (not time variant)
+
+PreGTD["DV.Kilcullen"] <- ifelse(is.na(PreGTD$DV.Target.Coastal), 
+                                   ((PreGTD$DV.Target.Urban+PreGTD$DV.Target.Crowded+PreGTD$DV.Target.Connected)/3),
+                                   (PreGTD$DV.Target.Urban+PreGTD$DV.Target.Crowded+PreGTD$DV.Target.Connected+PreGTD$DV.Target.Coastal)/4)
+
+
+DT <- data.table(PreGTD)
+IVdst <- data.frame(DT[,list(IV.Pop.Coastal.Dist = mean(Pop.Coast.Dist, rm.na=TRUE)),by=list(country_txt, iyear)])
+PreGTD <- merge(PreGTD, IVdst, by=c("country_txt", "iyear"), all.x=TRUE)
+PreGTD$IV.Pop.Coastal.Dist[is.na(PreGTD$DV.Target.Coastal)] <- NA
+rm(DT, IVdst)
+
+
 # write a csv, just to be sure
 write.csv(PreGTD, file="TerrorData/Pregtd.csv")
 

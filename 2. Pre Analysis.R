@@ -2,55 +2,52 @@
 
 
 
-#Load the Pre-Analysis Global Terrorism Database
+# Load the Pre-Analysis Global Terrorism Database
 PreGTD <- read.csv("TerrorData/Pregtd.csv", header=TRUE)
 PreGTD <-PreGTD[order(-PreGTD$eventid, na.last=TRUE) , ]
 
 
-# take out what we need
-Stat1GTD <- subset(PreGTD, select=c(eventid, iyear, country_txt, region_txt, pop.that.year, Rel.CS, inUC, aroundUC, Rank01.C, 
-                                  Rank01.W, capital, largestC, largest.UC, WC.UC.dist.km, TUPscale, PROPscale, HUMscale, 
-                                  Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, coast.dist, coast.dist.MIN, coast.dist.MAX, 
-                                  access, access.MAX, light, light.MAX, nldi, nldi.MAX, urbn.cover, city.gdp, gdp.MAX, density, 
-                                  density.MAX, density.growth, density.growth.MAX, EN.URB.MCTY.TL.ZS, SP.URB.TOTL.IN.ZS, 
-                                  EN.URB.LCTY.UR.ZS, latitude, longitude,  WCUC.city.old), iyear>=1998 & iyear<=2011)
+### take out what we need
+Stat1GTD <- subset(PreGTD, select=c(iyear, country_txt, TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, 
+                                    Inter.WAR, coast.dist, DV.Target.Urban, DV.Target.Crowded, DV.Target.Connected, DV.Target.Coastal,
+                                    DV.Kilcullen, IV.Pop.Coastal.Dist, Pop.Coast.Dist, WCUC.city.old, merge), 
+                   iyear>=1998 & iyear<=2013 & TUPscale!=(0|1|2|3) & Extra.WAR.In==0 & Inter.WAR==0 & Intra.WAR==0)
 
+# Exclude countries with less than 20 casaulties or incidents
+Asum <- aggregate(HUMscale ~ country_txt,Stat1GTD,FUN=sum)
+Asum <- Asum[order(-Asum$HUMscale, na.last=TRUE) , ]
+Asum["Victim1"] <- ifelse(Asum$HUMscale>= 40, 1, 0)
+Asum$HUMscale <- NULL
 
-# In order to build our varibales, we should exclude the influence of negative components, if there are any
-nonnegative <- function(x) ifelse(x<0, 0, x)
+#bosniaandherzegovina latvia switzerland azerbaijan kuwait netherlands venezuelarb kyrgyzrepublic liberia czechrepublic fiji
+#guatemala kazakhstan belgium paraguay albania ireland timorleste croatia macaosarchina qatar bhutan  brazil
+#stlucia trinidadandtobago maldives mozambique ecuador armenia austria finland slovakrepublic sweden bolivia
+#djibouti bulgaria chile malaysia yugoslavia benin equatorialguinea hungary montenegro poland solomonislands zambia
+#bahrain denmark nicaragua swaziland estonia gambiathe libya madagascar argentina costarica cuba jamaica japan lesotho
+#malawi panama puertorico romania turkmenistan unitedarabemirates belize cyprus newzealand papuanewguinea portugal
+#slovenia togo uruguay vietnam
 
+Stat1GTD["one"] <- 1
+Acount <- aggregate(one ~ country_txt,Stat1GTD,FUN=sum)
+Acount <- Acount[order(-Acount$one, na.last=TRUE) , ]
+Acount["Count1"] <- ifelse(Acount$one>= 20, 1, 0)
+Acount$one <- NULL
 
-### First Dependent Variable: >Urban< 
-# 25% (Country relative) City Rank -> Urban as Log Size                             (time variant)
-# 25% (Country relative) City Population -> Urban as Size                           (time variant)
-# 25% (Country relative) Location's Urban Landcover -> Urban as Surface             (not time variant)
-# 25% (Country relative) Location's Nightlights -> Urban as Life                    (not time variant, but data is out there)
-Stat1GTD["DV.Target.Urban"] <- (nonnegative(Stat1GTD$Rank01.C*0.25)  
-                                + nonnegative(Stat1GTD$Rel.CS*0.25) 
-                                + nonnegative(Stat1GTD$urbn.cover/100*0.25)
-                                + nonnegative(Stat1GTD$light/Stat1GTD$light.MAX*0.25))
+#cameroon, guyana, timorleste, tunisia, kuwait, latvia, newzealand, paraguay, bolivia, congodemrep, fiji, guineabissau, 
+#kazakhstan, madagascar, belarus, cyprus, eritrea, malaysia, norway, swaziland, bahrain, czechrepublic, hungary, macaosarchina,
+#bhutan, hongkongsarchina, montenegro, mozambique, puertorico, slovenia, estonia, libya, slovakrepublic, solomonislands, vietnam, 
+#denmark, korearep, maldives, moldova, panama, poland, qatar, trinidadandtobago, finland, lesotho, nicaragua, papuanewguinea, 
+#portugal, unitedarabemirates, belize, benin, costarica, cuba, djibouti, equatorialguinea, gambiathe, jamaica, malawi, romania, 
+#stlucia, togo, turkmenistan, uruguay
 
-### Second Dependent Variable: >Crowded< 
-# 60% (Country relative) Location's Population Density -> Crowded as Density                        (time variant)
-# 30% (Country relative) Location's Population Density Growth over past years -> Crowded as Growth  (time variant)
-# 10% (Country relative) Night Light Development Index (NLDI) -> Crowded as Inequality              (not time variant)
-Stat1GTD["DV.Target.Crowded"] <- (nonnegative(Stat1GTD$density/Stat1GTD$density.MAX*0.60) 
-                                  + nonnegative(Stat1GTD$density.growth/Stat1GTD$density.growth.MAX*0.30) 
-                                  + nonnegative(Stat1GTD$nldi/Stat1GTD$nldi.MAX*0.10))
+Stat1GTD <- merge(Stat1GTD, Asum, by=c("country_txt"), all.x=TRUE)
+Stat1GTD <- merge(Stat1GTD, Acount, by=c("country_txt"), all.x=TRUE)
+Stat1GTD <- subset(Stat1GTD, Count1==1 & Victim1==1)
+Stat1GTD$one  <- NULL
+Stat1GTD$Victim1 <- NULL
+Stat1GTD$Count1 <- NULL
+rm(Acount, Asum)
 
-### Third Dependent Variable: >Connected< 
-# 50% (Country relative) Travel Distance to larger City -> Connected as Proximity to Larger Cities  (not time variant)
-# 25% (Country relative) Travel Location's Nightlights -> Connected as Electrified                  (not time variant)
-# 25% (Country relative) Locations GDP -> Connected as Productive                                   (not time variant)
-Stat1GTD["DV.Target.Connected"] <- (nonnegative((((Stat1GTD$access/Stat1GTD$access.MAX)-1)*-1)*0.5) 
-                                    + nonnegative(Stat1GTD$light/Stat1GTD$light.MAX*0.25) 
-                                    + nonnegative(Stat1GTD$city.gdp/Stat1GTD$gdp.MAX*0.25))
-
-### Forth Dependent Variable: >Coastal< 
-# 100% (Country relative) Distance to the Coast, whereas landlocked countries are NA                (not time variant)
-Stat1GTD["DV.Target.Coastal"] <- ifelse(Stat1GTD$coast.dist.MIN >= 30, NA, 
-                                        nonnegative(((Stat1GTD$coast.dist/Stat1GTD$coast.dist.MAX)-1)*-1))
-rm(nonnegative)
 
 # Now we take aggregated means (country-years), not without putting a weight on the aggregation (Victims^04 + Damage^02))                              
 DT <- data.table(Stat1GTD)
@@ -58,56 +55,83 @@ DVurb <- data.frame(DT[,list(DV.Target.Urban = weighted.mean(DV.Target.Urban, (H
 DVcro <- data.frame(DT[,list(DV.Target.Crowded = weighted.mean(DV.Target.Crowded, (HUMscale^0.4 + PROPscale^0.2), rm.na=TRUE)),by=list(country_txt, iyear)])
 DVcoa <- data.frame(DT[,list(DV.Target.Coastal = weighted.mean(DV.Target.Coastal, (HUMscale^0.4 + PROPscale^0.2), rm.na=TRUE)),by=list(country_txt, iyear)])
 DVcon <- data.frame(DT[,list(DV.Target.Connected = weighted.mean(DV.Target.Connected, (HUMscale^0.4 + PROPscale^0.2), rm.na=TRUE)),by=list(country_txt, iyear)])
-Dependent <- merge(DVurb, DVcro, by=c("country_txt", "iyear"), all=TRUE)
-Dependent <- merge(Dependent, DVcoa, by=c("country_txt", "iyear"), all=TRUE)
-Dependent <- merge(Dependent, DVcon, by=c("country_txt", "iyear"), all=TRUE)
+IVdst <- data.frame(DT[,list(IV.Pop.Coastal.Dist = mean(Pop.Coast.Dist, rm.na=TRUE)),by=list(country_txt, iyear)])
+VaR <- merge(DVurb, DVcro, by=c("country_txt", "iyear"), all=TRUE)
+VaR <- merge(VaR, DVcoa, by=c("country_txt", "iyear"), all=TRUE)
+VaR <- merge(VaR, DVcon, by=c("country_txt", "iyear"), all=TRUE)
+VaR <- merge(VaR, IVdst, by=c("country_txt", "iyear"), all=TRUE)
+VaR$IV.Pop.Coastal.Dist[is.na(VaR$DV.Target.Coastal)] <- NA
+rm(DT, DVurb, DVcro, DVcoa, DVcon, IVdst)
 
 
-rm(DT, DVurb, DVcro, DVcoa, DVcon)
+### Fifth Dependent Variable: >Kilcullen< 
+# The combination of all four variables, or three in case of landlocked countries                (not time variant)
+VaR["DV.Kilcullen"] <- ifelse(is.na(VaR$DV.Target.Coastal), 
+                              ((VaR$DV.Target.Urban+VaR$DV.Target.Crowded+VaR$DV.Target.Connected)/3),
+                              (VaR$DV.Target.Urban+VaR$DV.Target.Crowded+VaR$DV.Target.Connected+VaR$DV.Target.Coastal)/4)
 
 
-###include the WDI data and clean it
-WDIData <- WDI(indicator=c('EN.URB.MCTY.TL.ZS',
-                           'SP.URB.TOTL.IN.ZS'),
-               country="all", start=1970, end=2013, extra=FALSE)
-
+### include the WDI data
+WDIData <- WDI(indicator=c('SP.URB.TOTL.IN.ZS'),country="all", start=1970, end=2013, extra=FALSE)
 WDIData <- WDIData[order(WDIData$country, WDIData$year), ]
-
 X <- WDIData$country
-X <- as.character(X)
-X <- gsub("\\,","",X)
-X <- gsub("\\-","",X)
-X <- gsub("\\-","",X)
-X <- gsub("\\-","",X)
-X <- gsub("\\'","",X)
-X <- gsub("\\'","",X)
-X <- gsub("\\.","",X)
-X <- gsub("\\\\", "", X)
-X <- gsub("\\(","",X)
-X <- gsub("\\)","",X)
-X<-gsub(" ","",X)
-X <- tolower(X)
+source('SmallScripts/CleanSpecialCharacters.R')
 WDIData$country <- X
 
-####################################################################################################################
+VaR <- merge(VaR, WDIData, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE)
+VaR$iso2c <- as.factor(VaR$iso2c)
+colnames(VaR)[colnames(VaR) == "country_txt"] <- "country"
+colnames(VaR)[colnames(VaR) == "SP.URB.TOTL.IN.ZS"] <- "IV.Urban.Share"
+VaR$country <- as.factor(VaR$country)
 
-gleich <- merge(Dependent, WDIData, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE)
+VaR$IV.Time <- (VaR$iyear -1998)
+VaR$IV.Urban.Share_Year <- VaR$IV.Time*VaR$IV.Urban.Share
+VaR$IV.Pop.Coastal.Dist_Year <- VaR$IV.Time*VaR$IV.Pop.Coastal.Dist
 
-gleich$iso2c <- NULL
-gleich["country"] <- gleich$country_txt
-gleich$country_txt <- NULL
-gleich["IV.Urban.Share"] <- gleich$SP.URB.TOTL.IN.ZS
-gleich$SP.URB.TOTL.IN.ZS <- NULL
-gleich$SP.URB.TOTL.IN.ZS <- NULL
-gleich$EN.URB.MCTY.TL.ZS <- NULL
-
-write.csv(gleich, file="Analysis Test/Data/Analysis.Variables.csv")
+write.csv(VaR, file="Analysis Test/Data/Analysis.Variables.csv")
 
 
+gleich<-VaR 
+#gleich <- read.csv("Analysis Test/Data/Analysis.Variables.csv", header=TRUE)
 
-#YYY <- subset(Stat1GTD, longitude >=27.9 & longitude <= 34.9 & latitude >= 36.2 & latitude <=41.7)
-#YYY <- YYY[order(-YYY$HUMscale, na.last=TRUE) , ]
 
-#write.csv(YYY, file="turkytile.csv")
+attach(gleich)
+##least squares dummary variable model
+fixed.dum1 <- lm(DV.Target.Urban ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
+fixed.dum2 <- lm(DV.Target.Connected ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
+fixed.dum3 <- lm(DV.Target.Coastal ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
+fixed.dum4 <- lm(DV.Target.Crowded ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
+fixed.dum5 <- lm(DV.Kilcullen ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
 
-#coplot(DV.Target.Urban ~ iyear|country_txt, type="l", Dependent)
+stargazer(fixed.dum1,fixed.dum2,fixed.dum3,fixed.dum4,fixed.dum5,
+          out="Analysis Test/5x5Panesl_least_squares_fixed.html",type="html", keep=c("IV.Urban.Share", "IV.Time", "IV.Urban.Share_Year",
+                                                                                     "IV.Pop.Coastal.Dist", "IV.Pop.Coastal.Dist_Year"))
+
+
+##least squares dummary variable model
+fixed.dum1 <- lm(DV.Target.Urban ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year, data=gleich) 
+fixed.dum2 <- lm(DV.Target.Connected ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year, data=gleich) 
+fixed.dum3 <- lm(DV.Target.Coastal ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year, data=gleich) 
+fixed.dum4 <- lm(DV.Target.Crowded ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year, data=gleich) 
+fixed.dum5 <- lm(DV.Kilcullen ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year, data=gleich) 
+
+stargazer(fixed.dum1,fixed.dum2,fixed.dum3,fixed.dum4,fixed.dum5,
+          out="Analysis Test/5x5Panesl_least_squares_notfixed5.html",type="html", keep=c("IV.Urban.Share", "IV.Time", "IV.Urban.Share_Year",
+                                                                                         "IV.Pop.Coastal.Dist", "IV.Pop.Coastal.Dist_Year"))
+
+
+
+
+
+
+

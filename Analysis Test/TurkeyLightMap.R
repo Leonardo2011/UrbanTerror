@@ -44,7 +44,7 @@ LightMap <- Turkey +
           stat_density2d(aes(x = lon, y = lat, alpha =..level.., fill=..level..), data = YYY, geom = "polygon") +
           geom_point(aes(x = longitude, y = latitude, size=sum.hum, color=turkeymap$inUC), data = turkeymap, size=3) + 
           theme(legend.position="none") + 
-          scale_fill_gradient(low = "black", high= "white")
+          scale_fill_gradient(low = "black", high= "yellow")
 
 
 unlink("Downloaded_Data/NLDI_2006_0p25_rev20111230.tif")
