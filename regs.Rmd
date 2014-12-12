@@ -1,0 +1,47 @@
+---
+title: "TestStarGaze"
+author: "Cameron Reed, Sascha Schuster, Lukas Bretzinger"
+date: "December 11, 2014"
+output: html_document
+---
+
+An attempt to produce an output table:
+
+
+```{r, echo=FALSE, results='asis'}
+gleich <- read.csv("Analysis Test/Data/Analysis.Variables.csv", header=TRUE)
+attach(gleich)
+library(stargazer)
+gleich$inturbshare <- gleich$iyear*gleich$IV.Urban.Share
+gleich$intcoastaldist <- gleich$iyear*gleich$IV.Pop.Coastal.Dist
+
+##least squares dummary variable model
+fixed.dum1 <- lm(DV.Target.Urban ~ iyear + IV.Urban.Share + inturbshare + IV.Pop.Coastal.Dist + 
+                   intcoastaldist + iyear*factor(country) + 
+                   IV.Urban.Share*factor(country) + inturbshare*factor(country) + 
+                   IV.Pop.Coastal.Dist*factor(country) + intcoastaldist*factor(country) + 
+                   factor(country) - 1, data=gleich)
+fixed.dum2 <- lm(DV.Target.Connected ~ iyear + IV.Urban.Share + inturbshare + IV.Pop.Coastal.Dist + 
+                   intcoastaldist + iyear*factor(country) + 
+                   IV.Urban.Share*factor(country) + inturbshare*factor(country) + 
+                   IV.Pop.Coastal.Dist*factor(country) + intcoastaldist*factor(country) + 
+                   factor(country) - 1, data=gleich)
+fixed.dum3 <- lm(DV.Target.Coastal ~ iyear + IV.Urban.Share + inturbshare + IV.Pop.Coastal.Dist + 
+                   intcoastaldist + iyear*factor(country) + 
+                   IV.Urban.Share*factor(country) + inturbshare*factor(country) + 
+                   IV.Pop.Coastal.Dist*factor(country) + intcoastaldist*factor(country) + 
+                   factor(country) - 1, data=gleich)
+fixed.dum4 <- lm(DV.Target.Crowded ~ iyear + IV.Urban.Share + inturbshare + IV.Pop.Coastal.Dist + 
+                   intcoastaldist + iyear*factor(country) + 
+                   IV.Urban.Share*factor(country) + inturbshare*factor(country) + 
+                   IV.Pop.Coastal.Dist*factor(country) + intcoastaldist*factor(country) + 
+                   factor(country) - 1, data=gleich)
+fixed.dum5 <- lm(DV.Kilcullen ~ iyear + IV.Urban.Share + inturbshare + IV.Pop.Coastal.Dist + 
+                   intcoastaldist + iyear*factor(country) + 
+                   IV.Urban.Share*factor(country) + inturbshare*factor(country) + 
+                   IV.Pop.Coastal.Dist*factor(country) + intcoastaldist*factor(country) + 
+                   factor(country) - 1, data=gleich)
+
+stargazer(fixed.dum1,fixed.dum2,fixed.dum3,fixed.dum4,fixed.dum5, type="html")
+```
+
