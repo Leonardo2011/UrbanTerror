@@ -1,12 +1,12 @@
 <!-- GeoChart generated in R 3.1.1 by googleVis 0.5.6 package -->
-<!-- Fri Dec 12 16:22:05 2014 -->
+<!-- Fri Dec 12 17:45:52 2014 -->
 
 
 <!-- jsHeader -->
 <script type="text/javascript">
  
 // jsData 
-function gvisDataGeoChartID21e02798675d () {
+function gvisDataGeoChartID21e017cc200 () {
 var data = new google.visualization.DataTable();
 var datajson =
 [
@@ -105,7 +105,7 @@ var datajson =
  0.32,
 32.58,
 "kampala",
-351.5,
+352,
 1180311 
 ],
 [
@@ -1281,12 +1281,12 @@ return(data);
 }
  
 // jsDrawChart
-function drawChartGeoChartID21e02798675d() {
-var data = gvisDataGeoChartID21e02798675d();
+function drawChartGeoChartID21e017cc200() {
+var data = gvisDataGeoChartID21e017cc200();
 var options = {};
 options["width"] =   1112;
 options["height"] =    694;
-options["colorAxis"] = {colors:['green', 'orange', 'darkred']};
+options["colorAxis"] = {colors:['green', 'orange', 'orange', 'darkred']};
 options["legend"] = {textStyle: {color: 'black', fontSize: 16}};
 options["legend.numberFormat"] = {numberFormat:'.'};
 options["backgroundColor"] = "black";
@@ -1296,7 +1296,7 @@ options["region"] =    145;
 
 
     var chart = new google.visualization.GeoChart(
-    document.getElementById('GeoChartID21e02798675d')
+    document.getElementById('GeoChartID21e017cc200')
     );
     chart.draw(data,options);
     
@@ -1320,9 +1320,9 @@ if (newPackage)
   pkgs.push(chartid);
   
 // Add the drawChart function to the global list of callbacks
-callbacks.push(drawChartGeoChartID21e02798675d);
+callbacks.push(drawChartGeoChartID21e017cc200);
 })();
-function displayChartGeoChartID21e02798675d() {
+function displayChartGeoChartID21e017cc200() {
   var pkgs = window.__gvisPackages = window.__gvisPackages || [];
   var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
   window.clearTimeout(window.__gvisLoad);
@@ -1346,10 +1346,10 @@ callbacks.shift()();
 </script>
  
 <!-- jsChart -->  
-<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartGeoChartID21e02798675d"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartGeoChartID21e017cc200"></script>
  
 <!-- divChart -->
   
-<div id="GeoChartID21e02798675d" 
+<div id="GeoChartID21e017cc200" 
   style="width: 1112; height: 694;">
 </div>

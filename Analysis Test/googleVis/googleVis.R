@@ -71,7 +71,7 @@ GVisD <-GVisD[order(GVisD$WC.UC.dist.km, -GVisD$pop.that.year, na.last=TRUE) , ]
 GVisD <- GVisD[!duplicated(GVisD$WCUC.city),]
 
 GVisD["Population"] <- GVisD$pop.that.year
-GVisD["Victims"] <- GVisD$Total.Number.of.Victim
+GVisD["Victims"] <- round(GVisD$Total.Number.of.Victim)
 world1 <- gvisGeoChart(GVisD, 
                                  locationvar='Latlong',
                                  sizevar = "Victims", 
@@ -106,7 +106,7 @@ GVisD <-GVisD[order(GVisD$WC.UC.dist.km, -GVisD$pop.that.year, na.last=TRUE) , ]
 GVisD <- GVisD[!duplicated(GVisD$WCUC.city),]
 
 GVisD["Population"] <- GVisD$pop.that.year
-GVisD["Victims"] <- GVisD$Total.Number.of.Victim
+GVisD["Victims"] <- round(GVisD$Total.Number.of.Victim)
 world2 <- gvisGeoChart(GVisD, 
                       locationvar='Latlong',
                       sizevar = "Victims", 
@@ -142,7 +142,7 @@ GVisD <-GVisD[order(GVisD$WC.UC.dist.km, -GVisD$pop.that.year, na.last=TRUE) , ]
 GVisD <- GVisD[!duplicated(GVisD$WCUC.city),]
 
 GVisD["Population"] <- GVisD$pop.that.year
-GVisD["Victims"] <- GVisD$Total.Number.of.Victim
+GVisD["Victims"] <- round(GVisD$Total.Number.of.Victim)
 world3 <- gvisGeoChart(GVisD, 
                       locationvar='Latlong',
                       sizevar = "Victims", 
@@ -176,7 +176,7 @@ GVisD <-GVisD[order(GVisD$WC.UC.dist.km, -GVisD$pop.that.year, na.last=TRUE) , ]
 GVisD <- GVisD[!duplicated(GVisD$WCUC.city),]
 
 GVisD["Population"] <- GVisD$pop.that.year
-GVisD["Victims"] <- GVisD$Total.Number.of.Victim
+GVisD["Victims"] <- round(GVisD$Total.Number.of.Victim)
 world4 <- gvisGeoChart(GVisD, 
                       locationvar='Latlong',
                       sizevar = "Victims", 
@@ -211,7 +211,7 @@ GVisD <-GVisD[order(GVisD$WC.UC.dist.km, -GVisD$pop.that.year, na.last=TRUE) , ]
 GVisD <- GVisD[!duplicated(GVisD$WCUC.city),]
 
 GVisD["Population"] <- GVisD$pop.that.year
-GVisD["Victims"] <- GVisD$Total.Number.of.Victim
+GVisD["Victims"] <- round(GVisD$Total.Number.of.Victim)
 world5 <- gvisGeoChart(GVisD, 
                        locationvar='Latlong',
                        sizevar = "Victims", 
@@ -251,13 +251,13 @@ GVisD <-GVisD[order(GVisD$WC.UC.dist.km, -GVisD$pop.that.year, na.last=TRUE) , ]
 GVisD <- GVisD[!duplicated(GVisD$WCUC.city),]
 
 GVisD["Population"] <- GVisD$pop.that.year
-GVisD["Victims"] <- GVisD$Total.Number.of.Victim
+GVisD["Victims"] <- round(GVisD$Total.Number.of.Victim)
 regionbefore2004 <- gvisGeoChart(GVisD, 
                           locationvar='Latlong',
                           colorvar = "Victims", 
                           sizevar = "Population",
                           hovervar="WCUC.city",
-                          options=list(colorAxis="{colors:['green', 'orange', 'darkred']}",
+                          options=list(colorAxis="{colors:['green', 'orange', 'orange', 'darkred']}",
              legend="{textStyle: {color: 'black', fontSize: 16}}",
              legend.numberFormat="{numberFormat:'.'}",
              backgroundColor="black", sizeAxis="{minValue: 1,  maxSize: 25}", 
@@ -286,15 +286,16 @@ rm(Acount, Ahum)
 GVisD <-GVisD[order(GVisD$WC.UC.dist.km, -GVisD$pop.that.year, na.last=TRUE) , ]
 GVisD <- GVisD[!duplicated(GVisD$WCUC.city),]
 GVisD["Population"] <- GVisD$pop.that.year
-GVisD["Victims"] <- GVisD$Total.Number.of.Victim
+GVisD["Victims"] <- round(GVisD$Total.Number.of.Victim)
 GVisD["Population"] <- GVisD$pop.that.year
-GVisD["Victims"] <- GVisD$Total.Number.of.Victim
+GVisD["Victims"] <- round(GVisD$Total.Number.of.Victim)
 regionafter2004 <- gvisGeoChart(GVisD, 
                                  locationvar='Latlong',
                                  colorvar = "Victims", 
                                  sizevar = "Population",
                                  hovervar="WCUC.city",
-                                options=list(colorAxis="{colors:['green', 'orange', 'darkred']}",
+                                options=list(colorAxis="{colors:['green', 'orange', 'orange','orange','orange','orange',
+                                             'orange','orange','orange','orange','orange','orange','orange','darkred']}",
                                              legend="{textStyle: {color: 'black', fontSize: 16}}",
                                              legend.numberFormat="{numberFormat:'.'}",
                                              backgroundColor="black", sizeAxis="{minValue: 1,  maxSize: 25}", 
@@ -323,7 +324,7 @@ GVisD <-GVisD[order(GVisD$WC.UC.dist.km, -GVisD$pop.that.year, na.last=TRUE) , ]
 GVisD <- GVisD[!duplicated(GVisD$WCUC.city),]
 GVisD["Population"] <- GVisD$pop.that.year
 GVisD["Size.1.to.10"] <- round(5*(GVisD$Rank01.C+GVisD$Rel.CS))
-GVisD["Victims"] <- GVisD$Total.Number.of.Victim
+GVisD["Victims"] <- round(GVisD$Total.Number.of.Victim)
 TurkeyAll <- gvisGeoChart(GVisD, 
                           locationvar='Latlong',
                           colorvar = "Population", 
@@ -360,7 +361,7 @@ GVisD <-GVisD[order(-GVisD$pop.that.year, na.last=TRUE) , ]
 GVisD <- GVisD[!duplicated(GVisD$WCUC.city),]
 GVisD["Population"] <- GVisD$pop.that.year
 GVisD["Size.1.to.10"] <- round(5*(GVisD$Rank01.C+GVisD$Rel.CS))
-GVisD["Victims"] <- GVisD$Total.Number.of.Victim
+GVisD["Victims"] <- round(GVisD$Total.Number.of.Victim)
 
 
 TurkeyNOistanbul <- gvisGeoChart(GVisD,
