@@ -60,7 +60,7 @@ topiso2cGDT <- split(Stat1GTD, (Stat1GTD)$iso2c)
 topiso2cGDT <- c(list(Stat1GTD), topiso2cGDT)
 
 model.early.per.region <- lapply(topiso2cGDT, function (x) {lm(DV.Kilcullen ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year, weight=weightGTD, data = x)})
-stargazer(model.early.per.region, type="latex", out="Analysis Test/Regressions Top 10 Countries/Peace1988-2013.TIME&URBAN.html", 
+stargazer(model.early.per.region, type="latex", out="Analysis Test/Regressions Top 10 Countries/Peace1998-2013.TIME&URBAN.html", 
           title="Top 10 Targeted Countries: Peacetime / Non-Government Targets / 1998-2013 (Linear Regression)", 
           column.labels=c("Top10", "Algeria", "Colombia","India", "Nigeria", "Pakistan","Philippines", "Russia", "Somalia", 
                           "Thailand","Yemen"), dep.var.labels=c("Urban, Networked, Crowded, Littoral Targets Location (% Points of Countries Maximum)"),
@@ -69,7 +69,7 @@ stargazer(model.early.per.region, type="latex", out="Analysis Test/Regressions T
 
 
 model.early.per.region <- lapply(topiso2cGDT, function (x) {lm(DV.Kilcullen ~ IV.Time, weight=weightGTD, data = x)})
-stargazer(model.early.per.region, type="latex", out="Analysis Test/Regressions Top 10 Countries/Peace1988-2013.TIME.html", 
+stargazer(model.early.per.region, type="latex", out="Analysis Test/Regressions Top 10 Countries/Peace1998-2013.TIME.html", 
           title="Top 10 Targeted Countries: Peacetime / Non-Government Targets / 1998-2013 (Linear Regression)", 
           column.labels=c("Top10", "Algeria", "Colombia","India", "Nigeria", "Pakistan","Philippines", "Russia", "Somalia", 
                           "Thailand","Yemen"), dep.var.labels=c("Urban, Networked, Crowded, Littoral Targets Location (% Points of Countries Maximum)"),
@@ -77,7 +77,7 @@ stargazer(model.early.per.region, type="latex", out="Analysis Test/Regressions T
 
 
 model.early.per.region <- lapply(topiso2cGDT, function (x) {lm(DV.Kilcullen ~ IV.Time + IV.Pop.Coastal.Dist + IV.Pop.Coastal.Dist_Year, weight=weightGTD, data = x)})
-stargazer(model.early.per.region, type="latex", out="Analysis Test/Regressions Top 10 Countries/Peace1988-2013.TIME&LITORAL.html", 
+stargazer(model.early.per.region, type="latex", out="Analysis Test/Regressions Top 10 Countries/Peace1998-2013.TIME&LITORAL.html", 
           title="Top 10 Targeted Countries: Peacetime / Non-Government Targets / 1998-2013 (Linear Regression)", 
           column.labels=c("Top10", "Algeria", "Colombia","India", "Nigeria", "Pakistan","Philippines", "Russia", "Somalia", 
                           "Thailand","Yemen"), dep.var.labels=c("Urban, Networked, Crowded, Littoral Targets Location (% Points of Countries Maximum)"),
