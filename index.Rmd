@@ -4,15 +4,20 @@ author: "Sascha Schuster, Lukas Bretzinger, Cameron Reed"
 date: "Thursday, November 13, 2014"
 output:
   html_document:
-    theme: flatly
+    css: ~/Desktop/test.css
     highlight: espresso
     number_sections: yes
     setspace: doublespacing
+    theme: flatly
 bibliography: UTBiblio.bib
 ---
 <p style='text-align: center;'>
-<img align="center" src="/Users/cameronreed/Desktop/GTDClean/megacity.jpg" /> 
+<img align="center" src="https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Images/urbanpic.jpg" /> 
 </p>
+<p style='text-align: Left;'>*This, then, is the suite of problems--framed by the megatrends of population growth, urbanization, littoralization, and connectedness--that will define the environment for future conflict, and for every aspect of life, in the next generation.*</p>
+
+<p style='text-align: right;'>*--David Kilcullen*</p>
+
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
@@ -23,12 +28,22 @@ PreGTD <- read.csv("PreAnalysis/pregtd.csv", header=TRUE)
 
 Populations, cities, and flows of people are rapidly outgrowing the spaces in which they live.
 
-<p style='text-align: center;'>(**Interactive Map of Attacks in the Near East**)</p>
+<p style='text-align: center;'>**Interactive Map of Attacks in the Near East**</p>
 
 <p style='text-align: center;'>
 
 And how about this?
 
+<div align="center">
+<iframe width="619" height="360"
+src="http://htmlpreview.github.io/?https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Analysis%20Test/googleVis/Region_min10Victims_before04.html"
+frameborder="0" allowfullscreen>
+  </iframe></div>
+
+Double spacing
+Margins
+Font
+Background
 
 ##Data Categories & Sources
 
