@@ -4,7 +4,7 @@ author: "Sascha Schuster, Lukas Bretzinger, Cameron Reed"
 date: "Thursday, November 13, 2014"
 output:
   html_document:
-    css: ~/Desktop/test.css
+    css: knit.css
     highlight: espresso
     number_sections: yes
     setspace: doublespacing
