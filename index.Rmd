@@ -14,7 +14,7 @@ bibliography: UTBiblio.bib
 <p style='text-align: center;'>
 <img align="center" src="https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Images/urbanpic.jpg" /> 
 </p>
-<p style='text-align: Left;'>*This, then, is the suite of problems--framed by the megatrends of population growth, urbanization, littoralization, and connectedness--that will define the environment for future conflict, and for every aspect of life, in the next generation.*</p>
+<p style='text-align: Left;'>*This, then, is the suite of problems -- framed by the megatrends of population growth, urbanization, littoralization, and connectedness -- that will define the environment for future conflict, and for every aspect of life, in the next generation.*</p>
 
 <p style='text-align: right;'>*--David Kilcullen*</p>
 
@@ -26,67 +26,60 @@ PreGTD <- read.csv("PreAnalysis/pregtd.csv", header=TRUE)
 <br>
 <br>
 
-Populations, cities, and flows of people are rapidly outgrowing the spaces in which they live.
+## Intro
 
-<p style='text-align: center;'>**Interactive Map of Attacks in the Near East**</p>
+The world is in flames, political violence concerns us all. Why does it occur? How to  respond?
 
-<p style='text-align: center;'>
+David Kilcullen, an influencal counterinsurgency expert published his new book  called *Out of the Mountains. The Coming Age of the Urban Guerilla* [@Kilcullen2013]. He describes political violence as something that used to occur in small villages far from big cities and urban life. And he predicts that this was about to change. In the future, political violence will happen in the completely opposite space: In big cities that are highly connected with each other, crowded and often close to the coastline. That is the space of future conflict. 
 
-And how about this?
+
+
+<p style='text-align: center;'>*Where does political violence happen?*</p>
+<p style='text-align: center;'>*Is it moving to the urban, connected, crowded, littoral space?*</p>
+  
+  
+
+
+We know that people historically have always preferred to live at the coastal, and that there is a global urbanization - people moving to the cities rather than living in villages. But Kilcullen goes further. He suggests that political violence is migrating towards the urban, crowded, connected, and littoral space faster than people are. We wanted to find out whether that may be true.
+
+Have a look at our interactive map. What you see are bubbles that stand for cities in the Middle East: The size stands for the number of inhabitants, the color for the victims of terrorist from 1990-2003. 
 
 <div align="center">
 <iframe width="619" height="360"
 src="http://htmlpreview.github.io/?https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Analysis%20Test/googleVis/Region_min10Victims_before04.html"
 frameborder="0" allowfullscreen>
   </iframe></div>
-
-
-# Intro
-
-At the latest since 9/11, terrorism - acts of political violence - concerns us all. Researchers across the world have analyzed political violence from a lot of angles:
-  * Why does terrorism occur?
-  * What is unique about some attacks?
-  * Is something similar with attacks?
-  * How do we fight terrorism?
   
-We are interested in two related questions:
+And now the same for 2004 until the end of our dataset in 2013. Bagdad changed the scale with over 51.000 victims dramatically. Why? May would argue that the Iraq War changed the region. After the war ended, several groups started to conduct attacks, around the beginning of 2004, with a focus on capital. But there are other changes everywhere. 
 
-  * Where does political violence happen?
-  * Does terrorism change?
-  
-David Kilcullen, an Australian counterinsurgency expert has published book in 2013 called *Out of the Mountains. The Coming Age of the Urban Guerilla* [@Kilcullen2013]. He describes political violence as something that used to occur in small villages far from big cities and urban life. Small, landlocked, Rural communities. And he predicts that this was about to change. In the future, Kilcullen says, Political Violence will happen in the completely opposite space: In big cities that are highly connected with each other and probably close to the coastline. Political violence, Kilcullen says, will move to the urban, connected, crowded, litoral space. 
-
-
-At a first glance, this actually does not seem to surprising: We know that people historically have always preferred to live in coastal space, and that there is a global trend towards urbanization - people moving to the cities rather than living in villages.
-
-But Kilcullen goes farther: What he suggests is not only that as populations move, terrorists move with them, but that terrorists will move to these place even faster than the rest of the population. Terrorists were a kind of "Vanguard" being in urban environments even quicker than everybody else.
-
-We wanted to find out whether that may be true.
-
-# An Example
-
-Take a look at the map above, it illustrates acts of political violence before 2004 - why 2004? We are sure you remember the Iraq War. After the war ended, several groups started to conduct attacks (around the beginning of 2004). If you check the map above, you see a map of attacks happening in the middle east before the insurgency in Iraq. Farther below, you can compare that with a map of political violence in Iraq since 2004 (we end our dataset in 2013)
+<div align="center">
+<iframe width="619" height="360"
+src="http://htmlpreview.github.io/?https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Analysis%20Test/googleVis/Region_min10Victims_after04.html"
+frameborder="0" allowfullscreen>
+  </iframe></div>
 
 
-# What We look at
 
 
-We conduct a statistical analysis to see if over the past years, acts of political violence were in fact more likely to happen in urban environments than people moving to these places. For this, we gather data from a lot of different sources:
-Our main dataset is the Global Terrorism Database, a huge dataset that contains over 120,000 violent attacks since 1970.
-Additionally, we want to know a lot about the environment in which these attacks take place. Alas, this information is not included in the GTD. So we have gathered a lot of information on cities in all countries of the world. They come from the World Bank, Wikipedia, and other open source information and include things like:
+## What We look at
 
- * Global nightly light eminations
- * Distance of all communities of the world from the coastline
- * Population density across the world
+We conduct a statistical analysis to see if over the past years, acts of political violence were in fact more likely to happen in urban environments, or it is just that people are moving to these places. For this, we gather data from a lot of different sources:
+Our main dataset is the Global Terrorism Database, a huge dataset that contains over 120,000 violent attacks since 1970 [@START2013].
+Additionally, we want to know a lot about the environment in which these attacks take place. This information is not included in the GTD. So we have gathered a lot of information on cities in all countries of the world. Some come from the World Bank, some even from Wikipedia, but all our source include:
+
+ * Global night light eminations capured by satelites
+ * Distance of ever place in the world to the coastline 
+ * Travel distance to the next bigger city
+ * The type of landcover around
+ * Population density
  * Economic activity
- * The travel time from each place of the world to the next bigger city
- 
- 
-If you have ever worked with data yourself, you probably know that the most of the time you spend with it is on making it fit your needs: Cleaning, Tidying, Calculating. All of our datasets have a lot of missing information and we needed a lot of work to align things like city and country names and find all the missing values of information.
+ * And of course the change over time for all these 
 
-# A Little Visualization
+If you have ever worked with data yourself, you probably know that the most of the time you spend with it is on making it fit your needs: Finding, gathering,  cleaning, tidying, calculating, merging. All of our datasets have a lot of missing information and we needed a lot of work to align things like city and country names and find all the missing values of information.
 
-We have taken a couple of attacks from the GTD that happend in Turkey (just to show you what we are doing, there is no particular reason why Turkey). Here is a little description of each of them and what happened there:
+## An example of how its done
+
+We have taken a couple of attacks from the GTD that happend in Turkey just to show  what we are doing. Here is a little description of each of them and what happened there:
 
 
 * 2003-11-14, Istanbul: Two car bombings by the militant Islamic group, Great East Islamic Raiders Front (IBDA-C - Islami Buyuk Dogu Akincilar Cephesi), on synagogues in Istanbul, Turkey, killed at least twenty people and injured 302 others. One of the two almost simultaneous blasts occurred at the Beth Israel Synagogue, damaging the building and several cars. Numerous people were reportedly killed and injured in the bombing. The group identified itself in a telephone call to the Anadolu News Agency.
@@ -110,32 +103,46 @@ We have taken a couple of attacks from the GTD that happend in Turkey (just to s
  * 2006-08-28, Antalya: A car filled with explosives exploded 80 meters from the Russian Consulate General in Antalya, Turkey, killing three people and wounding at least 20 more. No one claimed responsibility for the attack, but authorities believed the Kurdish separatists were to blame.
  
  
-To illustrate a little bit better what we are actually doing behind the fancy calculations, have a look at all these maps, where you can see examples of what we analyze and also show you where the attacks the GTD described above happened:
+ 
+To illustrate a little bit better what we are actually doing behind the fancy calculations, have a look at all these maps. They are examples of how we gather additional information on the 130.000 incidents of political violence in the global database.
 
-This map shows you how much light communities in Turkey emenate at night - which is a sign for how many people live there:
+This shows you how much light communities emenate at night - a sign for people with afordable electricity.
+
+
+<p style='text-align: Center;'>**Nightlight**</p>
 ![Light](https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Images/LightTurkey.png)
 
+Now we know something more about these places. We gather this data for all 130.000 incidents in the Global Terrorism Database. But there is much more, like travel distance to the next biggest city, in minutes that would need to be traveled.
 
-Here you can see how long people need to get from where they live to the next biggest city:
+<p style='text-align: Center;'>**Road Access**</p>
 ![Access](https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Images/AccessTurkey.png)
 
-
-This shows you how far away from the coast communities are:
+<p style='text-align: Center;'>**Distance to Coast**</p>
 ![Coast](https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Images/CoastTurkey.png)
 
-And finally, population density:
+<p style='text-align: Center;'>**Population Density**</p>
 ![Dens](https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Images/DensTurkey.png)
 
 
-# Analysis and Results
+## Analysis and Results
 
-After we used all the information we collected, arranged them in a certain way (you can get some impression from looking at the maps above), we feed all of this data into a statistical model. The outcome is this regression table, which tells us, how much our Independent Variables (the change in some population data over time) influence the Dependent Variables (the target environment attackers chose)
+After we used all the information we collected, arranged them in a certain way (you can get some impression from looking at the maps above), we feed all of this data into a statistical model. The outcome is this regression table, which tells us, how much our independent variables (like urbanisation) influence the dependent variables (the target violent extrimist chose to carry out an attack).
+
+<p style='text-align: Center;'>Linear Regression - Country Fixed Effects - 1998-2013</p>
+![Dens](https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Images/Regression.png)
+
+So what do we see here? A little bit surprisingly, the outcome of our analysis is quite the oppsite of David Kilcullen's predictions. In fact, violent extremists do not attack urban places more frequently than they grow anyway. Quite the opposite.
 
 
 
-So what do we see here? A little bit surprisingly, the outcome of our analysis is quite the oppsite of David Kilcullen's predictions. In fact, terrorists do not seem to be faster than everybody else - they are slower! At least when it comes to moving to Urban environments. Sometimes, really putting your fingers on a definity statistical effect is difficult. We are pretty sure we have a good idea of what happens in urban environments, but we want to do some more work when it comes to littoral, crowded, and connected environments. They often overlap with urban ones, but not always. And we don't try desperately find an effect - but if we don't find one, we at least want to make sure that is correct.
+<p style='text-align: Center;'>**That was just the beginning of our analysis!**</p>
 
-We hoped you like this website, and we would be happy to hear from you! Feel free to send us a message!
+We hoped you like this website, and we would be happy to hear from you. Feel free to send us a message, ask us for more regression tables and our data if you like!
+
+
+
+
+
 
 Sascha - saschust@syr.edu
 Lukas - lbretzin@syr.edu
