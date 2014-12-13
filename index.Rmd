@@ -21,7 +21,7 @@ bibliography: UTBiblio.bib
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 source("0 - Loading Packages.R", chdir=FALSE)
-PreGTD <- read.csv("PreAnalysis/pregtd.csv", header=TRUE)
+PreGTD <- read.csv("pregtd.csv", header=TRUE)
 ```
 <br>
 <br>
