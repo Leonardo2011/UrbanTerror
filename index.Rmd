@@ -133,7 +133,13 @@ After we used all the information we collected, arranged them in a certain way (
 
 
 
+So what do we see here? A little bit surprisingly, the outcome of our analysis is quite the oppsite of David Kilcullen's predictions. In fact, terrorists do not seem to be faster than everybody else - they are slower! At least when it comes to moving to Urban environments. Sometimes, really putting your fingers on a definity statistical effect is difficult. We are pretty sure we have a good idea of what happens in urban environments, but we want to do some more work when it comes to littoral, crowded, and connected environments. They often overlap with urban ones, but not always. And we don't try desperately find an effect - but if we don't find one, we at least want to make sure that is correct.
 
+We hoped you like this website, and we would be happy to hear from you! Feel free to send us a message!
+
+Sascha - saschust@syr.edu
+Lukas - lbretzin@syr.edu
+Cameron - ccreed@syr.edu
 
 
 
