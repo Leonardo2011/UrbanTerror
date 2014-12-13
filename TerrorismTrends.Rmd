@@ -108,7 +108,7 @@ We gathered as much of our data for all years of observations. Some data was not
 
   * Proximity to Coast: landlocked countries are NA (not time variant)
   
-**DV.Kilcullen:** a simple addition of all of the above
+**DV.Kilcullen:** a simple aggregation of all of the above
 
 
 ## Independent Variables
@@ -117,11 +117,11 @@ We gathered as much of our data for all years of observations. Some data was not
 
 **IV.Urban.Share:** total share of country's population living in urban environments
 
-**IV.Urban.Share*Year:** interaction variable
+**IV.Urban.Share_Year:** interaction variable
 
 **IV.Pop.Coastal.Dist:** country's population average proximity to the coast
 
-**IV.Pop.Coastal.Dist*Year:** interaction variable
+**IV.Pop.Coastal.Dist_Year:** interaction variable
 
 -------------
 
@@ -177,8 +177,8 @@ Given the varied context of GTD data collection, the database is another source 
 **Spelling Inconsistencies:** The main challenge across and within all datasets is the huge variation in spelling of countries and cities, which triggered an extensive hand recoding process. We developed a standardized style for country and city names and applied that to all data sets. 
 
  - GTD ~ 120k rows
- - Cities.1. ~ 60k rows
- - Cities.2. ~ 100k rows
+ - cities.a. ~ 60k rows
+ - cities.b. ~ 100k rows
  - Urban Centers ~ 500 rows
 
 **Coding Gaps, Information Inconsistencies, and Lack of Detail:** All datasets containing georeferenceable data contained this information on varying scales and for different time periods. For example, while some attacks in the GTD were probably geolocated using GPS guidance, others lack their own geoposition and are only presented using the central point of the city or district. When possible, we tried to define position data. 
@@ -224,7 +224,7 @@ To illustrate our approach, we have selected a subset of example attacks, which 
 
 These are 10 selected attacks in Turkey from 1998 to 2013 in different environments. Apart from human damage (number of killed and wounded), we also display the relative share of nightline, access to roads, and proximity to coasts compared to the rest of the cities in Turkey on a level from 0 - 100.
 
-**Table.1** Example Attacks in Turkey 
+**Table.1** Example Attacks in Turkey
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, cache = TRUE, results='asis'}
 
 Rmdattacks <- read.csv("Rmdattacks.csv")
@@ -232,7 +232,6 @@ Rmdattacks <- read.csv("Rmdattacks.csv")
 knitr::kable(Rmdattacks, format = "markdown")
 ```
 
-*"inUC": Attack is atributed to an Urban Center; "Kill.Wound": Sum of killed and wounded individuals due to the attack; "Light"", "Access"", "Prox.Coast"" and "Dens"" refer to geodata of the location.*
 
 **Attack Summaries** [@START2013]
 
@@ -258,7 +257,7 @@ knitr::kable(Rmdattacks, format = "markdown")
  
 ## Map Visualisation
 
-
+**Figure 1:** Illumination levels in Turkey and example attacks
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, cache = FALSE}
 # Show lightmap
@@ -293,21 +292,11 @@ rm(LightLayer)
 LightMap
 ```
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-**Figure 1:** (above) Illumination levels in Turkey and example attacks
 
-
----------
-=======
-=======
-
->>>>>>> 9fe33d0ef29b19fb102d02f538dcc9a07c44976c
 ---------
 
 
 **Figure 2:** Road accessibility in Turkey and example attacks
->>>>>>> origin/master
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, cache = FALSE}
 # Show Accessmap
@@ -349,21 +338,11 @@ rm(AccessLayer)
 AccessMap
 ```
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-**Figure 2:** (above) Road accessibility in Turkey and example attacks
 
-----------
-
-=======
-=======
-
->>>>>>> 9fe33d0ef29b19fb102d02f538dcc9a07c44976c
 ----------
 
 
 **Figure 3:** Distance to coast of locations in Turkey and example attacks
->>>>>>> origin/master
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, cache = FALSE}
 # Proximity to Coast
@@ -403,21 +382,11 @@ CoastMap <- BaseMap + geom_tile(aes(x = longitude, y = latitude, fill=Coastdist)
 CoastMap
 ```
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-**Figure 3:** (above) Distance to coast of locations in Turkey and example attacks
 
-
---------
-=======
-=======
-
->>>>>>> 9fe33d0ef29b19fb102d02f538dcc9a07c44976c
 --------
 
 
 **Figure 4:** Population density in Turkey and example attacks
->>>>>>> origin/master
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, cache = FALSE}
 # Population Density
@@ -442,18 +411,10 @@ DensMap <- BaseMap + geom_tile(aes(x = longitude, y = latitude-0.1, fill=Density
            theme(legend.position="none") + 
         geom_text(aes(x=longitude+0.3, y=latitude+0.08, fontface="bold", color = inUC, fontsize = 5), data=ExA, label=ExA$Date) +
            scale_colour_manual(values = c("firebrick","pink"))
+DensMap
 ```
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-**Figure 4:** (above) Population density in Turkey and example attacks
 
-
-=======
->>>>>>> origin/master
-=======
-
->>>>>>> 9fe33d0ef29b19fb102d02f538dcc9a07c44976c
 ------------
 
 
@@ -468,15 +429,13 @@ As of now, we were not able to clean the full GTD dataset and interpolate all mi
  
 For the current project, we have one hypothesis to test: 
 
-Political violence moves to urban, crowded, connected and littoral spaces at a higher pace than the countries population movement.
+ **H1:**Political violence moves to urban, crowded, connected and littoral spaces at a higher pace than the countries population movement.
 
 
 ---------
 
 
 # Results
-
-**Regression:** Linear, Fixed Effects Model, Country Panel Data, 1998-2013, w/o Government Targets, w/o Countries with less than 20 attacks or 40 victims
 
 ![regression](Images/Regression.png)
 
@@ -496,7 +455,7 @@ We find no statistically significant or strong acceleration effect for the chang
 
 We find some minor, negative effect. Similar to the urban population share, political violence does move towards the littoral space to a lesser extent than the population is.
 
-## Population's Coastal Distance*Time
+## Population's Coastal DistanceTime
 
 Here, we find very weak, but statistical significant negative effect for most dependent variables.
 
