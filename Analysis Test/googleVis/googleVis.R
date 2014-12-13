@@ -81,7 +81,7 @@ world1 <- gvisGeoChart(GVisD,
                                                legend="{textStyle: {color: 'black', fontSize: 16}}",
                                                legend.numberFormat="{numberFormat:'.'}",
                                   backgroundColor="black", sizeAxis="{minValue: 1,  maxSize: 25}", 
-                                  width=1112, height=694, markerOpacity=0.4))
+                                  width=556, height=343, markerOpacity=0.4))
 plot(world1)
 
 cat(world1$html$chart, file="Analysis Test/googleVis/WorldATpeace_min1000Victims.html")
@@ -116,7 +116,7 @@ world2 <- gvisGeoChart(GVisD,
                                    legend="{textStyle: {color: 'black', fontSize: 16}}",
                                    legend.numberFormat="{numberFormat:'.'}",
                                    backgroundColor="black", sizeAxis="{minValue: 1,  maxSize: 25}", 
-                                   width=1112, height=694, markerOpacity=0.4))
+                                   width=556, height=343, markerOpacity=0.4))
 plot(world2)
 
 cat(world2$html$chart, file="Analysis Test/googleVis/WorldATpeace_min500Victims_before90.html")
@@ -152,7 +152,7 @@ world3 <- gvisGeoChart(GVisD,
                                    legend="{textStyle: {color: 'black', fontSize: 16}}",
                                    legend.numberFormat="{numberFormat:'.'}",
                                    backgroundColor="black", sizeAxis="{minValue: 1,  maxSize: 25}", 
-                                   width=1112, height=694, markerOpacity=0.4))
+                                   width=556, height=343, markerOpacity=0.4))
 plot(world3)
 
 cat(world3$html$chart, file="Analysis Test/googleVis/WorldATpeace_min500Victims_after90.html")
@@ -186,7 +186,7 @@ world4 <- gvisGeoChart(GVisD,
                                    legend="{textStyle: {color: 'black', fontSize: 16}}",
                                    legend.numberFormat="{numberFormat:'.'}",
                                    backgroundColor="black", sizeAxis="{minValue: 1,  maxSize: 25}", 
-                                   width=1112, height=694, markerOpacity=0.4))
+                                   width=556, height=343, markerOpacity=0.4))
 
 cat(world4$html$chart, file="Analysis Test/googleVis/World_min500Victims_before90.html")
 plot(world4)
@@ -221,7 +221,7 @@ world5 <- gvisGeoChart(GVisD,
                                     legend="{textStyle: {color: 'black', fontSize: 16}}",
                                     legend.numberFormat="{numberFormat:'.'}",
                                     backgroundColor="black", sizeAxis="{minValue: 1,  maxSize: 25}", 
-                                    width=1112, height=694, markerOpacity=0.4))
+                                    width=556, height=343, markerOpacity=0.4))
 plot(world5)
 
 cat(world5$html$chart, file="Analysis Test/googleVis/World_min500Victims_after90.html")
@@ -261,7 +261,7 @@ regionbefore2004 <- gvisGeoChart(GVisD,
              legend="{textStyle: {color: 'black', fontSize: 16}}",
              legend.numberFormat="{numberFormat:'.'}",
              backgroundColor="black", sizeAxis="{minValue: 1,  maxSize: 25}", 
-             width=1112, height=694, markerOpacity=0.5, region=145))
+             width=556, height=343, markerOpacity=0.5, region=145))
 
 plot(regionbefore2004)
 
@@ -299,7 +299,7 @@ regionafter2004 <- gvisGeoChart(GVisD,
                                              legend="{textStyle: {color: 'black', fontSize: 16}}",
                                              legend.numberFormat="{numberFormat:'.'}",
                                              backgroundColor="black", sizeAxis="{minValue: 1,  maxSize: 25}", 
-                                             width=1112, height=694, markerOpacity=0.5, region=145))
+                                             width=556, height=343, markerOpacity=0.5, region=145))
 plot(regionafter2004)
 
 cat(regionafter2004$html$chart, file="Analysis Test/googleVis/Region_min10Victims_after04.html")
@@ -334,7 +334,7 @@ TurkeyAll <- gvisGeoChart(GVisD,
                                        legend="{textStyle: {color: 'black', fontSize: 16}}",
                                        legend.numberFormat="{numberFormat:'.'}",
                                        backgroundColor="black", dataMode="markers", 
-                                       displayMode='text', width=1112, height=694, sizeAxis="{minValue: 60,  maxSize: 70}"))
+                                       displayMode='text', width=556, height=343, sizeAxis="{minValue: 60,  maxSize: 70}"))
 plot(TurkeyAll)
 
 cat(TurkeyAll$html$chart, file="Analysis Test/googleVis/Turkey.html")
@@ -373,7 +373,7 @@ TurkeyNOistanbul <- gvisGeoChart(GVisD,
                                               legend="{textStyle: {color: 'black', fontSize: 16}}",
                                               legend.numberFormat="{numberFormat:'.'}",
                                               backgroundColor="black", dataMode="markers", 
-                                              displayMode='text', width=1112, height=694, sizeAxis="{minValue: 20,  maxSize: 50}"))
+                                              displayMode='text', width=556, height=343, sizeAxis="{minValue: 20,  maxSize: 50}"))
 plot(TurkeyNOistanbul)
 
 cat(TurkeyNOistanbul$html$chart, file="Analysis Test/googleVis/TurkeyNOistanbul.html")
