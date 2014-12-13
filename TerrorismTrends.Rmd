@@ -108,7 +108,7 @@ We gathered as much of our data for all years of observations. Some data was not
 
   * Proximity to Coast: landlocked countries are NA (not time variant)
   
-**DV.Kilcullen:** a simple aggregation of all of the above
+**DV.Kilcullen:** a simple addition of all of the above
 
 
 ## Independent Variables
@@ -117,11 +117,11 @@ We gathered as much of our data for all years of observations. Some data was not
 
 **IV.Urban.Share:** total share of country's population living in urban environments
 
-**IV.Urban.Share_Year:** interaction variable
+**IV.Urban.Share*Year:** interaction variable
 
 **IV.Pop.Coastal.Dist:** country's population average proximity to the coast
 
-**IV.Pop.Coastal.Dist_Year:** interaction variable
+**IV.Pop.Coastal.Dist*Year:** interaction variable
 
 -------------
 
@@ -177,8 +177,8 @@ Given the varied context of GTD data collection, the database is another source 
 **Spelling Inconsistencies:** The main challenge across and within all datasets is the huge variation in spelling of countries and cities, which triggered an extensive hand recoding process. We developed a standardized style for country and city names and applied that to all data sets. 
 
  - GTD ~ 120k rows
- - cities.a. ~ 60k rows
- - cities.b. ~ 100k rows
+ - Cities.a. ~ 60k rows
+ - Cities.b. ~ 100k rows
  - Urban Centers ~ 500 rows
 
 **Coding Gaps, Information Inconsistencies, and Lack of Detail:** All datasets containing georeferenceable data contained this information on varying scales and for different time periods. For example, while some attacks in the GTD were probably geolocated using GPS guidance, others lack their own geoposition and are only presented using the central point of the city or district. When possible, we tried to define position data. 
@@ -232,6 +232,7 @@ Rmdattacks <- read.csv("Rmdattacks.csv")
 knitr::kable(Rmdattacks, format = "markdown")
 ```
 
+*"inUC": Attack is atributed to an Urban Center; "Kill.Wound": Sum of killed and wounded individuals due to the attack; "Light"", "Access"", "Prox.Coast"" and "Dens"" refer to geodata of the location.*
 
 **Attack Summaries** [@START2013]
 
@@ -254,10 +255,12 @@ knitr::kable(Rmdattacks, format = "markdown")
  * 2006-08-28, Antalya: Four people were killed and approximately 65 were injured when a bomb attached to a motorcycle detonated in Antalya, Turkey. No one claimed responsibility for the attack.
 
  * 2006-08-28, Antalya: A car filled with explosives exploded 80 meters from the Russian Consulate General in Antalya, Turkey, killing three people and wounding at least 20 more. No one claimed responsibility for the attack, but authorities believed the Kurdish separatists were to blame.
+
+
+
  
 ## Map Visualisation
 
-**Figure 1:** Illumination levels in Turkey and example attacks
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, cache = FALSE}
 # Show lightmap
@@ -292,11 +295,15 @@ rm(LightLayer)
 LightMap
 ```
 
+**Figure 1:** (above) Illumination levels in Turkey and example attacks
+
+
+
 
 ---------
 
 
-**Figure 2:** Road accessibility in Turkey and example attacks
+
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, cache = FALSE}
 # Show Accessmap
@@ -338,11 +345,13 @@ rm(AccessLayer)
 AccessMap
 ```
 
+**Figure 2:** (above) Road accessibility in Turkey and example attacks
+
 
 ----------
 
 
-**Figure 3:** Distance to coast of locations in Turkey and example attacks
+
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, cache = FALSE}
 # Proximity to Coast
@@ -383,10 +392,14 @@ CoastMap
 ```
 
 
+**Figure 3:** (above) Distance to coast of locations in Turkey and example attacks
+
+
+
+
 --------
 
 
-**Figure 4:** Population density in Turkey and example attacks
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, cache = FALSE}
 # Population Density
@@ -414,6 +427,7 @@ DensMap <- BaseMap + geom_tile(aes(x = longitude, y = latitude-0.1, fill=Density
 DensMap
 ```
 
+**Figure 4:** (above) Population density in Turkey and example attacks
 
 ------------
 
@@ -429,7 +443,7 @@ As of now, we were not able to clean the full GTD dataset and interpolate all mi
  
 For the current project, we have one hypothesis to test: 
 
- **H1:**Political violence moves to urban, crowded, connected and littoral spaces at a higher pace than the countries population movement.
+Political violence moves to urban, crowded, connected and littoral spaces at a higher pace than the countries population movement.
 
 
 ---------
@@ -437,7 +451,11 @@ For the current project, we have one hypothesis to test:
 
 # Results
 
+
+**Regression:** Linear, Fixed Effects Model, Country Panel Data, 1998-2013, w/o Government Targets, w/o Countries with less than 20 attacks or 40 victims
+
 ![regression](Images/Regression.png)
+
 
 ## Time
 
@@ -455,7 +473,7 @@ We find no statistically significant or strong acceleration effect for the chang
 
 We find some minor, negative effect. Similar to the urban population share, political violence does move towards the littoral space to a lesser extent than the population is.
 
-## Population's Coastal DistanceTime
+## Population's Coastal Distance*Time
 
 Here, we find very weak, but statistical significant negative effect for most dependent variables.
 
