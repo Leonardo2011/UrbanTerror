@@ -70,7 +70,6 @@ By stating that terrorism will move into new environments, Kilcullen aims to acc
 
 ------------
 
-
 # Variable Operationalization
 
 Our analysis is inherently time based. Nevertheless, time is not our single independent variable. We also internalize the global trends towards urbanity and littoralness in our independent variable and estimate their effect on attacks in urban/crowded/connected/littoral environments.
@@ -125,7 +124,6 @@ We gathered as much of our data for all years of observations. Some data was not
 
 -------------
 
-
 # Data
 
 ## Data Sets
@@ -166,7 +164,6 @@ Given the varied context of GTD data collection, the database is another source 
 **a. Civil War** We include civil war dummy variables because civil wars are likely to exponentially increase the amount of terror attacks in a given year and city. It comes from the [Correlates of War](http://www.correlatesofwar.org/) project and is called the Intra-State War Database 4.0 [@COW]. 
 
 ----------
-
 
 ##Data Cleaning
 
@@ -211,10 +208,7 @@ With the new dataset, we can set a parameter of distance around each urban cente
 
 Finally, we merge our GTD and the combined city-urbancenter dataset. We use a merging variable, which is a clean character string in the form of *countrynamecityname* in order to avoid false positives of similar city names across countries. Due to our previously unified country and city coding in all datasets, we find a city (thus, population size and also closest urban center) for around 70% of all 120k terror attacks in the GTD. As the GTD often lacks any city name and has "unknown" or area codings (e.g. "District xyz"), 70% is a satisfying result given complexity and resource constraints. 
 
-
 ----------
-
-
 
 # Visualization
 
@@ -254,7 +248,9 @@ knitr::kable(Rmdattacks, format = "markdown")
  * 2006-08-28, Antalya: Four people were killed and approximately 65 were injured when a bomb attached to a motorcycle detonated in Antalya, Turkey. No one claimed responsibility for the attack.
 
  * 2006-08-28, Antalya: A car filled with explosives exploded 80 meters from the Russian Consulate General in Antalya, Turkey, killing three people and wounding at least 20 more. No one claimed responsibility for the attack, but authorities believed the Kurdish separatists were to blame.
- 
+
+---------
+
 ## Map Visualisation
 
 **Figure 1:** Illumination levels in Turkey and example attacks
@@ -292,9 +288,7 @@ rm(LightLayer)
 LightMap
 ```
 
-
 ---------
-
 
 **Figure 2:** Road accessibility in Turkey and example attacks
 
@@ -338,9 +332,7 @@ rm(AccessLayer)
 AccessMap
 ```
 
-
 ----------
-
 
 **Figure 3:** Distance to coast of locations in Turkey and example attacks
 
@@ -382,9 +374,7 @@ CoastMap <- BaseMap + geom_tile(aes(x = longitude, y = latitude, fill=Coastdist)
 CoastMap
 ```
 
-
 --------
-
 
 **Figure 4:** Population density in Turkey and example attacks
 
@@ -413,9 +403,7 @@ DensMap <- BaseMap + geom_tile(aes(x = longitude, y = latitude-0.1, fill=Density
            scale_colour_manual(values = c("firebrick","pink"))
 ```
 
-
 ------------
-
 
 # Analysis
 
@@ -430,9 +418,7 @@ For the current project, we have one hypothesis to test:
 
  **H1:**Political violence moves to urban, crowded, connected and littoral spaces at a higher pace than the countries population movement.
 
-
 ---------
-
 
 # Results
 
@@ -464,9 +450,7 @@ With what we have found, we can now reject our initial hypothesis inspired by Da
 
 Due to the scale of our overall project, we still only have preliminary results. We have gathered vast amounts of data and have progressed very far with a very intensive data cleaning and interpolation method. However, we are still working on improving data quality and hope to achieve higher statistical significance for our findings.
 
-
 ----------
-
 
 # Conclusion
 
@@ -474,5 +458,6 @@ With our fixed effects model using country level panel data, we can reject the n
 
 We will, however, further continue to improve data quality to increase statistical significance of our findings. After that process, we will analyze our data on the group level. 
 
+------------
 
 # References
