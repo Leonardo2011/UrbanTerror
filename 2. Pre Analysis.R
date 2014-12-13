@@ -11,7 +11,7 @@ PreGTD <-PreGTD[order(-PreGTD$eventid, na.last=TRUE) , ]
 Stat1GTD <- subset(PreGTD, select=c(iyear, country_txt, TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, 
                                     Inter.WAR, coast.dist, DV.Target.Urban, DV.Target.Crowded, DV.Target.Connected, DV.Target.Coastal,
                                     DV.Kilcullen, IV.Pop.Coastal.Dist, Pop.Coast.Dist, WCUC.city.old, merge), 
-                   iyear>=1998 & iyear<=2013 & TUPscale!=(0|1|2|3) & Extra.WAR.In==0 & Inter.WAR==0 & Intra.WAR==0)
+                   iyear>=1998 & iyear<=2013 & TUPscale!=(0|1|2|3))
 
 # Exclude countries with less than 20 casaulties or incidents
 Asum <- aggregate(HUMscale ~ country_txt,Stat1GTD,FUN=sum)
@@ -60,6 +60,7 @@ VaR <- merge(DVurb, DVcro, by=c("country_txt", "iyear"), all=TRUE)
 VaR <- merge(VaR, DVcoa, by=c("country_txt", "iyear"), all=TRUE)
 VaR <- merge(VaR, DVcon, by=c("country_txt", "iyear"), all=TRUE)
 VaR <- merge(VaR, IVdst, by=c("country_txt", "iyear"), all=TRUE)
+#VaR<-Stat1GTD
 VaR$IV.Pop.Coastal.Dist[is.na(VaR$DV.Target.Coastal)] <- NA
 rm(DT, DVurb, DVcro, DVcoa, DVcon, IVdst)
 
@@ -88,50 +89,91 @@ VaR$IV.Time <- (VaR$iyear -1998)
 VaR$IV.Urban.Share_Year <- VaR$IV.Time*VaR$IV.Urban.Share
 VaR$IV.Pop.Coastal.Dist_Year <- VaR$IV.Time*VaR$IV.Pop.Coastal.Dist
 
-write.csv(VaR, file="Analysis Test/Data/Analysis.Variables.csv")
-
+#write.csv(VaR, file="Analysis Test/Data/Analysis.Variables.Means.csv")
+#write.csv(VaR, file="Analysis Test/Data/Analysis.Variables.All.csv")
 
 gleich<-VaR 
 #gleich <- read.csv("Analysis Test/Data/Analysis.Variables.csv", header=TRUE)
 
-
 attach(gleich)
-##least squares dummary variable model
-fixed.dum1 <- lm(DV.Target.Urban ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
-                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
-fixed.dum2 <- lm(DV.Target.Connected ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
-                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
-fixed.dum3 <- lm(DV.Target.Coastal ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
-                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
-fixed.dum4 <- lm(DV.Target.Crowded ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
-                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
-fixed.dum5 <- lm(DV.Kilcullen ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
-                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
-
-stargazer(fixed.dum1,fixed.dum2,fixed.dum3,fixed.dum4,fixed.dum5,
-          out="Analysis Test/5x5Panesl_least_squares_fixed.html",type="html", keep=c("IV.Urban.Share", "IV.Time", "IV.Urban.Share_Year",
-                                                                                     "IV.Pop.Coastal.Dist", "IV.Pop.Coastal.Dist_Year"))
 
 
 ##least squares dummary variable model
 fixed.dum1 <- lm(DV.Target.Urban ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
                    IV.Pop.Coastal.Dist_Year, data=gleich) 
-fixed.dum2 <- lm(DV.Target.Connected ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+fixed.dum2 <- lm(DV.Target.Crowded ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
                    IV.Pop.Coastal.Dist_Year, data=gleich) 
-fixed.dum3 <- lm(DV.Target.Coastal ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+fixed.dum3 <- lm(DV.Target.Connected ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
                    IV.Pop.Coastal.Dist_Year, data=gleich) 
-fixed.dum4 <- lm(DV.Target.Crowded ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+fixed.dum4 <- lm(DV.Target.Coastal ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
                    IV.Pop.Coastal.Dist_Year, data=gleich) 
 fixed.dum5 <- lm(DV.Kilcullen ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
                    IV.Pop.Coastal.Dist_Year, data=gleich) 
 
 stargazer(fixed.dum1,fixed.dum2,fixed.dum3,fixed.dum4,fixed.dum5,
-          out="Analysis Test/5x5Panesl_least_squares_notfixed5.html",type="html", keep=c("IV.Urban.Share", "IV.Time", "IV.Urban.Share_Year",
-                                                                                         "IV.Pop.Coastal.Dist", "IV.Pop.Coastal.Dist_Year"))
+          out="Analysis Test/5x5Panesl_least_squares_linear.with.WAR.html",type="html", 
+          keep=c("IV.Urban.Share", "IV.Time", "IV.Urban.Share_Year", "IV.Pop.Coastal.Dist", "IV.Pop.Coastal.Dist_Year"), 
+          column.labels=c("Urban", "Crowded", "Connected", "Littoral", "All Combined"), 
+          dep.var.caption=c("Target Variables (Relative to Country Maximum %)"),
+          covariate.labels=c("Time (Year)", "Urban Population Share (% of total)", "Urban Population Share*Time", 
+                             "Population's Coastal Distance (% of max)", "Population's Coastal Distance*Time"), 
+          align=TRUE,no.space=TRUE,dep.var.labels.include = FALSE, model.numbers = FALSE)
+
+##least squares dummary variable model country fixed effects
+fixed.dum1 <- lm(DV.Target.Urban ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
+fixed.dum2 <- lm(DV.Target.Crowded ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
+fixed.dum3 <- lm(DV.Target.Connected ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
+fixed.dum4 <- lm(DV.Target.Coastal ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
+fixed.dum5 <- lm(DV.Kilcullen ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
+
+stargazer(fixed.dum1,fixed.dum2,fixed.dum3,fixed.dum4,fixed.dum5,
+          out="Analysis Test/5x1Panesl_least_squares_fixed.with.WAR.html",type="html", 
+          keep=c("IV.Urban.Share", "IV.Time", "IV.Urban.Share_Year", "IV.Pop.Coastal.Dist", "IV.Pop.Coastal.Dist_Year"), 
+          column.labels=c("Urban", "Crowded", "Connected", "Littoral", "All Combined"), 
+          dep.var.caption=c("Target Variables (Relative to Country Maximum %)"),
+          covariate.labels=c("Time (Year)", "Urban Population Share (% of total)", "Urban Population Share*Time", 
+                             "Population's Coastal Distance (% of max)", "Population's Coastal Distance*Time"), 
+          align=TRUE,no.space=TRUE,dep.var.labels.include = FALSE, model.numbers = FALSE)
 
 
 
 
 
+##least squares dummary variable model
+#fixed.dum1 <- lm(DV.Target.Urban ~ IV.Time + factor(country) -1, data=gleich) 
+#fixed.dum2 <- lm(DV.Target.Crowded ~ IV.Time + factor(country) -1, data=gleich) 
+#fixed.dum3 <- lm(DV.Target.Connected ~ IV.Time + factor(country) -1, data=gleich) 
+#fixed.dum4 <- lm(DV.Target.Coastal ~ IV.Time + factor(country) -1, data=gleich) 
+#fixed.dum5 <- lm(DV.Kilcullen ~ IV.Time + factor(country) -1, data=gleich) 
 
+#stargazer(fixed.dum1,fixed.dum2,fixed.dum3,fixed.dum4,fixed.dum5,
+#          out="Analysis Test/non-yearly-mean-55x1Panesl_least_squares_fixed.with.WAR.html",type="html", 
+#          keep=c("IV.Urban.Share", "IV.Time", "IV.Urban.Share_Year", "IV.Pop.Coastal.Dist", "IV.Pop.Coastal.Dist_Year"), 
+#          column.labels=c("Urban", "Crowded", "Connected", "Littoral", "All Combined"), 
+ #         dep.var.caption=c("Target Variables (Relative to Country Maximum %)"),
+ #         covariate.labels=c("Time (Year)", "Urban Population Share (% of total)", "Urban Population Share*Time", 
+#                             "Population's Coastal Distance (% of max)", "Population's Coastal Distance*Time"), 
+#          align=TRUE,no.space=TRUE,dep.var.labels.include = FALSE, model.numbers = FALSE, omit.stat = c("f"))
+
+
+##least squares dummary variable model
+#fixed.dum1 <- lm(DV.Target.Urban ~ IV.Time , data=gleich) 
+#fixed.dum2 <- lm(DV.Target.Crowded ~ IV.Time , data=gleich) 
+#fixed.dum3 <- lm(DV.Target.Connected ~ IV.Time , data=gleich) 
+#fixed.dum4 <- lm(DV.Target.Coastal ~ IV.Time , data=gleich) 
+#fixed.dum5 <- lm(DV.Kilcullen ~ IV.Time , data=gleich) 
+
+#stargazer(fixed.dum1,fixed.dum2,fixed.dum3,fixed.dum4,fixed.dum5,
+#          out="Analysis Test/non-yearly-mean-55x1Panesl_least_squares_linear.with.WAR.html",type="html", 
+#          keep=c("IV.Urban.Share", "IV.Time", "IV.Urban.Share_Year", "IV.Pop.Coastal.Dist", "IV.Pop.Coastal.Dist_Year"), 
+#          column.labels=c("Urban", "Crowded", "Connected", "Littoral", "All Combined"), 
+#          dep.var.caption=c("Target Variables (Relative to Country Maximum %)"),
+#          covariate.labels=c("Time (Year)", "Urban Population Share (% of total)", "Urban Population Share*Time", 
+#                             "Population's Coastal Distance (% of max)", "Population's Coastal Distance*Time"), 
+#          align=TRUE,no.space=TRUE,dep.var.labels.include = FALSE, model.numbers = FALSE, omit.stat = c("f"))
 
