@@ -26,31 +26,28 @@ PreGTD <- read.csv("Pregtd.csv", header=TRUE)
 <br>
 <br>
 
-## Intro
+## Intro {.unnumbered}
 
-The world is in flames, political violence concerns us all. Why does it occur? How to  respond?
+The world is in flames, political violence concerns us all. Why does it occur? How to respond? David Kilcullen, an influential counterinsurgency expert published his new book called *Out of the Mountains. The Coming Age of the Urban Guerilla* [@Kilcullen2013]. He describes political violence as something that used to occur in small villages far from big cities and urban life. And he predicts that this was about to change. In the future, this violence will happen in the completely opposite space: In big cities that are highly connected with each other, crowded and often close to the coastline. That is the space of future conflict.
 
-David Kilcullen, an influencial counterinsurgency expert published his new book  called *Out of the Mountains. The Coming Age of the Urban Guerilla* [@Kilcullen2013]. He describes political violence as something that used to occur in small villages far from big cities and urban life. And he predicts that this was about to change. In the future, political violence will happen in the completely opposite space: In big cities that are highly connected with each other, crowded and often close to the coastline. That is the space of future conflict. 
-
-
+<br>
 
 <p style='text-align: center;'>*Where does political violence happen?*</p>
 <p style='text-align: center;'>*Is it moving to the urban, connected, crowded, littoral space?*</p>
-  
-  
 
+<br>
 
-We know that people historically have always preferred to live at the coastal, and that there is a global urbanization - people moving to the cities rather than living in villages. But Kilcullen goes further. He suggests that political violence is migrating towards the urban, crowded, connected, and littoral space faster than people are. We wanted to find out whether that may be true.
-
-Have a look at our interactive map. What you see are bubbles that stand for cities in the Middle East: The size stands for the number of inhabitants, the color for the victims of terrorist from 1990-2003. 
+We know that people historically have always preferred to live at the coastal, and that there is a global urbanization - people moving to the cities rather than living in villages. But Kilcullen goes further. He suggests that political violence is migrating towards the urban, crowded, connected, and littoral space faster than people are. We wanted to find out whether that may be true. Have a look at our map. What you see are bubbles that stand for cities in the Middle East: The size stands for the number of inhabitants, the color for the victims of terrorist from 1990-2003. You can use your cursor to get more information.
 
 <div align="center">
 <iframe width="619" height="360"
 src="http://htmlpreview.github.io/?https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Analysis%20Test/googleVis/Region_min10Victims_before04f.html"
 frameborder="0" allowfullscreen>
   </iframe></div>
-  
-And now the same for 2004 until the end of our dataset in 2013. Bagdad changed the scale with over 51.000 victims dramatically. Why? May would argue that the Iraq War changed the region. After the war ended, several groups started to conduct attacks, around the beginning of 2004, with a focus on capital. But there are other changes everywhere. 
+ 
+ <br>
+ 
+And now the same for 2004 until the end of our dataset in 2013. Bagdad changed the scale with over 51.000 accumulated victims dramatically. Many would argue that the Iraq War changed the region. After the first phase of the war ended, several groups increased the frequency of attacks, around the beginning of 2004, with a focus on capital. But there are other changes everywhere, have a look at Yemen and Pakistan. This is just an example of the shifting geography of political violence. We can bo that with our dataset, but it is getting much more sophisticated. 
 
 <div align="center">
 <iframe width="619" height="360"
@@ -58,28 +55,28 @@ src="http://htmlpreview.github.io/?https://raw.githubusercontent.com/LBRETZIN/Ur
 frameborder="0" allowfullscreen>
   </iframe></div>
 
+<br>
 
-
-
-## What We look at
+## Measures {.unnumbered}
 
 We conduct a statistical analysis to see if over the past years, acts of political violence were in fact more likely to happen in urban environments, or it is just that people are moving to these places. For this, we gather data from a lot of different sources:
-Our main dataset is the Global Terrorism Database, a huge dataset that contains over 120,000 violent attacks since 1970 [@START2013].
-Additionally, we want to know a lot about the environment in which these attacks take place. This information is not included in the GTD. So we have gathered a lot of information on cities in all countries of the world. Some come from the World Bank, some even from Wikipedia, but all our source include:
+Our main dataset is the Global Terrorism Database, a huge dataset that contains over 120,000 violent attacks since 1970 [@START2013]. Additionally, we want to know a lot about the environment in which these attacks take place. This information is not included in the GTD. So we have gathered a lot of information on cities in all countries of the world. Some come from the World Bank, some even from Wikipedia, but all our source include:
 
  * Global night light emanations captured by satellites
  * Distance of ever place in the world to the coastline 
  * Travel distance to the next bigger city
- * The type of landcover around
+ * The type of landcover (forest or buildings)
  * Population density
  * Economic activity
- * And of course the change over time for all these 
+ * And the change over time for all these 
 
-If you have ever worked with data yourself, you probably know that the most of the time you spend with it is on making it fit your needs: Finding, gathering,  cleaning, tidying, calculating, merging. All of our datasets have a lot of missing information and we needed a lot of work to align things like city and country names and find all the missing values of information.
+If you have ever worked with data yourself, you probably know that the most of the time you spend with it is on making it fit your needs: Finding, gathering, cleaning, tidying, calculating, merging. All of our datasets have a lot of missing information and we needed a lot of work to align things like city and country names and find all the missing values of information.
 
-## An example of how its done
+<br>
 
-We have taken a couple of attacks from the GTD that happened in Turkey just to show  what we are doing. Here is a little description of each of them and what happened there:
+## Empirics {.unnumbered}
+
+We have taken a couple of attacks from the GTD that happened in Turkey just to show what we are doing. Here is a little description of each of them and what happened there:
 
 
 * 2003-11-14, Istanbul: Two car bombings by the militant Islamic group, Great East Islamic Raiders Front (IBDA-C - Islami Buyuk Dogu Akincilar Cephesi), on synagogues in Istanbul, Turkey, killed at least twenty people and injured 302 others. One of the two almost simultaneous blasts occurred at the Beth Israel Synagogue, damaging the building and several cars. Numerous people were reportedly killed and injured in the bombing. The group identified itself in a telephone call to the Anadolu News Agency.
@@ -102,11 +99,7 @@ We have taken a couple of attacks from the GTD that happened in Turkey just to s
 
  * 2006-08-28, Antalya: A car filled with explosives exploded 80 meters from the Russian Consulate General in Antalya, Turkey, killing three people and wounding at least 20 more. No one claimed responsibility for the attack, but authorities believed the Kurdish separatists were to blame.
  
- 
- 
-To illustrate a little bit better what we are actually doing behind the fancy calculations, have a look at all these maps. They are examples of how we gather additional information on the 130.000 incidents of political violence in the global database.
-
-This shows you how much light communities emanate at night - a sign for people with afordable electricity.
+To illustrate a little bit better what we are actually doing behind the fancy calculations, have a look at all these maps. They are examples of how we gather additional information on the 130.000 incidents of political violence in the global database. This shows you how much light communities emanate at night - a sign for people with afordable electricity.
 
 
 <p style='text-align: Center;'>**Nightlight**</p>
@@ -124,12 +117,19 @@ Now we know something more about these places. We gather this data for all 130.0
 ![Dens](https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Images/DensTurkey.png)
 
 
-## Analysis and Results
+<br>
+
+## Analysis {.unnumbered}
 
 After we used all the information we collected, arranged them in a certain way (you can get some impression from looking at the maps above), we feed all of this data into a statistical model. The outcome is this regression table, which tells us, how much our independent variables (like urbanization) influence the dependent variables (the target violent extremists chose to carry out an attack).
+ 
+<br> 
+
 
 <p style='text-align: Center;'>**Linear Regression - Country Fixed Effects - 1998-2013**</p>
-```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+
+<div align="center">
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.align='center'}
 ### take out what we need
 Stat1GTD <- subset(PreGTD, select=c(iyear, country_txt, TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, 
                             Inter.WAR, coast.dist, DV.Target.Urban, DV.Target.Crowded, DV.Target.Connected, DV.Target.Coastal,
@@ -229,26 +229,24 @@ stargazer(fixed.dum1,fixed.dum2,fixed.dum3,fixed.dum4,fixed.dum5,
                              "Population's Coastal Distance (% of max)", "Population's Coastal Distance*Time"), 
           align=TRUE,no.space=TRUE,dep.var.labels.include = FALSE, model.numbers = FALSE)
 ```
-<p style='text-align: Center;'>Linear Regression - Country Fixed Effects - 1998-2013</p>
 
-So what do we see here? A little bit surprisingly, the outcome of our analysis is quite the opposite of David Kilcullen's predictions. In fact, violent extremists do not attack urban places more frequently than they grow anyway. The same is thrue for the movement towards the coast. As more people move towards the urban and littoral space, political violence does not keep pace.
+</div>
+<br> 
 
-
-
-<p style='text-align: Center;'>**That was just the beginning of our analysis!**</p>
+So what do we see here? The result of our first analysis is quite the opposite of David Kilcullen's predictions. In fact, violent extremists do attack urban places more frequently, but less than the growth of urban space would lead us to expect. The same is true for the coastal, or "littoral", space. Violent extremists do attack places near coasts more frequently, but less than the migration of people towards the coast would lead us to expect. David Kilcullen wrote: *"This, then, is the suite of problems -- framed by the megatrends of population growth, urbanization, littoralization, and connectedness -- that will define the environment for future conflict, and for every aspect of life, in the next generation."* That is a strong claim about the future. At least for the past that was not true. For each of the ten most terrorism affected countries we found either no trend or a trend pointing in the other direction. The megatrends of "population growth, urbanization, littoralization, and connectedness" exist, but conflict moved the other way. To understand why, we maybe must study the data on the level of violent extremist groups. 
+  
+<p style='text-align: Center;'>**to be continued**</p>
+ 
+ 
+<br> 
 
 We hoped you like this website, and we would be happy to hear from you. Feel free to send us a message, ask us for more regression tables and our data if you like!
+<p style='text-align: right;'>Sascha - saschust@syr.edu   Lukas - lbretzin@syr.edu   Cameron - ccreed@syr.edu</p>
+ 
+<br>
+<br>
+<br>
+<br>
+  
 
-
-
-
-
-
-Sascha - saschust@syr.edu
-Lukas - lbretzin@syr.edu
-Cameron - ccreed@syr.edu
-
-
-
-
-#References
+## References  {.unnumbered}
