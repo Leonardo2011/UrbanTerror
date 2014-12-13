@@ -40,6 +40,40 @@ src="http://htmlpreview.github.io/?https://raw.githubusercontent.com/LBRETZIN/Ur
 frameborder="0" allowfullscreen>
   </iframe></div>
 
+
+# Intro
+
+At the latest since 9/11, terrorism - acts of political violence - concerns us all. Researchers across the world have analyzed political violence from a lot of angles:
+  * Why does terrorism occur?
+  * What is unique about some attacks?
+  * Is something similar with attacks?
+  * How do we fight terrorism?
+  
+We are interested in two related questions:
+
+  * Where does political violence happen?
+  * Does terrorism change?
+  
+David Kilcullen, an Australian counterinsurgency expert has published book in 2013 called *Out of the Mountains. The Coming Age of the Urban Guerilla* [@Kilcullen2013]. He describes political violence as something that used to occur in small villages far from big cities and urban life. Small, landlocked, Rural communities. And he predicts that this was about to change. In the future, Kilcullen says, Political Violence will happen in the completely opposite space: In big cities that are highly connected with each other and probably close to the coastline. Political violence, Kilcullen says, will move to the urban, connected, crowded, litoral space. 
+
+
+At a first glance, this actually does not seem to surprising: We know that people historically have always preferred to live in coastal space, and that there is a global trend towards urbanization - people moving to the cities rather than living in villages.
+
+But Kilcullen goes farther: What he suggests is not only that as populations move, terrorists move with them, but that terrorists will move to these place even faster than the rest of the population. Terrorists were a kind of "Vanguard" being in urban environments even quicker than everybody else.
+
+We wanted to find out whether that may be true.
+
+# An Example
+
+Take a look at the map above, it illustrates acts of political violence before 2004 - why 2004? We are sure you remember the Iraq War. After the war ended, several groups started to conduct attacks (around the beginning of 2004). If you check the map above, you see a map of attacks happening in the middle east before the insurgency in Iraq. Farther below, you can compare that with a map of political violence in Iraq since 2004 (we end our dataset in 2013)
+
+
+# What We look at
+
+
+
+
+
 Double spacing
 Margins
 Font
