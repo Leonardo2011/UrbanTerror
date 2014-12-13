@@ -20,7 +20,7 @@ bibliography: UTBiblio.bib
 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-library(ggplot2)
+source("0 - Loading Packages.R", chdir=FALSE)
 PreGTD <- read.csv("PreAnalysis/pregtd.csv", header=TRUE)
 ```
 <br>
@@ -30,7 +30,7 @@ PreGTD <- read.csv("PreAnalysis/pregtd.csv", header=TRUE)
 
 The world is in flames, political violence concerns us all. Why does it occur? How to  respond?
 
-David Kilcullen, an influencal counterinsurgency expert published his new book  called *Out of the Mountains. The Coming Age of the Urban Guerilla* [@Kilcullen2013]. He describes political violence as something that used to occur in small villages far from big cities and urban life. And he predicts that this was about to change. In the future, political violence will happen in the completely opposite space: In big cities that are highly connected with each other, crowded and often close to the coastline. That is the space of future conflict. 
+David Kilcullen, an influencial counterinsurgency expert published his new book  called *Out of the Mountains. The Coming Age of the Urban Guerilla* [@Kilcullen2013]. He describes political violence as something that used to occur in small villages far from big cities and urban life. And he predicts that this was about to change. In the future, political violence will happen in the completely opposite space: In big cities that are highly connected with each other, crowded and often close to the coastline. That is the space of future conflict. 
 
 
 
@@ -67,7 +67,7 @@ We conduct a statistical analysis to see if over the past years, acts of politic
 Our main dataset is the Global Terrorism Database, a huge dataset that contains over 120,000 violent attacks since 1970 [@START2013].
 Additionally, we want to know a lot about the environment in which these attacks take place. This information is not included in the GTD. So we have gathered a lot of information on cities in all countries of the world. Some come from the World Bank, some even from Wikipedia, but all our source include:
 
- * Global night light eminations capured by satelites
+ * Global night light emanations captured by satellites
  * Distance of ever place in the world to the coastline 
  * Travel distance to the next bigger city
  * The type of landcover around
@@ -79,7 +79,7 @@ If you have ever worked with data yourself, you probably know that the most of t
 
 ## An example of how its done
 
-We have taken a couple of attacks from the GTD that happend in Turkey just to show  what we are doing. Here is a little description of each of them and what happened there:
+We have taken a couple of attacks from the GTD that happened in Turkey just to show  what we are doing. Here is a little description of each of them and what happened there:
 
 
 * 2003-11-14, Istanbul: Two car bombings by the militant Islamic group, Great East Islamic Raiders Front (IBDA-C - Islami Buyuk Dogu Akincilar Cephesi), on synagogues in Istanbul, Turkey, killed at least twenty people and injured 302 others. One of the two almost simultaneous blasts occurred at the Beth Israel Synagogue, damaging the building and several cars. Numerous people were reportedly killed and injured in the bombing. The group identified itself in a telephone call to the Anadolu News Agency.
@@ -106,7 +106,7 @@ We have taken a couple of attacks from the GTD that happend in Turkey just to sh
  
 To illustrate a little bit better what we are actually doing behind the fancy calculations, have a look at all these maps. They are examples of how we gather additional information on the 130.000 incidents of political violence in the global database.
 
-This shows you how much light communities emenate at night - a sign for people with afordable electricity.
+This shows you how much light communities emanate at night - a sign for people with afordable electricity.
 
 
 <p style='text-align: Center;'>**Nightlight**</p>
@@ -126,12 +126,113 @@ Now we know something more about these places. We gather this data for all 130.0
 
 ## Analysis and Results
 
-After we used all the information we collected, arranged them in a certain way (you can get some impression from looking at the maps above), we feed all of this data into a statistical model. The outcome is this regression table, which tells us, how much our independent variables (like urbanisation) influence the dependent variables (the target violent extrimist chose to carry out an attack).
+After we used all the information we collected, arranged them in a certain way (you can get some impression from looking at the maps above), we feed all of this data into a statistical model. The outcome is this regression table, which tells us, how much our independent variables (like urbanization) influence the dependent variables (the target violent extremists chose to carry out an attack).
 
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+### take out what we need
+Stat1GTD <- subset(PreGTD, select=c(iyear, country_txt, TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, 
+                            Inter.WAR, coast.dist, DV.Target.Urban, DV.Target.Crowded, DV.Target.Connected, DV.Target.Coastal,
+                                    DV.Kilcullen, IV.Pop.Coastal.Dist, Pop.Coast.Dist, WCUC.city.old, merge), 
+                   iyear>=1998 & iyear<=2013 & TUPscale!=(0|1|2|3))
+
+# Exclude countries with less than 20 casaulties or incidents
+Asum <- aggregate(HUMscale ~ country_txt,Stat1GTD,FUN=sum)
+Asum <- Asum[order(-Asum$HUMscale, na.last=TRUE) , ]
+Asum["Victim1"] <- ifelse(Asum$HUMscale>= 40, 1, 0)
+Asum$HUMscale <- NULL
+#bosniaandherzegovina latvia switzerland azerbaijan kuwait netherlands venezuelarb kyrgyzrepublic liberia czechrepublic fiji
+#guatemala kazakhstan belgium paraguay albania ireland timorleste croatia macaosarchina qatar bhutan  brazil
+#stlucia trinidadandtobago maldives mozambique ecuador armenia austria finland slovakrepublic sweden bolivia
+#djibouti bulgaria chile malaysia yugoslavia benin equatorialguinea hungary montenegro poland solomonislands zambia
+#bahrain denmark nicaragua swaziland estonia gambiathe libya madagascar argentina costarica cuba jamaica japan lesotho
+#malawi panama puertorico romania turkmenistan unitedarabemirates belize cyprus newzealand papuanewguinea portugal
+#slovenia togo uruguay vietnam
+
+Stat1GTD["one"] <- 1
+Acount <- aggregate(one ~ country_txt,Stat1GTD,FUN=sum)
+Acount <- Acount[order(-Acount$one, na.last=TRUE) , ]
+Acount["Count1"] <- ifelse(Acount$one>= 20, 1, 0)
+Acount$one <- NULL
+#cameroon, guyana, timorleste, tunisia, kuwait, latvia, newzealand, paraguay, bolivia, congodemrep, fiji, guineabissau, 
+#kazakhstan, madagascar, belarus, cyprus, eritrea, malaysia, norway, swaziland, bahrain, czechrepublic, hungary, macaosarchina,
+#bhutan, hongkongsarchina, montenegro, mozambique, puertorico, slovenia, estonia, libya, slovakrepublic, solomonislands, vietnam, 
+#denmark, korearep, maldives, moldova, panama, poland, qatar, trinidadandtobago, finland, lesotho, nicaragua, papuanewguinea, 
+#portugal, unitedarabemirates, belize, benin, costarica, cuba, djibouti, equatorialguinea, gambiathe, jamaica, malawi, romania, 
+#stlucia, togo, turkmenistan, uruguay
+Stat1GTD <- merge(Stat1GTD, Asum, by=c("country_txt"), all.x=TRUE)
+Stat1GTD <- merge(Stat1GTD, Acount, by=c("country_txt"), all.x=TRUE)
+Stat1GTD <- subset(Stat1GTD, Count1==1 & Victim1==1)
+Stat1GTD$one  <- NULL
+Stat1GTD$Victim1 <- NULL
+Stat1GTD$Count1 <- NULL
+rm(Acount, Asum)
+
+# Now we take aggregated means (country-years), not without putting a weight on the aggregation (Victims^04 + Damage^02))                              
+DT <- data.table(Stat1GTD)
+DVurb <- data.frame(DT[,list(DV.Target.Urban = weighted.mean(DV.Target.Urban, (HUMscale^0.4 + PROPscale^0.2), rm.na=TRUE)),by=list(country_txt, iyear)])
+DVcro <- data.frame(DT[,list(DV.Target.Crowded = weighted.mean(DV.Target.Crowded, (HUMscale^0.4 + PROPscale^0.2), rm.na=TRUE)),by=list(country_txt, iyear)])
+DVcoa <- data.frame(DT[,list(DV.Target.Coastal = weighted.mean(DV.Target.Coastal, (HUMscale^0.4 + PROPscale^0.2), rm.na=TRUE)),by=list(country_txt, iyear)])
+DVcon <- data.frame(DT[,list(DV.Target.Connected = weighted.mean(DV.Target.Connected, (HUMscale^0.4 + PROPscale^0.2), rm.na=TRUE)),by=list(country_txt, iyear)])
+IVdst <- data.frame(DT[,list(IV.Pop.Coastal.Dist = mean(Pop.Coast.Dist, rm.na=TRUE)),by=list(country_txt, iyear)])
+VaR <- merge(DVurb, DVcro, by=c("country_txt", "iyear"), all=TRUE)
+VaR <- merge(VaR, DVcoa, by=c("country_txt", "iyear"), all=TRUE)
+VaR <- merge(VaR, DVcon, by=c("country_txt", "iyear"), all=TRUE)
+VaR <- merge(VaR, IVdst, by=c("country_txt", "iyear"), all=TRUE)
+#VaR<-Stat1GTD
+VaR$IV.Pop.Coastal.Dist[is.na(VaR$DV.Target.Coastal)] <- NA
+rm(DT, DVurb, DVcro, DVcoa, DVcon, IVdst)
+
+### Fifth Dependent Variable: >Kilcullen< 
+# The combination of all four variables, or three in case of landlocked countries                (not time variant)
+VaR["DV.Kilcullen"] <- ifelse(is.na(VaR$DV.Target.Coastal), 
+                              ((VaR$DV.Target.Urban+VaR$DV.Target.Crowded+VaR$DV.Target.Connected)/3),
+                              (VaR$DV.Target.Urban+VaR$DV.Target.Crowded+VaR$DV.Target.Connected+VaR$DV.Target.Coastal)/4)
+
+### include the WDI data
+WDIData <- WDI(indicator=c('SP.URB.TOTL.IN.ZS'),country="all", start=1970, end=2013, extra=FALSE)
+WDIData <- WDIData[order(WDIData$country, WDIData$year), ]
+X <- WDIData$country
+source('SmallScripts/CleanSpecialCharacters.R')
+WDIData$country <- X
+VaR <- merge(VaR, WDIData, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE)
+VaR$iso2c <- as.factor(VaR$iso2c)
+colnames(VaR)[colnames(VaR) == "country_txt"] <- "country"
+colnames(VaR)[colnames(VaR) == "SP.URB.TOTL.IN.ZS"] <- "IV.Urban.Share"
+VaR$country <- as.factor(VaR$country)
+VaR$IV.Time <- (VaR$iyear -1998)
+VaR$IV.Urban.Share_Year <- VaR$IV.Time*VaR$IV.Urban.Share
+VaR$IV.Pop.Coastal.Dist_Year <- VaR$IV.Time*VaR$IV.Pop.Coastal.Dist
+
+#get ready
+gleich<-VaR 
+attach(gleich)
+
+##least squares dummary variable model country fixed effects
+fixed.dum1 <- lm(DV.Target.Urban ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
+fixed.dum2 <- lm(DV.Target.Crowded ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
+fixed.dum3 <- lm(DV.Target.Connected ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
+fixed.dum4 <- lm(DV.Target.Coastal ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
+fixed.dum5 <- lm(DV.Kilcullen ~ IV.Time + IV.Urban.Share + IV.Urban.Share_Year + IV.Pop.Coastal.Dist + 
+                   IV.Pop.Coastal.Dist_Year + factor(country) -1, data=gleich) 
+
+stargazer(fixed.dum1,fixed.dum2,fixed.dum3,fixed.dum4,fixed.dum5,
+          type="html", 
+          keep=c("IV.Urban.Share", "IV.Time", "IV.Urban.Share_Year", "IV.Pop.Coastal.Dist", "IV.Pop.Coastal.Dist_Year"), 
+          column.labels=c("Urban", "Crowded", "Connected", "Littoral", "All Combined"), 
+          dep.var.caption=c("Target Variables (Relative to Country Maximum %)"),
+          covariate.labels=c("Time (Year)", "Urban Population Share (% of total)", "Urban Population Share*Time", 
+                             "Population's Coastal Distance (% of max)", "Population's Coastal Distance*Time"), 
+          align=TRUE,no.space=TRUE,dep.var.labels.include = FALSE, model.numbers = FALSE)
+```
 <p style='text-align: Center;'>Linear Regression - Country Fixed Effects - 1998-2013</p>
 ![Dens](https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Images/Regression.png)
 
-So what do we see here? A little bit surprisingly, the outcome of our analysis is quite the oppsite of David Kilcullen's predictions. In fact, violent extremists do not attack urban places more frequently than they grow anyway. Quite the opposite.
+So what do we see here? A little bit surprisingly, the outcome of our analysis is quite the opposite of David Kilcullen's predictions. In fact, violent extremists do not attack urban places more frequently than they grow anyway. Quite the opposite.
 
 
 
