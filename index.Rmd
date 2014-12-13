@@ -1,7 +1,7 @@
 ---
 title: 'Political Violence in the Urban Space: Evidence from the GTD'
 author: "Sascha Schuster, Lukas Bretzinger, Cameron Reed"
-date: "Thursday, November 13, 2014"
+date: "Fall 2014"
 output:
   html_document:
     css: knit.css
