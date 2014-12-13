@@ -231,7 +231,7 @@ stargazer(fixed.dum1,fixed.dum2,fixed.dum3,fixed.dum4,fixed.dum5,
 ```
 <p style='text-align: Center;'>Linear Regression - Country Fixed Effects - 1998-2013</p>
 
-So what do we see here? A little bit surprisingly, the outcome of our analysis is quite the opposite of David Kilcullen's predictions. In fact, violent extremists do not attack urban places more frequently than they grow anyway. Quite the opposite.
+So what do we see here? A little bit surprisingly, the outcome of our analysis is quite the opposite of David Kilcullen's predictions. In fact, violent extremists do not attack urban places more frequently than they grow anyway. The same is thrue for the movement towards the coast. As more people move towards the urban and littoral space, political violence does not keep pace.
 
 
 
