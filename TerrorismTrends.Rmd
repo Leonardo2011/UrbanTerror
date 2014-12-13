@@ -19,8 +19,6 @@ PreGTD <- read.csv("TerrorData/pregtd.csv")
 ```
 
 
-
-
 # Introduction
 In the past five years, violent extremist groups have attracted significant attention using urban centers as stages. In 2008, Pakistan-based Lashkar-e-Taiba launched a coordinated assault on Mumbai, which lasted three days and resulted in 164 civilian deaths. In 2013, Somalia-based Al-Shabaab infiltrated the Westgate mall in Nairobi, Kenya, killing 67 and injuring 175 civilians.  Terrorist groups are a considerable threat to vulnerable cities.  In both cases, the groups exploited with relative ease the complex flow of systems in the city to achieve desired outcomes. This sparked a debate about extremist groups targeting practices, as well as how to locate, understand, protect against, and mitigate attacks in the face of megatrends like urbanization, population growth, migration, and increasing interconnectedness. The urban environment emerges as a unit of analysis for acts of political violence. 
 
@@ -35,6 +33,8 @@ This paper proceeds as follows. First, we conduct a literature review on terrori
 
 
 **Note:** The state of this project right now is a final exam for the class "Collaborative Social Science Data Analysis", taught by Christopher Gandrud at the Hertie School of Governance in the Fall 2014 Semester. Cleaning, Manipulation, and Analysis for the project remain preliminary. We hope to clean more observations and derive more hypotheses in the future with the goal of making the final project part ouf our master thesis. Our future focus will rest on improved analysis, including on the perpetrator group level.
+
+-------
 
 # Literature Review
 
@@ -67,6 +67,8 @@ In 2013, David Kilcullen contributed a highly influential book on new trends in 
 
 
 By stating that terrorism will move into new environments, Kilcullen aims to account for a change significantly faster than existing global trends. Since there is a general trend for people to move to urban environments we would naturally expect political violence to move with the people. Kilcullen's meaning of a change of environment however does more than just accounting for the global trend towards urbanity. He predicts an increase in terrorism in urban environments that is faster than the overall trend for urbanity.
+
+------------
 
 
 # Variable Operationalization
@@ -121,6 +123,8 @@ We gathered as much of our data for all years of observations. Some data was not
 
 **IV.Pop.Coastal.Dist_Year:** interaction variable
 
+-------------
+
 
 # Data
 
@@ -144,7 +148,9 @@ Given the varied context of GTD data collection, the database is another source 
 
 ### Country Level Data
 
-Our source for country-level data is the set of [World Development Indicators (WDI)](http://data.worldbank.org/data-catalog/world-development-indicators) provided by the World Bank. We download them using the [WDI package for R](http://cran.r-project.org/web/packages/WDI/WDI.pdf), a shortcut to the World Bank's API that provides data already formatted in long country-year format [@WDIpackage].
+**a.** Our source for population related country-level data is the set of [World Development Indicators (WDI)](http://data.worldbank.org/data-catalog/world-development-indicators) provided by the World Bank. We download them using the [WDI package for R](http://cran.r-project.org/web/packages/WDI/WDI.pdf), a shortcut to the World Bank's API that provides data already formatted in long country-year format [@WDIpackage].
+
+**b.** We use data from wiki's worldgrids for our estimate on urbanity related factors: The nightline development index, surface sealing, population density, road accessability, coastal proximity. [@worldgrids]
 
 ### City Level Data
 
@@ -158,6 +164,8 @@ Our source for country-level data is the set of [World Development Indicators (W
 ### Additional Control Variables
 
 **a. Civil War** We include civil war dummy variables because civil wars are likely to exponentially increase the amount of terror attacks in a given year and city. It comes from the [Correlates of War](http://www.correlatesofwar.org/) project and is called the Intra-State War Database 4.0 [@COW]. 
+
+----------
 
 
 ##Data Cleaning
@@ -202,6 +210,9 @@ With the new dataset, we can set a parameter of distance around each urban cente
 
 
 Finally, we merge our GTD and the combined city-urbancenter dataset. We use a merging variable, which is a clean character string in the form of *countrynamecityname* in order to avoid false positives of similar city names across countries. Due to our previously unified country and city coding in all datasets, we find a city (thus, population size and also closest urban center) for around 70% of all 120k terror attacks in the GTD. As the GTD often lacks any city name and has "unknown" or area codings (e.g. "District xyz"), 70% is a satisfying result given complexity and resource constraints. 
+
+
+----------
 
 
 
@@ -282,6 +293,9 @@ LightMap
 ```
 
 
+---------
+
+
 **Figure 2:** Road accessibility in Turkey and example attacks
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, cache = FALSE}
@@ -325,6 +339,9 @@ AccessMap
 ```
 
 
+----------
+
+
 **Figure 3:** Distance to coast of locations in Turkey and example attacks
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, cache = FALSE}
@@ -366,6 +383,9 @@ CoastMap
 ```
 
 
+--------
+
+
 **Figure 4:** Population density in Turkey and example attacks
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, cache = FALSE}
@@ -394,6 +414,9 @@ DensMap <- BaseMap + geom_tile(aes(x = longitude, y = latitude-0.1, fill=Density
 ```
 
 
+------------
+
+
 # Analysis
 
 As of now, we were not able to clean the full GTD dataset and interpolate all missing date to enable full time variance. Therefore, we selected a subset of the merged and added to GTD as a base for our panel data analysis to study fixed effects. 
@@ -407,9 +430,13 @@ For the current project, we have one hypothesis to test:
 
  **H1:**Political violence moves to urban, crowded, connected and littoral spaces at a higher pace than the countries population movement.
 
+
+---------
+
+
 # Results
 
-![regression]("Image/Regression.png")
+![regression](Images/Regression.png)
 
 ## Time
 
@@ -427,7 +454,7 @@ We find no statistically significant or strong acceleration effect for the chang
 
 We find some minor, negative effect. Similar to the urban population share, political violence does move towards the littoral space to a lesser extent than the population is.
 
-## Population's Coastal Distance*Time
+## Population's Coastal DistanceTime
 
 Here, we find very weak, but statistical significant negative effect for most dependent variables.
 
@@ -436,6 +463,10 @@ Here, we find very weak, but statistical significant negative effect for most de
 With what we have found, we can now reject our initial hypothesis inspired by David Kilcullen. In contradiction to what David Kilkullen stated, political violence does not seem to migrate towards the urban, crowded, connected and littoral more than people are. Quite the opposite might be true. Another set of tests on the 10 most affected countries showed the same result.
 
 Due to the scale of our overall project, we still only have preliminary results. We have gathered vast amounts of data and have progressed very far with a very intensive data cleaning and interpolation method. However, we are still working on improving data quality and hope to achieve higher statistical significance for our findings.
+
+
+----------
+
 
 # Conclusion
 
