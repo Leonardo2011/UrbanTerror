@@ -128,7 +128,7 @@ Now we know something more about these places. We gather this data for all 130.0
 
 After we used all the information we collected, arranged them in a certain way (you can get some impression from looking at the maps above), we feed all of this data into a statistical model. The outcome is this regression table, which tells us, how much our independent variables (like urbanization) influence the dependent variables (the target violent extremists chose to carry out an attack).
 
-
+<p style='text-align: Center;'>**Linear Regression - Country Fixed Effects - 1998-2013**</p>
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 ### take out what we need
 Stat1GTD <- subset(PreGTD, select=c(iyear, country_txt, TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, 
