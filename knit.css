@@ -1,0 +1,10 @@
+body {
+  margin: 0 20% 0 20%;
+	background-color: #eee
+}
+
+strong {
+  font-size: 20px;
+}
+
+p {line-height: 2em;}
