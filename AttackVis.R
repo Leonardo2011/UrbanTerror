@@ -14,7 +14,7 @@ ExA <- subset(PreGTD, eventid == 200807270020 | eventid == 200608280001 | eventi
 ExA$inUC <- as.factor(ExA$inUC)
 ExA$latitude <- as.numeric(ExA$latitude)
 ExA$longitude <- as.numeric(ExA$longitude)
-ExA$Relative Light <- ExA$light/ExA$light.MAX
+
 
 # Attack Summaries:
 # 200807270020: On Sunday, two bombs exploded minutes apart in one of Istanbul's busy shopping districts on the European side. Though the Kurdistan Workers Party denied responsibility for the attack, officials continually accuse them of direct involvement. 
@@ -54,8 +54,9 @@ Rmdattacks$coast.dist <- NULL
 Rmdattacks$coast.dist.MAX <- NULL
 Rmdattacks$Date <- NULL
 Rmdattacks$original.city <- NULL
-colnames(Rmdattacks) <- c("On.UC", "Killed.Wounded", "Rel.Access", "Rel.Light", "Rel.Density", "Rel.Prox.Coast", "Date.Place")
+colnames(Rmdattacks) <- c("On.UC", "Kill.Wound", "Access", "Light", "Dens", "Prox.Coast", "Date.Place")
 Rmdattacks <- Rmdattacks[c(7,1,2,4,3,6,5) ]
+Rmdattacks$row.names <- NULL
 
 
 # show example attacks on map with distinginishing if take place on UC and labels
@@ -129,8 +130,7 @@ AccessMap <- BaseMap + geom_tile(aes(x = longitude, y = latitude, fill=AccessTim
             geom_text(aes(x=longitude+0.3, y=latitude+0.08, fontface="bold", color = inUC, fontsize = 7), data=ExA, label=ExA$Date) +
             scale_colour_manual(values = c("firebrick","pink"))
 
-# Proximity to Coaast
-
+# Proximity to Coast
 unzip("Downloaded_Data/Downloaded_Raster_Data.zip", exdir="Downloaded_Data")
 unlink("Downloaded_Data/NLDI_2006_0p25_rev20111230.tif")
 unlink("Downloaded_Data/GDP_grid_flt.tif")
@@ -187,4 +187,4 @@ DensMap <- BaseMap + geom_tile(aes(x = longitude, y = latitude-0.1, fill=Density
            scale_fill_gradient(low = "lightblue", high= "darkblue") +
            theme(legend.position="none") + 
            geom_text(aes(x=longitude+0.3, y=latitude+0.08, fontface="bold", color = inUC, fontsize = 7), data=ExA, label=ExA$Date) +
-           scale_colour_manual(values = c("firebrick","pink")
+           scale_colour_manual(values = c("firebrick","pink"))
