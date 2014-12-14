@@ -28,7 +28,7 @@ PreGTD <- read.csv("Pregtd.csv", header=TRUE)
 
 ## Intro {.unnumbered}
 
-The world is in flames, political violence concerns us all. Why does it occur? How to respond? David Kilcullen, an influential counterinsurgency expert published his new book called *Out of the Mountains. The Coming Age of the Urban Guerilla* [@Kilcullen2013]. He describes political violence as something that used to occur in small villages far from big cities and urban life. And he predicts that this was about to change. In the future, this violence will happen in the completely opposite space: In big cities that are highly connected with each other, crowded and often close to the coastline. That is the space of future conflict.
+The world is in flames. Political violence is a concern to us all. Why does it occur? How to respond? David Kilcullen, an influential counterinsurgency expert published his new book called *Out of the Mountains. The Coming Age of the Urban Guerilla* [@Kilcullen2013]. He describes political violence as something that used to occur in small villages far from big cities and urban life. And he predicts that this was about to change. In the future, this violence will happen in the completely opposite space: In big cities that are highly connected with each other, crowded and often close to the coastline. That is the space of future conflict.
 
 <br>
 
@@ -70,7 +70,7 @@ We conduct a statistical analysis to see if over the past years, acts of politic
  * City population 
  * And the change over time for all of these 
 
-If you have ever worked with data yourself, you probably know that most of the time you spend  making it fit your needs: Finding, gathering, cleaning, tidying, calculating, merging. All of our datasets have a lot of missing information and we needed a lot of work to align things like city and country names and find all the missing values of information.
+If you have ever worked with data yourself, you probably know that most of the time you spend making it organized: Finding, gathering, cleaning, tidying, calculating, merging. All of our datasets have a lot of missing information and we needed a lot of work to align things like city and country names and find all the missing values of information.
 
 <br>
 
@@ -103,7 +103,7 @@ To illustrate a little bit better how we learn more about these locations, have 
 <p style='text-align: Center;'>**Nightlight**</p>
 ![Light](https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Images/LightTurkey.png)
 
-Now we know something more about these places be did not before. This information will become part of our measure for "connectedness". But there is much more, like travel distance to the next biggest city, measured by the time needed to get there.
+Now we know something more about these places than we did not before. This information will become part of our measure for "connectedness". But there is much more, like travel distance to the next biggest city, measured by the time needed to get there.
 
 <p style='text-align: Center;'>**Road Access**</p>
 ![Access](https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Images/AccessTurkey.png)
@@ -119,7 +119,7 @@ Now we know something more about these places be did not before. This informatio
 
 ## Analysis {.unnumbered}
 
-Collecting all this information was necessarty to put together variables that represent the concepts of e.g. "crowdedness" or "littoralnes". Then we feed all of this data into a statistical model. The outcome is this regression table, which tells us how much our independent variables (like urbanization) influence the dependent variables, meaning the characteristics of the violent extremists' targets.
+Collecting all this information was necessary to put together variables that represent the concepts of e.g. "crowdedness" or "littoralnes". We then feed all of this data into a statistical model. The outcome is this regression table, which tells us how much our independent variables (like urbanization) influence the dependent variables, meaning the characteristics of the violent extremists' targets.
  
 <br> 
 
@@ -231,9 +231,9 @@ stargazer(fixed.dum1,fixed.dum2,fixed.dum3,fixed.dum4,fixed.dum5,
 </div>
 <br> 
 
-So what do we see here? The result of our first analysis is quite the opposite of David Kilcullen's predictions. In fact, violent extremists do attack urban places more frequently, but less than the growth of urban space would lead us to expect. The same is true for the coastal, or "littoral", space. Violent extremists do attack places near coasts more frequently, but less than the migration of people towards the coast would lead us to expect. David Kilcullen wrote: *"This, then, is the suite of problems -- framed by the megatrends of population growth, urbanization, littoralization, and connectedness -- that will define the environment for future conflict, and for every aspect of life, in the next generation."* That is a strong claim about the future. At least for the past that was not true. For each of the ten most terrorism affected countries we found either no trend or a trend pointing in the other direction. The megatrends of "population growth, urbanization, littoralization, and connectedness" exist, but conflict moved the other way. To understand why, we maybe must study the data on the level of violent extremist groups. 
+So what do we see here? The result of our first analysis is quite the opposite of David Kilcullen's predictions. Violent extremists appear to attack urban places more frequently, but less than the growth of urban space would lead us to expect. The same is true for the coastal (or "littoral") space. Violent extremists do attack places near coasts more frequently, but less than the migration of people towards the coast would lead us to expect. David Kilcullen wrote: *"This, then, is the suite of problems -- framed by the megatrends of population growth, urbanization, littoralization, and connectedness -- that will define the environment for future conflict, and for every aspect of life, in the next generation."* That is a strong claim about the future. At least for the past that was not true. For each of the ten most terrorism affected countries we found either no trend or a trend pointing in the other direction. The megatrends of "population growth, urbanization, littoralization, and connectedness" exist, but conflict moved the other way. To understand why, we must study the data on the level of violent extremist groups. 
   
-<p style='text-align: Center;'>**to be continued**</p>
+<p style='text-align: Center;'>**to be continued...**</p>
  
  
 <br> 
