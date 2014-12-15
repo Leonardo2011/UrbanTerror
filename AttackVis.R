@@ -79,7 +79,7 @@ LightLayer <- crop(RASTERlight, e)
 #convert to usable dataframe including eliminating minor light values and aggregating the rest from 63 to only 6 levels
 LightLayer <- as(LightLayer, "SpatialPixelsDataFrame")
 LightLayer <- data.frame(LightLayer)
-LightLayer$y <- LightLayer$y-0.1
+LightLayer$y <- LightLayer$y-0.09
 colnames(LightLayer) <- c("light", "longitude", "latitude")
 LightLayer$light <- as.numeric(LightLayer$light)
 #LightLayer <- subset(LightLayer, light >60)
@@ -94,8 +94,7 @@ LightMap <- BaseMap +   geom_tile(aes(x = longitude, y = latitude, fill=light), 
   scale_shape_manual(values=c(10, 10, 13, 13)) +
   scale_colour_manual(values = c("white","white", "white","black", "firebrick", "firebrick")) +
   theme(legend.position="none")
-#plot(LightMap) 
-          
+
 unlink("Downloaded_Data/LNMDMS2a.tif")
 rm(LightLayer, RASTERlight, e)
 
@@ -116,7 +115,7 @@ AccessLayer <- crop(RASTERAccess, e)
 #convert to usable dataframe including eliminating largest Access time values (in minutes ) and aggregating the rest to 10 min intervals
 AccessLayer <- as(AccessLayer, "SpatialPixelsDataFrame")
 AccessLayer <- data.frame(AccessLayer)
-AccessLayer$y <- AccessLayer$y-0.09
+AccessLayer$y <- AccessLayer$y-0.085
 colnames(AccessLayer) <- c("AccessTime", "longitude", "latitude")
 AccessLayer$AccessTime <- as.numeric(AccessLayer$AccessTime)
 
@@ -138,13 +137,9 @@ AccessMap <- BaseMap + geom_tile(aes(x = longitude, y = latitude, fill=AccessTim
   scale_colour_manual(values = c("white","white", "white","black", "firebrick", "firebrick")) +
   theme(legend.position="none")
 
-plot(AccessMap)  
-  
-
-
 unlink("Downloaded_Data/GACGEM2a.tif")
-
 rm(RASTERAccess, e)
+
 
 # Proximity to Coast
 unzip("Downloaded_Data/Downloaded_Raster_Data.zip", exdir="Downloaded_Data")
@@ -153,33 +148,33 @@ unlink("Downloaded_Data/GDP_grid_flt.tif")
 unlink("Downloaded_Data/GACGEM2a.tif")
 unlink("Downloaded_Data/G19ESA3a.tif")
 unlink("Downloaded_Data/LNMDMS2a.tif")
-
 RASTERCoast<- raster("Downloaded_Data/DICGSH1a.tif")
-
 #crop Raster to Turkey maps boundaries
 e <- extent(27.9, 34.9, 36.2, 41.7)
 CoastLayer <- crop(RASTERCoast, e)
-
 CoastLayer <- as(CoastLayer, "SpatialPixelsDataFrame")
 CoastLayer <- data.frame(CoastLayer)
-
-rm(RASTERCoast, e)
-unlink("Downloaded_Data/DICGSH1a.tif")
-
+CoastLayer$y <- CoastLayer$y-0.09
 colnames(CoastLayer) <- c("Coastdist", "longitude", "latitude")
 CoastLayer$Coastdist <- as.numeric(CoastLayer$Coastdist)
 #reducing No of observations to on-coast and less than a 100 km from coast
-CoastLayer <- subset(CoastLayer, Coastdist <=0 & Coastdist >=-100)
+CoastLayer <- subset(CoastLayer, Coastdist <=0)
 CoastLayer$Coastdist <- CoastLayer$Coastdist*-1
+CoastLayer$Coastdist  <- ifelse(CoastLayer$Coastdist>= 120, 120, CoastLayer$Coastdist)
 
+CoastMap <- BaseMap + geom_tile(aes(x = longitude, y = latitude, fill=Coastdist), data = CoastLayer, alpha=0.85) +
+  scale_fill_gradient(low = "lightblue", high= "darkblue") +
+  geom_point(aes(x=longitude, y=latitude-0.1, color="white"), data = ExA, size = 5 ) +
+  geom_point(aes(x=longitude, y=latitude-0.1, color="red"), data = ExA, size = 4 ) +
+  geom_point(aes(x=longitude, shape= inUC, color=inUC, y=latitude-0.1), data = ExA, size = 8 ) +
+  geom_text(aes(x=longitude+0.3, y=latitude+0.19, fontface="bold", colour="firebrick", fontsize = 7), data=ExA, label=ExA$Date) +
+  scale_shape_manual(values=c(10, 10, 13, 13)) +
+  scale_colour_manual(values = c("white","white", "white","black", "firebrick", "firebrick")) +
+  theme(legend.position="none")
 
-CoastMap <- BaseMap + geom_tile(aes(x = longitude, y = latitude, fill=Coastdist), data = CoastLayer, alpha=0.7) +
-            geom_point(aes(x=longitude, y=latitude, shape = inUC, color = inUC), data = ExA, size = 7 ) +
-            scale_fill_gradient(low = "lightblue", high= "darkblue") +
-            theme(legend.position="none") + 
-            geom_text(aes(x=longitude+0.3, y=latitude+0.08, fontface="bold", color = inUC, fontsize = 7), data=ExA, label=ExA$Date) +
-            scale_colour_manual(values = c("firebrick","pink"))
-
+plot(CoastMap)
+rm(RASTERCoast, e)
+unlink("Downloaded_Data/DICGSH1a.tif")
 
 
 # Population Density
@@ -188,19 +183,29 @@ RASTERDens <- raster("Downloaded_Data/SEDAC_POP_2000-01-01_rgb_3600x1800.TIFF")
 #crop Raster to Turkey maps boundaries
 e <- extent(27.9, 34.9, 36.2, 41.7)
 DensLayer <- crop(RASTERDens, e)
-
 DensLayer <- as(DensLayer, "SpatialPixelsDataFrame")
 DensLayer <- data.frame(DensLayer)
-
-rm(RASTERDens, e)
-
+DensLayer$y <- DensLayer$y-0.09
 colnames(DensLayer) <- c("Density", "longitude", "latitude")
 DensLayer$Density <- as.numeric(DensLayer$Density)
-#For whatever reason 255 is like NA, e.g. the sea
-DensLayer <- subset(DensLayer, Density <255)
-DensMap <- BaseMap + geom_tile(aes(x = longitude, y = latitude-0.1, fill=Density), data = DensLayer, alpha=0.7) +
-           geom_point(aes(x=longitude, y=latitude, shape = inUC, color = inUC), data = ExA, size = 7 ) + 
-           scale_fill_gradient(low = "lightblue", high= "darkblue") +
-           theme(legend.position="none") + 
-           geom_text(aes(x=longitude+0.3, y=latitude+0.08, fontface="bold", color = inUC, fontsize = 7), data=ExA, label=ExA$Date) +
-           scale_colour_manual(values = c("firebrick","pink"))
+
+# 255 is like NA, e.g. the sea
+DensLayer <- subset(DensLayer, Density<255)
+DensLayer$Density   <- ifelse(DensLayer$Density <= 100, 100, DensLayer$Density )
+
+
+DensMap <- BaseMap + geom_tile(aes(x = longitude, y = latitude, fill=Density), data = DensLayer, alpha=0.75) +  
+  scale_fill_gradient(low = "lightgreen", high= "firebrick") +
+  geom_point(aes(x=longitude, y=latitude-0.1, color="white"), data = ExA, size = 5 ) +
+  geom_point(aes(x=longitude, y=latitude-0.1, color="red"), data = ExA, size = 4 ) +
+  geom_point(aes(x=longitude, shape= inUC, color=inUC, y=latitude-0.1), data = ExA, size = 8 ) +
+  geom_text(aes(x=longitude+0.3, y=latitude+0.19, fontface="bold", colour="firebrick", fontsize = 7), data=ExA, label=ExA$Date) +
+  scale_shape_manual(values=c(10, 10, 13, 13)) +
+  scale_colour_manual(values = c("white","white", "white","black", "firebrick", "firebrick")) +
+  theme(legend.position="none")
+plot(DensMap)
+  
+ 
+
+
+rm(RASTERDens, e)
