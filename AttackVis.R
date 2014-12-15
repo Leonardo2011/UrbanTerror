@@ -8,9 +8,10 @@ BaseMap <- qmap("Davulga", zoom = 7, extent = "device", source="stamen", maptype
 
 
 #Creating our PreGTD subset with example attacks
-ExA <- subset(PreGTD, eventid == 200608280001 | eventid == 199811270002 |
-                      eventid == 200608280002 | eventid == 199903050002 | eventid == 200308010004 | 
-                      eventid == 199907300003 | eventid == 199809090001 | eventid == 200311140004 )
+ExA <- subset(PreGTD, eventid == 200608280001 | eventid == 199811270002 | eventid == 199903050002 
+                    | eventid == 200308010004 | eventid == 199907300003 | eventid == 199809090001
+                    | eventid == 200311140004 )
+
 ExA$inUC <- as.factor(ExA$inUC)
 ExA$latitude <- as.numeric(ExA$latitude)
 ExA$longitude <- as.numeric(ExA$longitude)
