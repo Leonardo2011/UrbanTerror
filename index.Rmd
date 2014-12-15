@@ -37,7 +37,7 @@ The world is in flames. Political violence is a concern to us all. Why does it o
 
 <br>
 
-We know that people historically have always preferred to live at the coastal, and that there is a global urbanization - people moving to the cities rather than living in villages. But Kilcullen goes further. He suggests that political violence is migrating towards the urban, crowded, connected, and littoral space faster than people are. We wanted to find out whether that may be true. Have a look at our map. What you see are bubbles that stand for cities in the Middle East: The size stands for the number of inhabitants, the color for the victims of terrorist from 1990-2003. You can use your cursor to get more information.
+We know that people historically have always preferred to live at the coast, and that there is a global urbanization - people moving to the cities rather than living in villages. But Kilcullen goes further. He suggests that political violence is migrating towards the urban, crowded, connected, and littoral space faster than people are. We wanted to find out whether that may be true. Have a look at our map. What you see are bubbles that stand for cities in the Middle East: The size represents the number of inhabitants, the color indicates the victims of terrorist from 1990-2003. You can use your cursor to get more information.
 
 <div align="center">
 <iframe width="750" height="437"
@@ -81,8 +81,6 @@ We have taken a couple of attacks from the GTD that took place in Turkey just to
 
  * 2003-11-14, Istanbul: Two car bombings by the militant Islamic group, Great East Islamic Raiders Front (IBDA-C - Islami Buyuk Dogu Akincilar Cephesi), on synagogues in Istanbul, Turkey, killed at least twenty people and injured 302 others. One of the two almost simultaneous blasts occurred at the Beth Israel Synagogue, damaging the building and several cars. Numerous people were reportedly killed and injured in the bombing. The group identified itself in a telephone call to the Anadolu News Agency.
 
- * 2008-07-27, Istanbul: On Sunday, two bombs exploded minutes apart in one of Istanbul's busy shopping districts on the European side. Though the Kurdistan Workers Party denied responsibility for the attack, officials continually accuse them of direct involvement.
- 
  * 1999-07-30, Gurpinar: A total of four village guards were killed in Gurpinar, Turkey, when a group of perpetrators attacked the guards who were protecting the Telekom employees. Officials reported that the employees where the target of this attack.
  
  * 1999-03-05, Cankiri: A car bomb attack targeted the Cankiri Provincial Governor, Ayhan Cevik, while he was driving in Cankiri, Turkey. Four people were killed and the Governor and nine others were wounded. The Turkish Workers and Peasants Liberation Army (TKP/ML-TIKKO) claimed responsibility for the attack.
@@ -95,8 +93,6 @@ We have taken a couple of attacks from the GTD that took place in Turkey just to
  
  * 2006-08-28, Antalya: Four people were killed and approximately 65 were injured when a bomb attached to a motorcycle detonated in Antalya, Turkey. No one claimed responsibility for the attack.
 
- * 2006-08-28, Antalya: A car filled with explosives exploded 80 meters from the Russian Consulate General in Antalya, Turkey, killing three people and wounding at least 20 more. No one claimed responsibility for the attack, but authorities believed the Kurdish separatists were to blame.
- 
 To illustrate a little bit better how we learn more about these locations, have a look at the following maps. They are examples of how we gather additional information on the 120.000 incidents of political violence in the global database. The first map shows how much light communities emanate at night - a sign for peoples' access to electricity.
 
 
