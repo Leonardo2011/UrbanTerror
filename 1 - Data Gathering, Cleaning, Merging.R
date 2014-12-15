@@ -31,7 +31,7 @@ if(file.exists("Cache/CountryData.csv")) {CountryData <- read.csv("Cache/Country
 
 
 # City level data from a number of sources, including web scraping and GIS analysis
-if(file.exists("Cache/WC.UC.dist.csv")) {WC.UC.dist <- read.csv("Cache/WC.UC.dist.gis.csv")} else{source("1.c - City Data.R")}
+if(file.exists("Cache/WC.UC.dist.gis.csv")) {WC.UC.dist <- read.csv("Cache/WC.UC.dist.gis.csv")} else{source("1.c - City Data.R")}
 
 
 

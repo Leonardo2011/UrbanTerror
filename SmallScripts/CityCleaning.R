@@ -199,6 +199,8 @@ X<-gsub("^Herzliyya","herzliya", X, ignore.case=TRUE)
 X<-gsub("^Hezliyya","herzliya", X, ignore.case=TRUE)
 X<-gsub("^herzeliyya","herzliya", X, ignore.case=TRUE)
 X<-gsub("^Arab East Jerusalem","jerusalem", X, ignore.case=TRUE)
+X<-gsub("^West Jerusalem","jerusalem", X, ignore.case=TRUE)
+X<-gsub("^East Jerusalem","jerusalem", X, ignore.case=TRUE)
 X<-gsub("^VWest Jerusalem","jerusalem", X, ignore.case=TRUE)
 X<-gsub("^Jersualem","jerusalem", X, ignore.case=TRUE)
 X<-gsub("^Jerusalem (Talpiyyat) on Hebron road","jerusalem", X, ignore.case=TRUE)
@@ -1588,3 +1590,16 @@ X<-gsub("^shenzen$", "shenzhen", X, ignore.case=TRUE)
 X<-gsub("^samore$", "bogota", X, ignore.case=TRUE)
 X<-gsub("^mutur$", "trincomalee", X, ignore.case=TRUE)
 X<-gsub("^gazacity$", "gaza", X, ignore.case=TRUE)
+X<-gsub("^northbogota$", "bogota", X, ignore.case=TRUE)
+X<-gsub("^northnazimabad$", "karachi", X, ignore.case=TRUE)
+X<-gsub("^southdelhi$", "deli", X, ignore.case=TRUE)
+X<-gsub("^southjakarta$", "jakarta", X, ignore.case=TRUE)
+X<-gsub("^westbanknablus$", "nablus", X, ignore.case=TRUE)
+X<-gsub("^westnabluscity$", "nablus", X, ignore.case=TRUE)
+
+
+
+
+
+
+

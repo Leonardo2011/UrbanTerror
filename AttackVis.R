@@ -6,11 +6,11 @@ PreGTD <- read.csv("TerrorData/pregtd.csv")
 Turkey <- qmap("Davulga", zoom = 7, extent = "device", legend = "topleft")
 BaseMap <- qmap("Davulga", zoom = 7, extent = "device", source="stamen", maptype="toner")
 
+
 #Creating our PreGTD subset with example attacks
-ExA <- subset(PreGTD, eventid == 200807270020 | eventid == 200608280001 | eventid == 199811270002 |
+ExA <- subset(PreGTD, eventid == 200608280001 | eventid == 199811270002 |
                       eventid == 200608280002 | eventid == 199903050002 | eventid == 200308010004 | 
-                      eventid == 199907300003 | eventid == 199809090001 | 
-                      eventid == 199910180002 | eventid == 200311140004 )
+                      eventid == 199907300003 | eventid == 199809090001 | eventid == 200311140004 )
 ExA$inUC <- as.factor(ExA$inUC)
 ExA$latitude <- as.numeric(ExA$latitude)
 ExA$longitude <- as.numeric(ExA$longitude)
@@ -25,7 +25,6 @@ ExA$longitude <- as.numeric(ExA$longitude)
 # 200308010004: An unnamed leftist organization detonated an explosive device in the garden of the Justice Ministry's Center of Education for Judge and Prosecutor Candidates in Ankara, Turkey. Eleven people, including policemen and judges, were injured in the explosion. Although a group claimed responsibility for the attack, Turkey's Interior Minister, Abdulkadir Aksu, did not publicly reveal the perpetrator group's name
 # 199907300003: A total of four village guards were killed in Gurpinar, Turkey, when a group of perpetrators attacked the guards who were protecting the Telekom employees. Officials reported that the employees where the target of this attack. 
 # 199809090001: In one of two related attacks, rebels from the Kurdistan Workers Party (PKK) attacked the Imamli settlement unit in the village of Kuyucak, Turkey, killing one person and injuring three (Mustafa, Hilmi and Nuriye Atici). The perpetrators fled after this incident.
-# 199910180002: Unknown perpetrators set a Greek citizen's house on fire in the village of Bademli on Gokceada island, Turkey. A small child died in the fire. 
 # 200311140004: Two car bombings by the militant Islamic group, Great East Islamic Raiders Front (IBDA-C - Islami Buyuk Dogu Akincilar Cephesi), on synagogues in Istanbul, Turkey, killed at least twenty people and injured 302 others. One of the two almost simultaneous blasts occurred at the Beth Israel Synagogue, damaging the building and several cars. Numerous people were reportedly killed and injured in the bombing. The group identified itself in a telephone call to the Anadolu News Agency. 
 
 
@@ -76,23 +75,30 @@ RASTERlight<- raster("Downloaded_Data/LNMDMS2a.tif")
 #crop Raster to Turkey maps boundaries
 e <- extent(27.9, 34.9, 36.2, 41.7)
 LightLayer <- crop(RASTERlight, e)
+
 #convert to usable dataframe including eliminating minor light values and aggregating the rest from 63 to only 6 levels
 LightLayer <- as(LightLayer, "SpatialPixelsDataFrame")
 LightLayer <- data.frame(LightLayer)
-rm(RASTERlight, e)
-unlink("Downloaded_Data/LNMDMS2a.tif")
+LightLayer$y <- LightLayer$y-0.1
 colnames(LightLayer) <- c("light", "longitude", "latitude")
 LightLayer$light <- as.numeric(LightLayer$light)
-LightLayer <- subset(LightLayer, light > 3)
-LightLayer$light <- recode (LightLayer$light, "4:10 = 1; 11:20 = 2; 21:30 = 3; 31:40 = 4; 41:50 = 5; 51:63 = 6", as.numeric.result=TRUE)
+#LightLayer <- subset(LightLayer, light >60)
+LightLayer$light <- recode (LightLayer$light, "0:4 = 0; 4:10 = 1 ; 11:18 = 2; 19:30 = 3; 31:40 = 4; 41:50 = 5; 51:63 = 6", as.numeric.result=TRUE)
 
-LightMap <- BaseMap + geom_tile(aes(x = longitude, y = latitude, fill=light), data = LightLayer, alpha = 0.7) +
-            geom_point(aes(x=longitude, y=latitude, shape = inUC, color = inUC), data = ExA, size = 7 ) +
-            scale_fill_gradient(low = "darkblue", high= "lightblue") +
-            theme(legend.position="none") + 
-            geom_text(aes(x=longitude+0.3, y=latitude+0.08, fontface="bold", color = inUC, fontsize = 7), data=ExA, label=ExA$Date) +
-            scale_colour_manual(values = c("firebrick","pink"))
-rm(LightLayer)
+LightMap <- BaseMap +   geom_tile(aes(x = longitude, y = latitude, fill=light), data = LightLayer, alpha = 0.6) +
+  geom_point(aes(x=longitude, y=latitude-0.1, color="white"), data = ExA, size = 5 ) +
+  geom_point(aes(x=longitude, y=latitude-0.1, color="red"), data = ExA, size = 4 ) +
+  geom_point(aes(x=longitude, shape= inUC, color=inUC, y=latitude-0.1), data = ExA, size = 8 ) +
+  geom_text(aes(x=longitude+0.3, y=latitude+0.19, fontface="bold", colour="firebrick", fontsize = 7), data=ExA, label=ExA$Date) +
+  scale_fill_gradient(low = "darkblue", high= "yellow") + 
+  scale_shape_manual(values=c(10, 10, 13, 13)) +
+  scale_colour_manual(values = c("white","white", "white","black", "firebrick", "firebrick")) +
+  theme(legend.position="none")
+#plot(LightMap) 
+          
+unlink("Downloaded_Data/LNMDMS2a.tif")
+rm(LightLayer, RASTERlight, e)
+
 
 # Show Accessmap
 unzip("Downloaded_Data/Downloaded_Raster_Data.zip", exdir="Downloaded_Data")
@@ -106,29 +112,39 @@ RASTERAccess<- raster("Downloaded_Data/GACGEM2a.tif")
 e <- extent(27.9, 34.9, 36.2, 41.7)
 AccessLayer <- crop(RASTERAccess, e)
 #aggregating cells because else, way too muh values
-AccessLayer <- raster::aggregate(AccessLayer, fact=2, fun=mean, na.rm=TRUE)
+#AccessLayer <- raster::aggregate(AccessLayer, fact=1, fun=mean, na.rm=TRUE)
 #convert to usable dataframe including eliminating largest Access time values (in minutes ) and aggregating the rest to 10 min intervals
 AccessLayer <- as(AccessLayer, "SpatialPixelsDataFrame")
 AccessLayer <- data.frame(AccessLayer)
-unlink("Downloaded_Data/GACGEM2a.tif")
-
-rm(RASTERAccess, e)
-
+AccessLayer$y <- AccessLayer$y-0.09
 colnames(AccessLayer) <- c("AccessTime", "longitude", "latitude")
 AccessLayer$AccessTime <- as.numeric(AccessLayer$AccessTime)
 
 #subsetting and binning Access Time values to 10 minute bins to reduce observations. N
 #ow, only displaying areas that have Access Time < 120 minutes
-AccessLayer <- subset(AccessLayer, AccessTime < 120)
+#AccessLayer <- subset(AccessLayer, AccessTime < 120)
 AccessLayer$AccessTime <- AccessLayer$AccessTime/10
+AccessLayer$AccessTime <- ifelse(AccessLayer$AccessTime >= 18, 18, AccessLayer$AccessTime)
 AccessLayer$AccessTime <- round(AccessLayer$AccessTime)
 
-AccessMap <- BaseMap + geom_tile(aes(x = longitude, y = latitude, fill=AccessTime), data = AccessLayer) +
-            geom_point(aes(x=longitude, y=latitude, shape = inUC, color = inUC), data = ExA, size = 7 ) +
-            scale_fill_gradient(low = "lightblue", high= "darkblue") +
-            theme(legend.position="none") + 
-            geom_text(aes(x=longitude+0.3, y=latitude+0.08, fontface="bold", color = inUC, fontsize = 7), data=ExA, label=ExA$Date) +
-            scale_colour_manual(values = c("firebrick","pink"))
+
+AccessMap <- BaseMap + geom_tile(aes(x = longitude, y = latitude, fill=AccessTime), data = AccessLayer, alpha = 0.75) + 
+  geom_point(aes(x=longitude, y=latitude-0.1, color="white"), data = ExA, size = 5 ) +
+  geom_point(aes(x=longitude, y=latitude-0.1, color="red"), data = ExA, size = 4 ) +
+  geom_point(aes(x=longitude, shape= inUC, color=inUC, y=latitude-0.1), data = ExA, size = 8 ) +
+  geom_text(aes(x=longitude+0.3, y=latitude+0.19, fontface="bold", colour="firebrick", fontsize = 7), data=ExA, label=ExA$Date) +
+  scale_fill_gradient(low = "yellow", high= "darkgreen") +
+  scale_shape_manual(values=c(10, 10, 13, 13)) +
+  scale_colour_manual(values = c("white","white", "white","black", "firebrick", "firebrick")) +
+  theme(legend.position="none")
+
+plot(AccessMap)  
+  
+
+
+unlink("Downloaded_Data/GACGEM2a.tif")
+
+rm(RASTERAccess, e)
 
 # Proximity to Coast
 unzip("Downloaded_Data/Downloaded_Raster_Data.zip", exdir="Downloaded_Data")

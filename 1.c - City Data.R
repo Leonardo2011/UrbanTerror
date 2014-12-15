@@ -454,7 +454,7 @@ write.csv(WC.UC.dist, "Cache/WC.UC.dist.csv")
 
 #################### Load some GIS Data into the set ;) ########################
 
-C <- WC.UC.dist
+C <- read.csv("Cache/WC.UC.dist.csv")
 
 unzip("Downloaded_Data/Downloaded_Raster_Data.zip", exdir="Downloaded_Data")
 
