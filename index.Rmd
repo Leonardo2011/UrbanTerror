@@ -1,6 +1,6 @@
 ---
 title: 'Political Violence in the Urban Space: Evidence from the GTD'
-author: "Sascha Schuster, Lukas Bretzinger, Cameron Reed"
+author: "Lukas Bretzinger, Cameron Reed, Sascha Schuster"
 date: "Fall 2014"
 output:
   html_document:
@@ -15,7 +15,6 @@ bibliography: UTBiblio.bib
 <img align="center" src="https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Images/urbanpic.jpg" /> 
 </p>
 <p style='text-align: Left;'>*This, then, is the suite of problems -- framed by the megatrends of population growth, urbanization, littoralization, and connectedness -- that will define the environment for future conflict, and for every aspect of life, in the next generation.*</p>
-
 <p style='text-align: right;'>*--David Kilcullen*</p>
 
 
@@ -28,14 +27,14 @@ PreGTD <- read.csv("Pregtd.csv", header=TRUE)
 
 ## Intro {.unnumbered}
 
-The world is in flames. Political violence is a concern to us all. Why does it occur? How to respond? David Kilcullen, an influential counterinsurgency expert published his new book called *Out of the Mountains. The Coming Age of the Urban Guerilla* [@Kilcullen2013]. He describes political violence as something that used to occur in small villages far from big cities and urban life. And he predicts that this was about to change. In the future, this violence will happen in the completely opposite space: In big cities that are highly connected with each other, crowded and often close to the coastline. That is the space of future conflict.
-
-<br>
+The world is in flames. Political violence is a concern to us all. Why does it occur? How to respond? David Kilcullen, an influential counterinsurgency expert published his new book called *Out of the Mountains. The Coming Age of the Urban Guerilla* [@Kilcullen2013]. He describes political violence as something that used to occur "out there", far from big cities and urban life. He claims to see a change. In the future, this political violence will come out of the mountains to appear in big cities that are highly connected with each other, crowded and often close to the coastline. These places will become the space of future conflict. That raises questions of life and death:
+  
+  
 
 <p style='text-align: center;'>*Where does political violence happen?*</p>
 <p style='text-align: center;'>*Is it moving to the urban, connected, crowded, littoral space?*</p>
-
-<br>
+  
+  
 
 We know that people historically have always preferred to live at the coast, and that there is a global urbanization - people moving to the cities rather than living in villages. But Kilcullen goes further. He suggests that political violence is migrating towards the urban, crowded, connected, and littoral space faster than people are. We wanted to find out whether that may be true. Have a look at our map. What you see are bubbles that stand for cities in the Middle East: The size stands for the number of inhabitants, the color for the victims of terrorist from 1990-2003. You can use your cursor to get more information.
 
@@ -46,7 +45,7 @@ frameborder="0" allowfullscreen>
   </iframe></div>
  
  <br>
-And now the same for 2004 until the end of our dataset in 2013. Bagdad changed the color scale with almost ten times more accumulated victims than any other city the 14 years before the war. Many would argue that the Iraq War changed the whole region dramatically. After the war's first phase ended, several groups increased their frequency of attacks on the capital. But there are other changes everywhere, have a look at Yemen and Pakistan. This is just an example of the shifting geography of political violence. We can show these developments with the help of our  dataset, but what we do it is getting a little bit more sophisticated.
+What you see is the result of week-long work with different data sets. And now the same for 2004 until the end of our data set in 2013. Baghdad changed our color scale with almost ten times more accumulated victims than any other city the 14 years before the war. Many would argue that this was to be expected as the Iraq War changed the whole region dramatically. But there are other changes everywhere, have a look at Yemen and the Stans. This is just a vivid example of the shifting geography of political violence.
 
 <div align="center">
 <iframe width="755" height="445"
@@ -58,18 +57,18 @@ frameborder="0" allowfullscreen>
 
 ## Measures {.unnumbered}
 
-We conduct a statistical analysis to see if over the past years, acts of political violence were in fact more likely to happen in urban and littoral environments, or it is just that people are moving to these spaces. For this, we gather data from a lot of different sources.Our main dataset is the Global Terrorism Database, a huge dataset that contains over 120,000 violent attacks since 1970 [@START2013]. Additionally, we want to know a lot about the environment in which these attacks take place. This information is not included in the GTD. So we have gathered a lot of information on cities. Some other data comes from the World Bank, some even from Wikipedia, but all our source combined include:
+We conduct a statistical analysis to see if over the past years, acts of political violence were in fact more likely to happen in urban and littoral environments, or it is just that people are moving to these spaces. For this, we gather data from a lot of different sources. Our main data set is the Global Terrorism Database, a huge data set that contains over 120,000 violent attacks since 1970 [@START2013]. Additionally, we want to know a lot about the environment in which these attacks take place. This information is not included in the GTD. Some other data comes from the World Bank, some from NASA, some even from Wikipedia, but all our source combined include:
 
- * Global night light emanations captured by satellites and equality of distribution amongst population
+ * Global night light emanations captured by satellites and equality of distribution among population
  * Distance of every place in the world to the coastline 
  * Travel distance to the next bigger city
- * The type of landcover (forest? buildings?)
+ * The type of land cover (forest? buildings?)
  * Population density
  * Economic activity
  * City population 
  * And the change over time for all of these 
 
-If you have ever worked with data yourself, you probably know that most of the time you spend making it organized: Finding, gathering, cleaning, tidying, calculating, merging. All of our datasets have a lot of missing information and we needed a lot of work to align things like city and country names and find all the missing values of information.
+If you have ever worked with data yourself, you probably know that most of the time you spend finding, gathering, organizing, cleaning, tidying, calculating, merging. All of our data sets have a lot of missing information and we needed a lot of work to align things like city and country names and find all the missing values of information. The goal is to pin all 120,000 incidences down on a map so we can investigate their environment. For around 80,000 it's done successfully. Given that all we know about many is not much better than "Highway between Delhi and Agra", that is good for the moment. 
 
 <br>
 
@@ -93,7 +92,7 @@ We have taken a couple of attacks from the GTD that took place in Turkey just to
  
  * 2006-08-28, Antalya: Four people were killed and approximately 65 were injured when a bomb attached to a motorcycle detonated in Antalya, Turkey. No one claimed responsibility for the attack.
 
-To illustrate a little bit better how we learn more about these locations, have a look at the following maps. They are examples of how we gather additional information on the 120.000 incidents of political violence in the global database. The first map shows how much light communities emanate at night - a sign for peoples' access to electricity.
+To illustrate a bit better how we learn more about these locations, have a look at the following maps. They are examples of how we gather additional information on these incidents of political violence in the global database. The first map shows how much light communities emanate at night - a sign for peoples' access to electricity.
 
 
 <p style='text-align: Center;'>**Nightlight**</p>
@@ -221,7 +220,7 @@ stargazer(fixed.dum1,fixed.dum2,fixed.dum3,fixed.dum4,fixed.dum5,
           dep.var.caption=c("Target Variables (Relative to Country Maximum %)"),
           covariate.labels=c("Time (Year)", "Urban Population Share (% of total)", "Urban Population Share*Time", 
                              "Population's Coastal Distance (% of max)", "Population's Coastal Distance*Time"), 
-          align=TRUE,no.space=TRUE,dep.var.labels.include = FALSE, model.numbers = FALSE, note="Observation are means as country years")
+          align=TRUE,no.space=TRUE,dep.var.labels.include = FALSE, model.numbers = FALSE, notes="Observation are yearly country means")
 ```
 
 </div>
@@ -234,13 +233,22 @@ So what do we see here? The result of our first analysis is quite the opposite o
  
 <br> 
 
-We hoped you like this website, and we would be happy to hear from you. Feel free to send us a message, ask us for more regression tables and our data if you like!
+<br> 
+
+<br> 
+
+<br>
+
+<br> 
+
+
+
+<p style='text-align: right;'>We hope you like this website. Feel free to shoot us a message, ask for more regression tables or our data if you like!</p>
 <p style='text-align: right;'>Sascha - saschust@syr.edu   Lukas - lbretzin@syr.edu   Cameron - ccreed@syr.edu</p>
- 
+<p style='text-align: right;'>*Atlantis Transatlantic Degree Program in International Security*</p>
+
 <br>
-<br>
-<br>
-<br>
-  
+
+
 
 ## References  {.unnumbered}
