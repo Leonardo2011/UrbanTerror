@@ -294,7 +294,6 @@ rm(X)
 
 
 GTD["original.city"]<- GTD$city
-X <- GTD$city
 source('SmallScripts/CityCleaning.R')
 source('SmallScripts/CleanSpecialCharacters.R')
 GTD$city <- X

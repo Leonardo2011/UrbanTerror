@@ -1,15 +1,63 @@
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Lima and El Callao" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Lima Blanca" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Lima-Callao" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Lima-Huancayo" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="San Juan de Lurigancho" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="San Juan de Lurighancho" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="San Martin de Porres" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Comas" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Comas District" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Villa El Salvador" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Villa El Savador" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Villa Maria del Tricanfo" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Villa Maria del Triunfo" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Villa Marina" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Villa Rica" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Villa Virgen" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Miraflores" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="San Juan de Mira Flores" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="San Juan de Miraflores" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Chorrillas District" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Chorrillos" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Puente Piedra" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Independencia" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="La Victoria" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Carabayllo" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="rimac" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="El Agustino" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Santa Anita" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="San Borja" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Brena " ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Lurigancho" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Surquillo" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Pueblo Libre" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Lurin" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="San Isidro" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Pachacamac" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Lince" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Magdalena del Mar" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="San Luis" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Barranco" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Chaclacayo" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="La Polvora" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Santaines" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Arce" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Elcallao" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Chacarilla" ] <- "Lima"
+GTD$city[GTD$country_txt == "Peru" & GTD$city =="Villa Victoria" ] <- "Lima"
+
+
+X <- GTD$city
 X <- gsub("^ .", "", X)
 X <- gsub(". $", "", X)
 X <- gsub("\\(District\\)", "District", X, ignore.case=TRUE)
 X <- gsub("\\(\\(District\\)\\)", "District", X, ignore.case=TRUE)          
 X <- gsub("\\(Province\\)", "Province", X, ignore.case=TRUE)             
 X <- gsub("\\(Province", "Province", X, ignore.case=TRUE) 
-
 X[X == "\\(blank\\)"|X == "blank"|X == "unknown"|X == "Unknown"|X == "na"|X == "NA"| X == "not stated"|
   X == "ns"|X == "NS"|X == "unk"|X == "not stated"|X == "n\\/s"|X == "n/s"|X == "Unkknown"|X == "\\(Leer\\)"|
     X == "unidentified"|X == "(Leer)"|X == "area unk"|X == "exact location unk"|X == "no city or area shown"] <- NA
-
-X<-gsub("^sarzulgarh","sardulgarh", X, ignore.case=TRUE)
+<-gsub("^sarzulgarh","sardulgarh", X, ignore.case=TRUE)
 X<-gsub("^Buenas Aires","buenos aires", X, ignore.case=TRUE)
 X<-gsub("^Buenos Aiers","buenos aires", X, ignore.case=TRUE)
 X<-gsub("^Buenos Aries","buenos aires", X, ignore.case=TRUE) 
@@ -310,47 +358,6 @@ X<-gsub("^Chota Lahore","lahore", X, ignore.case=TRUE)
 X<-gsub("^Faizabad","Faisalabad", X, ignore.case=TRUE)
 X<-gsub("^Panama City","panama", X, ignore.case=TRUE)
 X<-gsub("^acos vichos","acos vinchos", X, ignore.case=TRUE)
-X<-gsub("^Lima and El Callao","lima", X, ignore.case=TRUE)
-X<-gsub("^Lima Blanca","lima", X, ignore.case=TRUE)
-X<-gsub("^Lima-Callao","lima", X, ignore.case=TRUE)
-X<-gsub("^Lima-Huancayo","lima", X, ignore.case=TRUE)
-X<-gsub("^San Juan de Lurigancho","lima", X, ignore.case=TRUE)
-X<-gsub("^San Juan de Lurighancho","lima", X, ignore.case=TRUE)
-X<-gsub("^San Martin de Porres","lima", X, ignore.case=TRUE)
-X<-gsub("^Comas","lima", X, ignore.case=TRUE)
-X<-gsub("^Comas District","lima", X, ignore.case=TRUE)
-X<-gsub("^Villa El Salvador","lima", X, ignore.case=TRUE)
-X<-gsub("^Villa El Savador","lima", X, ignore.case=TRUE)
-X<-gsub("^Villa Maria del Tricanfo","lima", X, ignore.case=TRUE)
-X<-gsub("^Villa Maria del Triunfo","lima", X, ignore.case=TRUE)
-X<-gsub("^Villa Marina","lima", X, ignore.case=TRUE)
-X<-gsub("^Villa Rica","lima", X, ignore.case=TRUE)
-X<-gsub("^Villa Virgen","lima", X, ignore.case=TRUE)
-X<-gsub("^Miraflores","lima", X, ignore.case=TRUE)
-X<-gsub("^San Juan de Mira Flores","lima", X, ignore.case=TRUE)
-X<-gsub("^San Juan de Miraflores","lima", X, ignore.case=TRUE)
-X<-gsub("^Chorrillas District","lima", X, ignore.case=TRUE)
-X<-gsub("^Chorrillos","lima", X, ignore.case=TRUE)
-X<-gsub("^Puente Piedra","lima", X, ignore.case=TRUE)
-X<-gsub("^Independencia","lima", X, ignore.case=TRUE)
-X<-gsub("^La Victoria","lima", X, ignore.case=TRUE)
-X<-gsub("^Carabayllo","lima", X, ignore.case=TRUE)
-X<-gsub("^rimac","lima", X, ignore.case=TRUE)
-X<-gsub("^El Agustino","lima", X, ignore.case=TRUE)
-X<-gsub("^Santa Anita","lima", X, ignore.case=TRUE)
-X<-gsub("^San Borja","lima", X, ignore.case=TRUE)
-X<-gsub("^Brena ","lima", X, ignore.case=TRUE)
-X<-gsub("^Lurigancho","lima", X, ignore.case=TRUE)
-X<-gsub("^Surquillo","lima", X, ignore.case=TRUE)
-X<-gsub("^Pueblo Libre","lima", X, ignore.case=TRUE)
-X<-gsub("^Lurin","lima", X, ignore.case=TRUE)
-X<-gsub("^San Isidro","lima", X, ignore.case=TRUE)
-X<-gsub("^Pachacamac","lima", X, ignore.case=TRUE)
-X<-gsub("^Lince","lima", X, ignore.case=TRUE)
-X<-gsub("^Magdalena del Mar","lima", X, ignore.case=TRUE)
-X<-gsub("^San Luis","lima", X, ignore.case=TRUE)
-X<-gsub("^Barranco","lima", X, ignore.case=TRUE)
-X<-gsub("^Chaclacayo","lima", X, ignore.case=TRUE)
 X<-gsub("^Ayachucho","ayacucho", X, ignore.case=TRUE)
 X<-gsub("^Ayachucho City","ayacucho", X, ignore.case=TRUE)
 X<-gsub("^Ayachuco","ayacucho", X, ignore.case=TRUE)
@@ -1071,8 +1078,7 @@ X<-gsub("^huarai$","huaraz", X, ignore.case=TRUE)
 X<-gsub("^huaralcity$","huaraz", X, ignore.case=TRUE)
 X<-gsub("^huaurahua$","huaura", X, ignore.case=TRUE)
 X<-gsub("^julianca$","juliaca", X, ignore.case=TRUE)
-X<-gsub("^lapolvora$","lima", X, ignore.case=TRUE)
-X<-gsub("^santaines$","lima", X, ignore.case=TRUE)
+
 X<-gsub("^moyobambu$","moyobamba", X, ignore.case=TRUE)
 X<-gsub("^mayopampa$","moyobamba", X, ignore.case=TRUE)
 X<-gsub("^monobamba$","moyobamba", X, ignore.case=TRUE)
@@ -1339,7 +1345,7 @@ X<-gsub("^eshkolot$", "arramadin", X, ignore.case=TRUE)
 X<-gsub("^khorog$", "khorugh", X, ignore.case=TRUE)
 X<-gsub("^sanestebancatarina$", "apastepeque", X, ignore.case=TRUE)
 X<-gsub("^castellondelaplana$", "castellodelaplana", X, ignore.case=TRUE)
-X<-gsub("^arce$", "lima", X, ignore.case=TRUE)
+
 X<-gsub("^beitshean$", "betshean", X, ignore.case=TRUE)
 X<-gsub("^sanrafaelobrajuelo$", "santiagononualco", X, ignore.case=TRUE)
 X<-gsub("^halhoul$", "halhul", X, ignore.case=TRUE)
@@ -1380,7 +1386,7 @@ X<-gsub("^armitsar$", "amritsar", X, ignore.case=TRUE)
 X<-gsub("^orense$", "ourense", X, ignore.case=TRUE)
 X<-gsub("^srinager$", "srinagar", X, ignore.case=TRUE)
 X<-gsub("^kalimpong$", "kalimpang", X, ignore.case=TRUE)
-X<-gsub("^elcallao$", "lima", X, ignore.case=TRUE)
+
 X<-gsub("^ozamis$", "ozamizcity", X, ignore.case=TRUE)
 X<-gsub("^bendery$", "bender", X, ignore.case=TRUE)
 X<-gsub("^kelanitissa$", "colombo", X, ignore.case=TRUE)
@@ -1478,7 +1484,7 @@ X<-gsub("^marwar$", "pali", X, ignore.case=TRUE)
 X<-gsub("^faisalabad$", "fayzabad", X, ignore.case=TRUE)
 X<-gsub("^alkutum$", "kutum", X, ignore.case=TRUE)
 X<-gsub("^kazakh$", "qazax", X, ignore.case=TRUE)
-X<-gsub("^villavictoria$", "lima", X, ignore.case=TRUE)
+
 X<-gsub("^merliotcity$", "sansalvador", X, ignore.case=TRUE)
 X<-gsub("^chiawelo$", "johannesburg", X, ignore.case=TRUE)
 X<-gsub("^nelliyadi$", "valvedditturai", X, ignore.case=TRUE)
@@ -1528,7 +1534,7 @@ X<-gsub("^bununu$", "bununukasa", X, ignore.case=TRUE)
 X<-gsub("^larosita$", "rosita", X, ignore.case=TRUE)
 X<-gsub("^marjayoun$", "marjuyun", X, ignore.case=TRUE)
 X<-gsub("^sanpaulo$", "saopaulo", X, ignore.case=TRUE)
-X<-gsub("^chacarilla$", "lima", X, ignore.case=TRUE)
+
 X<-gsub("^tricomalee$", "trincomalee", X, ignore.case=TRUE)
 X<-gsub("^imphaleast$", "imphal", X, ignore.case=TRUE)
 X<-gsub("^ballynafeigh$", "belfast", X, ignore.case=TRUE)
