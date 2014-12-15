@@ -28,7 +28,7 @@ PreGTD <- read.csv("Pregtd.csv", header=TRUE)
 
 ## Intro {.unnumbered}
 
-The world is in flames, political violence concerns us all. Why does it occur? How to respond? David Kilcullen, an influential counterinsurgency expert published his new book called *Out of the Mountains. The Coming Age of the Urban Guerilla* [@Kilcullen2013]. He describes political violence as something that used to occur in small villages far from big cities and urban life. And he predicts that this was about to change. In the future, this violence will happen in the completely opposite space: In big cities that are highly connected with each other, crowded and often close to the coastline. That is the space of future conflict.
+The world is in flames. Political violence is a concern to us all. Why does it occur? How to respond? David Kilcullen, an influential counterinsurgency expert published his new book called *Out of the Mountains. The Coming Age of the Urban Guerilla* [@Kilcullen2013]. He describes political violence as something that used to occur in small villages far from big cities and urban life. And he predicts that this was about to change. In the future, this violence will happen in the completely opposite space: In big cities that are highly connected with each other, crowded and often close to the coastline. That is the space of future conflict.
 
 <br>
 
@@ -37,21 +37,31 @@ The world is in flames, political violence concerns us all. Why does it occur? H
 
 <br>
 
-We know that people historically have always preferred to live at the coastal, and that there is a global urbanization - people moving to the cities rather than living in villages. But Kilcullen goes further. He suggests that political violence is migrating towards the urban, crowded, connected, and littoral space faster than people are. We wanted to find out whether that may be true. Have a look at our map. What you see are bubbles that stand for cities in the Middle East: The size stands for the number of inhabitants, the color for the victims of terrorist from 1990-2003. You can use your cursor to get more information.
+<<<<<<< HEAD
+We know that people historically have always preferred to live at the coast, and that there is a global urbanization - people moving to the cities rather than living in villages. But Kilcullen goes further. He suggests that political violence is migrating towards the urban, crowded, connected, and littoral space faster than people are. We wanted to find out whether that may be true. Have a look at our map. What you see are bubbles that stand for cities in the Middle East: The size stands for the number of inhabitants, the color for the victims of terrorist from 1990-2003. You can use your cursor to get more information.
 
 <div align="center">
-<iframe width="619" height="360"
-src="http://htmlpreview.github.io/?https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Analysis%20Test/googleVis/Region_min10Victims_before04f.html"
+<iframe width="755" height="445"
+=======
+We know that people historically have always preferred to live at the coast, and that there is a global urbanization - people moving to the cities rather than living in villages. But Kilcullen goes further. He suggests that political violence is migrating towards the urban, crowded, connected, and littoral space faster than people are. We wanted to find out whether that may be true. Have a look at our map. What you see are bubbles that stand for cities in the Middle East: The size represents the number of inhabitants, the color indicates the victims of terrorist from 1990-2003. You can use your cursor to get more information.
+
+<div align="center">
+<iframe width="750" height="437"
+>>>>>>> origin/gh-pages
+src="http://htmlpreview.github.io/?https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Analysis%20Test/googleVis/Region_min10Victims_before04n.html"
 frameborder="0" allowfullscreen>
   </iframe></div>
  
  <br>
- 
 And now the same for 2004 until the end of our dataset in 2013. Bagdad changed the color scale with almost ten times more accumulated victims than any other city the 14 years before the war. Many would argue that the Iraq War changed the whole region dramatically. After the war's first phase ended, several groups increased their frequency of attacks on the capital. But there are other changes everywhere, have a look at Yemen and Pakistan. This is just an example of the shifting geography of political violence. We can show these developments with the help of our  dataset, but what we do it is getting a little bit more sophisticated.
 
 <div align="center">
-<iframe width="619" height="360"
-src="http://htmlpreview.github.io/?https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Analysis%20Test/googleVis/Region_min10Victims_after04f.html"
+<<<<<<< HEAD
+<iframe width="755" height="445"
+=======
+<iframe width="750" height="437"
+>>>>>>> origin/gh-pages
+src="http://htmlpreview.github.io/?https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Analysis%20Test/googleVis/Region_min10Victims_after04n.html"
 frameborder="0" allowfullscreen>
   </iframe></div>
 
@@ -70,7 +80,7 @@ We conduct a statistical analysis to see if over the past years, acts of politic
  * City population 
  * And the change over time for all of these 
 
-If you have ever worked with data yourself, you probably know that most of the time you spend  making it fit your needs: Finding, gathering, cleaning, tidying, calculating, merging. All of our datasets have a lot of missing information and we needed a lot of work to align things like city and country names and find all the missing values of information.
+If you have ever worked with data yourself, you probably know that most of the time you spend making it organized: Finding, gathering, cleaning, tidying, calculating, merging. All of our datasets have a lot of missing information and we needed a lot of work to align things like city and country names and find all the missing values of information.
 
 <br>
 
@@ -79,10 +89,13 @@ If you have ever worked with data yourself, you probably know that most of the t
 We have taken a couple of attacks from the GTD that took place in Turkey just to show what we are doing. Here is a little description of each of them and what happened there:
 
 
+<<<<<<< HEAD
 * 2003-11-14, Istanbul: Two car bombings by the militant Islamic group, Great East Islamic Raiders Front (IBDA-C - Islami Buyuk Dogu Akincilar Cephesi), on synagogues in Istanbul, Turkey, killed at least twenty people and injured 302 others. One of the two almost simultaneous blasts occurred at the Beth Israel Synagogue, damaging the building and several cars. Numerous people were reportedly killed and injured in the bombing. The group identified itself in a telephone call to the Anadolu News Agency.
-
- * 2008-07-27, Istanbul: On Sunday, two bombs exploded minutes apart in one of Istanbul's busy shopping districts on the European side. Though the Kurdistan Workers Party denied responsibility for the attack, officials continually accuse them of direct involvement.
  
+=======
+ * 2003-11-14, Istanbul: Two car bombings by the militant Islamic group, Great East Islamic Raiders Front (IBDA-C - Islami Buyuk Dogu Akincilar Cephesi), on synagogues in Istanbul, Turkey, killed at least twenty people and injured 302 others. One of the two almost simultaneous blasts occurred at the Beth Israel Synagogue, damaging the building and several cars. Numerous people were reportedly killed and injured in the bombing. The group identified itself in a telephone call to the Anadolu News Agency.
+
+>>>>>>> origin/gh-pages
  * 1999-07-30, Gurpinar: A total of four village guards were killed in Gurpinar, Turkey, when a group of perpetrators attacked the guards who were protecting the Telekom employees. Officials reported that the employees where the target of this attack.
  
  * 1999-03-05, Cankiri: A car bomb attack targeted the Cankiri Provincial Governor, Ayhan Cevik, while he was driving in Cankiri, Turkey. Four people were killed and the Governor and nine others were wounded. The Turkish Workers and Peasants Liberation Army (TKP/ML-TIKKO) claimed responsibility for the attack.
@@ -90,22 +103,22 @@ We have taken a couple of attacks from the GTD that took place in Turkey just to
  * 2003-08-01, Ankara: An unnamed leftist organization detonated an explosive device in the garden of the Justice Ministry's Center of Education for Judge and Prosecutor Candidates in Ankara, Turkey. Eleven people, including policemen and judges, were injured in the explosion. Although a group claimed responsibility for the attack, Turkey's Interior Minister, Abdulkadir Aksu, did not publicly reveal the perpetrator group's name.
  
  * 1998-11-27, Kirikkale: A bomb exploded on a bus near Kirikkale, Turkey. The explosion killed four passengers and injured 20 others. The bomb was placed in the luggage department of the bus. There was no claim of responsibility for this attack.
-
- * 1999-10-18, Bademli: Unknown perpetrators set a Greek citizen's house on fire in the village of Bademli on Gokceada island, Turkey. A small child died in the fire.
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> origin/gh-pages
  * 1998-09-09, Kuyucak: In one of two related attacks, rebels from the Kurdistan Workers Party (PKK) attacked the Imamli settlement unit in the village of Kuyucak, Turkey, killing one person and injuring three (Mustafa, Hilmi and Nuriye Atici). The perpetrators fled after this incident.
  
  * 2006-08-28, Antalya: Four people were killed and approximately 65 were injured when a bomb attached to a motorcycle detonated in Antalya, Turkey. No one claimed responsibility for the attack.
 
- * 2006-08-28, Antalya: A car filled with explosives exploded 80 meters from the Russian Consulate General in Antalya, Turkey, killing three people and wounding at least 20 more. No one claimed responsibility for the attack, but authorities believed the Kurdish separatists were to blame.
- 
 To illustrate a little bit better how we learn more about these locations, have a look at the following maps. They are examples of how we gather additional information on the 120.000 incidents of political violence in the global database. The first map shows how much light communities emanate at night - a sign for peoples' access to electricity.
 
 
 <p style='text-align: Center;'>**Nightlight**</p>
 ![Light](https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Images/LightTurkey.png)
 
-Now we know something more about these places be did not before. This information will become part of our measure for "connectedness". But there is much more, like travel distance to the next biggest city, measured by the time needed to get there.
+Now we know something more about these places than we did not before. This information will become part of our measure for "connectedness". But there is much more, like travel distance to the next biggest city, measured by the time needed to get there.
 
 <p style='text-align: Center;'>**Road Access**</p>
 ![Access](https://raw.githubusercontent.com/LBRETZIN/UrbanTerror/master/Images/AccessTurkey.png)
@@ -121,7 +134,7 @@ Now we know something more about these places be did not before. This informatio
 
 ## Analysis {.unnumbered}
 
-Collecting all this information was necessarty to put together variables that represent the concepts of e.g. "crowdedness" or "littoralnes". Then we feed all of this data into a statistical model. The outcome is this regression table, which tells us how much our independent variables (like urbanization) influence the dependent variables, meaning the characteristics of the violent extremists' targets.
+Collecting all this information was necessary to put together variables that represent the concepts of e.g. "crowdedness" or "littoralnes". We then feed all of this data into a statistical model. The outcome is this regression table, which tells us how much our independent variables (like urbanization) influence the dependent variables, meaning the characteristics of the violent extremists' targets.
  
 <br> 
 
@@ -233,9 +246,9 @@ stargazer(fixed.dum1,fixed.dum2,fixed.dum3,fixed.dum4,fixed.dum5,
 </div>
 <br> 
 
-So what do we see here? The result of our first analysis is quite the opposite of David Kilcullen's predictions. In fact, violent extremists do attack urban places more frequently, but less than the growth of urban space would lead us to expect. The same is true for the coastal, or "littoral", space. Violent extremists do attack places near coasts more frequently, but less than the migration of people towards the coast would lead us to expect. David Kilcullen wrote: *"This, then, is the suite of problems -- framed by the megatrends of population growth, urbanization, littoralization, and connectedness -- that will define the environment for future conflict, and for every aspect of life, in the next generation."* That is a strong claim about the future. At least for the past that was not true. For each of the ten most terrorism affected countries we found either no trend or a trend pointing in the other direction. The megatrends of "population growth, urbanization, littoralization, and connectedness" exist, but conflict moved the other way. To understand why, we maybe must study the data on the level of violent extremist groups. 
+So what do we see here? The result of our first analysis is quite the opposite of David Kilcullen's predictions. Violent extremists appear to attack urban places more frequently, but less than the growth of urban space would lead us to expect. The same is true for the coastal (or "littoral") space. Violent extremists do attack places near coasts more frequently, but less than the migration of people towards the coast would lead us to expect. David Kilcullen wrote: *"This, then, is the suite of problems -- framed by the megatrends of population growth, urbanization, littoralization, and connectedness -- that will define the environment for future conflict, and for every aspect of life, in the next generation."* That is a strong claim about the future. At least for the past that was not true. For each of the ten most terrorism affected countries we found either no trend or a trend pointing in the other direction. The megatrends of "population growth, urbanization, littoralization, and connectedness" exist, but conflict moved the other way. To understand why, we must study the data on the level of violent extremist groups. 
   
-<p style='text-align: Center;'>**to be continued**</p>
+<p style='text-align: Center;'>**to be continued...**</p>
  
  
 <br> 
