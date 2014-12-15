@@ -54,9 +54,14 @@ X <- gsub("\\(District\\)", "District", X, ignore.case=TRUE)
 X <- gsub("\\(\\(District\\)\\)", "District", X, ignore.case=TRUE)          
 X <- gsub("\\(Province\\)", "Province", X, ignore.case=TRUE)             
 X <- gsub("\\(Province", "Province", X, ignore.case=TRUE) 
-X[X == "\\(blank\\)"|X == "blank"|X == "unknown"|X == "Unknown"|X == "na"|X == "NA"| X == "not stated"|
+
+
+X[X == "\\(blank\\)"|X == "blank"|X == "unknown"|X == "Unknown"|X == "na"|X == "NA"| X == "not stated"| X == "not Stated"|
   X == "ns"|X == "NS"|X == "unk"|X == "not stated"|X == "n\\/s"|X == "n/s"|X == "Unkknown"|X == "\\(Leer\\)"|
     X == "unidentified"|X == "(Leer)"|X == "area unk"|X == "exact location unk"|X == "no city or area shown"] <- NA
+
+
+
 <-gsub("^sarzulgarh","sardulgarh", X, ignore.case=TRUE)
 X<-gsub("^Buenas Aires","buenos aires", X, ignore.case=TRUE)
 X<-gsub("^Buenos Aiers","buenos aires", X, ignore.case=TRUE)
