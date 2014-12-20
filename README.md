@@ -29,11 +29,13 @@ Lukas Bretzinger, Cameron Reed, Sascha Schuster
  *  Model with treatment on country level: Coastal Megacity vs. no Coastal Megacity. Gravitation?  
  * single out the effect of various institutions coding and account for it, if possible, to run analysis back til 1970.
 
+ * Identify the best analytical tools and methods to study group behaviour (we want to identify both if there are clear trends, and if certain events have an impact, so some sort of polynomial regression and visualisation would be a potentially usefull first step)
+
 
 **nice to haves** 
  *  use geonames to find missing values
  *  find exact urban center growth for larger cities to replace our estimates. 
-
+ *  get into spatial analysis, as c.traxler suggested at the thesis cluster meeting 
 
 
 ===========
