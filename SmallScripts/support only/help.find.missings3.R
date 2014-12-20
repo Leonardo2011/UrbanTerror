@@ -1,15 +1,5 @@
 
 
-#download a limited GTD we created for this assignment (5MB instead of 100MB file)
-PreGTD_in_Memory <- getURL("https://rawgit.com/LBRETZIN/UrbanTerror/master/TerrorData/Pregtd.csv", ssl.verifypeer=0L, followlocation=1L)
-writeLines(PreGTD_in_Memory,'Pre.GTD.csv')
-rm(PreGTD_in_Memory)
-PreGTD <- read.csv("Pre.GTD.csv", header=TRUE)
-
-WC.UC.dist_in_Memory <- getURL("https://rawgit.com/LBRETZIN/UrbanTerror/master/Cache/WC.UC.dist.csv", ssl.verifypeer=0L, followlocation=1L)
-writeLines(WC.UC.dist_in_Memory,'WC.UC.dist.csv')
-rm(WC.UC.dist_in_Memory)
-
 WC.UC.dist <- read.csv("WC.UC.dist.csv", header=TRUE)
 
 PreGTD <- read.csv('TerrorData/Pregtd.csv')
@@ -224,9 +214,10 @@ X$GTD.city <- sub("highlands", NA, X$GTD.city)
 X$GTD.city <- sub("hills", NA, X$GTD.city)
 X$GTD.city <- sub("regimiento", NA, X$GTD.city)
 X$GTD.city <- sub("junction", NA, X$GTD.city)
-X$GTD.city <- sub("miles", NA, X$GTD.city)
-
-
+X$GTD.city <- sub("north", NA, X$GTD.city)
+X$GTD.city <- sub("south", NA, X$GTD.city)
+X$GTD.city <- sub("west", NA, X$GTD.city)
+X$GTD.city <- sub("east", NA, X$GTD.city)
 
 X <- subset(X, !is.na(GTD.city))
 
@@ -242,6 +233,8 @@ Missing["attacks"] <- Missing$x
 Missing$x <- NULL
 Missing <- Missing[order(-Missing$attacks), ]
 rm(List)
+
+
 X <- subset(Missing, attacks>=3 & attacks<=150)
 X["lookup"] <- paste(X$Group.1, X$country_txt, sep=", ")
 
