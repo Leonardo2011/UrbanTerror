@@ -36,7 +36,7 @@ Lukas Bretzinger, Cameron Reed, Sascha Schuster
 
 
 
-
+===========
 
 
 **1 - Data Gathering, Cleaning, Merging.R**	is the main script for merging data sets. The result is the "preGTD" saved as csv in the Terror Data Folder. It **combines the scipts 1.a, 1.b., 1.c**. 
