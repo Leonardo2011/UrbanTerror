@@ -44,7 +44,23 @@ if(file.exists("Cache/UrbanCenters.csv"))
   ##### Cleaning Data #####
   
   #Cleaning the Urban Centers name in order to allow google.maps API to find them
-  source('SmallScripts/UrbanCleaning.R')
+  UrbanCenters$City <- gsub("\\(.*","", UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\,.*","", UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\[.+?\\]","", UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\(.+?\\)","", UrbanCenters$City)
+  UrbanCenters$City <- gsub("[[:digit:]]", "", UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\x2d.*","", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City  <- gsub("\\xe2\x80\x91.*","", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City  <- gsub("\\xe2\x80\x92.*","", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City  <- gsub("\\xe2\x80\x93.*","", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City  <- gsub("\\xe2\x80\x94.*","", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("Region", "", UrbanCenters$City)
+  UrbanCenters$City <- gsub("Greater ", "", UrbanCenters$City)
+  X <- UrbanCenters$City
+  source('SmallScripts/CleanSpecialCharacters.R')
+  UrbanCenters$City <- X
+  rm(X)
+  
   
   ###### Manipulate Data ######
   
