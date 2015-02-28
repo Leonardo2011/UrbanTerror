@@ -1,3 +1,4 @@
+
 ### Fall 2014
 ### Instructor: Christopher Gandrud
 
@@ -80,7 +81,6 @@ WDIData <- merge(WDIData, Highs.URB.MCTY, by=("country"))
 WDIData <- merge(WDIData, Highs.URB.LCTY.UR, by=("country"))
 WDIData <- merge(WDIData, Highs.POP.TOTL, by=("country"))
 
-
 rm(Highs.URB.TOTL, Highs.URB.MCTY, Highs.URB.LCTY.UR, Highs.POP.TOTL)
 
 #MAX.URB.TOTL = Urban population at its highest point
@@ -154,7 +154,7 @@ WDIData <- subset(WDIData,
 # codebook: http://www.correlatesofwar.org/COW2%20Data/WarData_NEW/Intra-StateWars_Codebook.pdf
 
 #download, define and subset
-x <- getURL("www.correlatesofwar.org/COW2%20Data/WarData_NEW/Intra-StateWarData_v4.1.csv")
+x <- getURL("http://www.correlatesofwar.org/data-sets/COW-war/intra-state-war-data-v4-1/at_download/file")
 COWIS <- read.csv(text = x)
 rm(x)
 COWIS <- subset(COWIS, select=c(SideA, SideB, StartYear1, EndYear1))
@@ -224,7 +224,7 @@ COWIS1 <- rename(COWIS1 , c("TimeFilled"="Intra.WAR"))
 # codebook: http://www.correlatesofwar.org/COW2%20Data/WarData_NEW/Inter-StateWars_Codebook.pdf
 
 #download, define and subset
-x <- getURL("http://www.correlatesofwar.org/COW2%20Data/WarData_NEW/Inter-StateWarData_v4.0.csv")
+x <- getURL("http://www.correlatesofwar.org/data-sets/COW-war/inter-state-war-data/at_download/file")
 COWIS2 <- read.csv(text = x)
 rm(x)
 COWIS2 <- subset(COWIS2, select=c(StateName, StartYear1, EndYear1), EndYear1>=1970, rownames=FALSE)
@@ -266,7 +266,7 @@ COWIS2 <- rename(COWIS2 , c("TimeFilled"="Inter.WAR"))
 # codebook: http://www.correlatesofwar.org/COW2%20Data/WarData_NEW/Extra-StateWars_Codebook.pdf
 
 #download, define and subset
-x <- getURL("http://www.correlatesofwar.org/COW2%20Data/WarData_NEW/Extra-StateWarData_v4.0.csv")
+x <- getURL("http://www.correlatesofwar.org/data-sets/COW-war/extra-state-war-data/at_download/file")
 COWIS3 <- read.csv(text = x)
 rm(x)
 COWIS3$EndYear1 <- recode(COWIS3$EndYear1, "-7=2014", as.numeric.result=TRUE)

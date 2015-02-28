@@ -28,8 +28,8 @@ unlink("TerrorData/globalterrorismdb_0814dist.csv")
 #We subset the database, selecting also only successful terror attacks.
 #Documentation on the variables we select can be found on: http://www.start.umd.edu/gtd/downloads/Codebook.pdf
 
-GTD <- subset(rawGTD, select = c(eventid, iyear, imonth, iday, country, country_txt, region, provstate, region_txt, city, attacktype1, targtype1, targsubtype1,
-                                 weaptype1, weapsubtype1, propextent, nkill, nwound, latitude, longitude), 
+GTD <- subset(rawGTD, select = c(eventid, iyear, imonth, iday, country_txt, city, attacktype1, targtype1, targsubtype1,
+                                 propextent, nkill, nwound, latitude, longitude), 
               iyear >= 1970, na.strings = c("", " "))
 rm(rawGTD)
 
