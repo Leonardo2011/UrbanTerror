@@ -283,84 +283,147 @@ if(file.exists("Cache/world.cities.csv"))
 #In this script we merge the UrbanCenters and world.cities databases so that each 
 #city is allocated to its closest Urban Center (including distances)
 
-#extremely time and RAM consuming. See: source('SmallScripts/if.the.WC.UC.Merger.needs.splitting.of.dataset.R')
+# times 4: we splitted the city dataset into 4 sets to make this operation work on machines with less RAM...
+world.citiesa <- subset (world.cities, pop<=median(pop))
+world.citiesb <- subset (world.cities, !pop<=median(pop))
+world.cities1 <- subset (world.citiesa, !pop<=median(pop))
+world.cities2 <- subset (world.citiesa, pop<=median(pop))
+world.cities3 <- subset (world.citiesb, !pop<=median(pop))
+world.cities4 <- subset (world.citiesb, pop<=median(pop))
+rm(world.citiesa, world.citiesb)
 
 #Renaming columns and select subsets for merging over fake variable to create a matrix 
-#with each City X each Urban Center (~ 60.000 Cities X ~ 500 urban Centers) 
+#with each city and each Urban Center for each city (~ 120.000 Cities X ~ 500 urban Centers) 
 UCmerge <- subset(UrbanCenters, select = c("lon", "lat", "full.name"))
-UCmerge$fake=1
-WCmerge <-subset(world.cities, select = c("long", "lat"))
-WCmerge["CityID"] <- rownames(world.cities)
-WCmerge$fake=1
+DTUC <- data.table(UCmerge)
+DTUC[,fake:=1]
+WCmerge1 <-subset(world.cities1, select = c("long", "lat"))
+WCmerge1["CityID"] <- rownames(world.cities1)
+DTWC1 <- data.table(WCmerge1)
+DTWC1[,fake:=1]
+ALLDIST1 <-merge(DTUC, DTWC1, by='fake',allow.cartesian=TRUE)
+rm(WCmerge1, DTWC1)
 
-ALLDIST <-merge(UCmerge, WCmerge, by=c("fake"))
+
+WCmerge2 <-subset(world.cities2, select = c("long", "lat"))
+WCmerge2["CityID"] <- rownames(world.cities2)
+DTWC2 <- data.table(WCmerge2)
+DTWC2[,fake:=1]
+ALLDIST2 <-merge(DTUC, DTWC2, by='fake',allow.cartesian=TRUE)
+rm(WCmerge2, DTWC2)
+WCmerge3 <-subset(world.cities3, select = c("long", "lat"))
+WCmerge3["CityID"] <- rownames(world.cities3)
+DTWC3 <- data.table(WCmerge3)
+DTWC3[,fake:=1]
+ALLDIST3 <-merge(DTUC, DTWC3, by='fake',allow.cartesian=TRUE)
+rm(WCmerge3, DTWC3)
+WCmerge4 <-subset(world.cities4, select = c("long", "lat"))
+WCmerge4["CityID"] <- rownames(world.cities4)
+DTWC4 <- data.table(WCmerge4)
+DTWC4[,fake:=1]
+ALLDIST4 <-merge(DTUC, DTWC4, by='fake',allow.cartesian=TRUE)
+rm(WCmerge4, DTWC4, UCmerge, DTUC, world.cities1, world.cities2, world.cities3, world.cities4)
+
+
 
 #Finding each distance ( ~ 30 million individual distances will be found )
-ALLDIST["DISTkm"] <- gdist(ALLDIST$lon, ALLDIST$lat.x, ALLDIST$long, ALLDIST$lat.y, units = "km",
-                           a = 6378137, b = 6356752, verbose = FALSE)
+DISTkm <- gdist(ALLDIST1$lon, ALLDIST1$lat.x, ALLDIST1$long, ALLDIST1$lat.y, units = "km",
+                a = 6378137, b = 6356752, verbose = FALSE)
+ALLDIST1 <-  data.table(ALLDIST1, DISTkm)
+rm(DISTkm)
+ALLDIST1 <- subset(ALLDIST1, select=c(CityID, DISTkm, full.name))
 
-#Reducing to only the closest Urban Center for each and every city, 30 million distances to the ~ 60.000 minimal ones
-ALLDIST.min <- aggregate(DISTkm ~ CityID, ALLDIST, function(x) min(x))
-ALLDIST$lon <- NULL
-ALLDIST$lat.x  <- NULL		
-ALLDIST$long <- NULL
-ALLDIST$lat.y <- NULL
-ALLDIST.fullmin <- merge(ALLDIST.min, ALLDIST, by=c("CityID", "DISTkm"))
-ALLDIST.fullmin <- merge(ALLDIST.fullmin, UrbanCenters, by=c("full.name"), all.x=TRUE)
-ALLDIST.fullmin["Closest.Urban.Center"] <- ALLDIST.fullmin$"full.name"
-ALLDIST.fullmin["WC.UC.dist.km"] <- ALLDIST.fullmin$"DISTkm"
+#Reducing to only the closest Urban Center for each and every city
+ALLDIST1.min  <- ALLDIST1[,list(DISTkm = min(DISTkm)),by=list(CityID)]
+ALLDIST1.min <-merge(ALLDIST1.min, ALLDIST1, by=c("CityID","DISTkm"), all.y=FALSE)
+rm(ALLDIST1)
 
-#Bringing information on closest Urban Center and the respective distance back into 'world.cities'
-UC.WC.merger <- subset(ALLDIST.fullmin, select = c("CityID", "Closest.Urban.Center", "Population", "WC.UC.dist.km", 
-                                                   "Area", "Density", "coastalMC", "largest.UC"))
+#We will merge this back into the original City Data set later. Now, we repeat the two steps above
+#for the othe rparts of the splittet city data set (all because of the RAM issue)
+#2
+DISTkm <- gdist(ALLDIST2$lon, ALLDIST2$lat.x, ALLDIST2$long, ALLDIST2$lat.y, units = "km",
+                a = 6378137, b = 6356752, verbose = FALSE)
+ALLDIST2 <-  data.table(ALLDIST2, DISTkm)
+ALLDIST2 <- subset(ALLDIST2, select=c(CityID, DISTkm, full.name))
+ALLDIST2.min  <- ALLDIST2[,list(DISTkm = min(DISTkm)),by=list(CityID)]
+ALLDIST2.min <-merge(ALLDIST2.min, ALLDIST2, by=c("CityID","DISTkm"), all.y=FALSE)
+rm(ALLDIST2, DISTkm)
 
-#New dataset WC.UC.dist! which stands for a merged dataset including distance and estimate if the respective city is part of an urban center
-world.cities["CityID"] <-rownames(world.cities)
-WC.UC.dist <- merge(world.cities, UC.WC.merger, by="CityID")
-WC.UC.dist$WC.UC.dist.km <- as.numeric(WC.UC.dist$WC.UC.dist.km) 
-WC.UC.dist$Area <- as.numeric(WC.UC.dist$Area) 
-WC.UC.dist$capital <- as.numeric(WC.UC.dist$capital)
+#3
+DISTkm <- gdist(ALLDIST3$lon, ALLDIST3$lat.x, ALLDIST3$long, ALLDIST3$lat.y, units = "km",
+                a = 6378137, b = 6356752, verbose = FALSE)
+ALLDIST3 <-  data.table(ALLDIST3, DISTkm)
+ALLDIST3 <- subset(ALLDIST3, select=c(CityID, DISTkm, full.name))
+ALLDIST3.min  <- ALLDIST3[,list(DISTkm = min(DISTkm)),by=list(CityID)]
+ALLDIST3.min <-merge(ALLDIST3.min, ALLDIST3, by=c("CityID","DISTkm"), all.y=FALSE)
+rm(ALLDIST3, DISTkm)
 
-#CityID is now not needed anymore.
-WC.UC.dist$CityID <- NULL
+#4
+DISTkm <- gdist(ALLDIST4$lon, ALLDIST4$lat.x, ALLDIST4$long, ALLDIST4$lat.y, units = "km",
+                a = 6378137, b = 6356752, verbose = FALSE)
+ALLDIST4 <-  data.table(ALLDIST4, DISTkm)
+ALLDIST4 <- subset(ALLDIST4, select=c(CityID, DISTkm, full.name))
+ALLDIST4.min  <- ALLDIST4[,list(DISTkm = min(DISTkm)),by=list(CityID)]
+ALLDIST4.min <-merge(ALLDIST4.min, ALLDIST4, by=c("CityID","DISTkm"), all.y=FALSE)
+rm(ALLDIST4, DISTkm)
+
+#Bring them all together again
+ALLDIST.min <- merge(ALLDIST1.min, ALLDIST2.min, by=c("CityID", "DISTkm", "full.name"), all=TRUE)
+ALLDIST.min <- merge(ALLDIST.min, ALLDIST3.min, by=c("CityID", "DISTkm", "full.name"), all=TRUE)
+ALLDIST.min <- merge(ALLDIST.min, ALLDIST4.min, by=c("CityID", "DISTkm", "full.name"), all=TRUE)
+rm(ALLDIST1.min, ALLDIST2.min, ALLDIST3.min, ALLDIST4.min)
+
+
+# merge with world.cities and UrbanCenters 
+world.citiesID <- world.cities
+world.citiesID["CityID"] <-rownames(world.citiesID)
+WC.UC <- merge(world.citiesID, ALLDIST.min, by="CityID", all.x=TRUE)
+rm(world.citiesID, ALLDIST.min)
+WC.UC <- merge(WC.UC, UrbanCenters, by=c("full.name"), all.x=TRUE)
+
 
 #Housekeeping
-X<-WC.UC.dist$name
+X<-WC.UC$name
 source('SmallScripts/CleanSpecialCharacters.R')
-WC.UC.dist$name <- X
-rm(X)
-
-X<-WC.UC.dist$country.etc
+WC.UC$name <- X
+X<-WC.UC$country.etc
 source('SmallScripts/CleanSpecialCharacters.R')
 source('SmallScripts/CountryCleaninginCitySet.R')
-WC.UC.dist$country.etc <- X
+WC.UC$country.etc <- X
 rm(X)
+WC.UC["Closest.Urban.Center"] <- WC.UC$full.name
+WC.UC["WC.UC.dist.km"] <- WC.UC$DISTkm
+WC.UC$WC.UC.dist.km <- as.numeric(WC.UC$WC.UC.dist.km) 
+WC.UC$Area <- as.numeric(WC.UC$Area) 
+WC.UC$capital <- as.numeric(WC.UC$capital)
 
 #Introducing logical variable that tells us whether a city is part of an Urban Center or close to one.
 #We use a calculation that treates the middle of the city as the center of a circle.
-WC.UC.dist["part.of.urban.center"] <- (WC.UC.dist$WC.UC.dist.km <= (20+(2*(((WC.UC.dist$Area)/pi)**0.5))))
-WC.UC.dist["in.urban.centers.environment"] <- (WC.UC.dist$WC.UC.dist.km<=(40+(3*(((WC.UC.dist$Area)/pi)**0.5))))
-WC.UC.dist <- WC.UC.dist[order(-WC.UC.dist$pop, na.last=TRUE) , ]
-
-#remove rest
-rm(WCmerge, UCmerge, ALLDIST, ALLDIST.min, ALLDIST.fullmin, UC.WC.merger)
-
-
+WC.UC["part.of.urban.center"] <- (WC.UC$WC.UC.dist.km <= (25+(2*(((WC.UC$Area)/pi)**0.5))))
+WC.UC <- WC.UC[order(-WC.UC$pop, na.last=TRUE) , ]
 
 # Assigning a 1 to all the largest cities in a country
-LC <- aggregate(pop ~ country.etc,WC.UC.dist,max)
-LC["largestC"] <- 1
-WC.UC.dist <- merge(WC.UC.dist, LC, by=c("pop", "country.etc"), all.x=TRUE)
-WC.UC.dist <- WC.UC.dist[order(-WC.UC.dist$pop), ]
-WC.UC.dist$largestC[is.na(WC.UC.dist$largestC)] <-0
-WC.UC.dist$largestC[WC.UC.dist$name == "bombay" &  WC.UC.dist$country.etc  == "india"] <- 1
-WC.UC.dist$largestC[WC.UC.dist$name == "mexicocity" &  WC.UC.dist$country.etc  == "mexico"] <- 1
+LC <- aggregate(pop ~ country.etc, WC.UC, max)
+LC["largestC"] <- 1 
+WC.UC <- merge(WC.UC, LC, by=c("pop", "country.etc"), all.x=TRUE)
+WC.UC <- WC.UC[order(-WC.UC$pop), ]
+WC.UC$largestC[is.na(WC.UC$largestC)] <-0
+WC.UC$largestC[WC.UC$merge == "indiabombay"] <- 1
+WC.UC$largestC[WC.UC$merge == "mexicomexicocity"] <- 1
+WC.UC$largestC[WC.UC$merge == "unitedstatesofamericanewyork"] <- 1
+WC.UC$largestC[WC.UC$merge == "unitedkingdomlondon"] <- 1
+WC.UC$largestC[WC.UC$merge == "myanmaryangon"] <- 1
 rm(LC)
 
-write.csv(WC.UC.dist, "Cache/WC.UC.dist.old.csv")
 
+#Housekeeping
+WC.UC$lat.y <- NULL
+WC.UC$lat <- WC.UC$lat.x
+WC.UC <- subset(WC.UC, select=c(pop, country.etc, merge, name, lat, long, capital, Region, Closest.Urban.Center, 
+                                Population, WC.UC.dist.km, Area, Density, coastalMC, largest.UC, part.of.urban.center,
+                                largestC))
 
-
+write.csv(WC.UC, "Cache/WC.UC.dist.old.csv")
 
 
 

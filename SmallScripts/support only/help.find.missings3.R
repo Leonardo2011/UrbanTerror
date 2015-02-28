@@ -1,6 +1,6 @@
 
 
-WC.UC.dist <- read.csv("WC.UC.dist.csv", header=TRUE)
+WC.UC.dist <- read.csv("WC.UC.dist.gis.csv", header=TRUE)
 
 PreGTD <- read.csv('TerrorData/Pregtd.csv')
 
@@ -228,6 +228,21 @@ rm(X)
 List <- merge(List, PreGTD, by.x=c("Group.1"), by.y=c("GTD.city"), all.x=TRUE)
 List <- subset(List, is.na(List$old.pop))
 List <- List[!duplicated(List$merge),]
+
+GNName <- paste(List$original.city, List$country.etc, sep="")
+Lists <- split(GNName)
+options(geonamesUsername="lokullustest")
+
+ListGN <- lapply lapply(Lists, function (x) {
+  
+  GNsearch(maxRows="1", featureClass="P", orderby="relevence", q=X))} {lm(CC.HUMscale ~ IV.Time, data = x)})
+
+
+
+
+
+GNsearch(maxRows="1", featureClass="P", orderby="relevence", q="aceh, india")
+
 Missing <- subset(List, select=c("country_txt", "Group.1", "x", "original.city"))
 Missing["attacks"] <- Missing$x
 Missing$x <- NULL
@@ -235,7 +250,7 @@ Missing <- Missing[order(-Missing$attacks), ]
 rm(List)
 
 
-X <- subset(Missing, attacks>=3 & attacks<=150)
+X <- subset(Missing, attacks>=3 & attacks<=150x
 X["lookup"] <- paste(X$Group.1, X$country_txt, sep=", ")
 
 

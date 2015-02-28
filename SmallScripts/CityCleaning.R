@@ -62,7 +62,7 @@ X[X == "\\(blank\\)"|X == "blank"|X == "unknown"|X == "Unknown"|X == "na"|X == "
 
 
 
-<-gsub("^sarzulgarh","sardulgarh", X, ignore.case=TRUE)
+X<-gsub("^sarzulgarh","sardulgarh", X, ignore.case=TRUE)
 X<-gsub("^Buenas Aires","buenos aires", X, ignore.case=TRUE)
 X<-gsub("^Buenos Aiers","buenos aires", X, ignore.case=TRUE)
 X<-gsub("^Buenos Aries","buenos aires", X, ignore.case=TRUE) 
