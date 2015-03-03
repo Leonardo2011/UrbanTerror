@@ -233,9 +233,11 @@ GNName <- paste(List$original.city, List$country.etc, sep="")
 Lists <- split(GNName)
 options(geonamesUsername="lokullustest")
 
-ListGN <- lapply lapply(Lists, function (x) {
+ListGN <- lapply lapply(Lists, function (C) {
   
-  GNsearch(maxRows="1", featureClass="P", orderby="relevence", q=X))} {lm(CC.HUMscale ~ IV.Time, data = x)})
+GNsearch(maxRows="1", featureClass="P", orderby="relevence", q=x))}
+
+
 
 
 

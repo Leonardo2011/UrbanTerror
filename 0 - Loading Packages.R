@@ -31,8 +31,8 @@ ipak <- function(pkg){
 
 
 packages <- c("foreign", "car", "RCurl", "ggplot2", "WDI", "rtiff", "httr", "iterators", "dplyr", "plyr", "mapproj", 
-              "stargazer", "rgdal", "sp", "dismo","XML", "maps", "ggmap", "Imap", "geonames", "GSIF", "tiff", "stats",
-              "raster", "gdalUtils","geosphere", "maptools", "rgeos", "googleVis", "DataCombine", "R.utils", "data.table")
+              "stargazer", "rgdal", "sp", "dismo","XML", "maps", "ggmap", "geonames", "geosphere", "GSIF", "tiff", "stats",
+              "raster", "gdalUtils", "rgeos", "googleVis", "DataCombine", "R.utils", "data.table")
 
 ipak(packages)
 rm(packages, ipak)

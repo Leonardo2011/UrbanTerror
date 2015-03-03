@@ -37,38 +37,102 @@ if(file.exists("Cache/UrbanCenters.csv"))
   table <- readHTMLTable(URL, encoding = "UTF-16")
   UrbanCenters <- table [[2]]
   UrbanCenters$City <- as.character(UrbanCenters$City)
-  colnames(UrbanCenters)[5] <- "Area"
-  colnames(UrbanCenters)[6] <- "Density"
+  colnames(UrbanCenters)[6] <- "Area"
+  colnames(UrbanCenters)[7] <- "Density"
   
   
   ##### Cleaning Data #####
   
   #Cleaning the Urban Centers name in order to allow google.maps API to find them
+  UrbanCenters$City <- gsub("\\xc3\xa1","a", perl=TRUE, UrbanCenters$City) 
+  UrbanCenters$City <- gsub("\\xc3\xa2","a", perl=TRUE, UrbanCenters$City) 
+  UrbanCenters$City <- gsub("\\xc3\xa3","a", perl=TRUE, UrbanCenters$City) 
+  UrbanCenters$City <- gsub("\\xc3\xa4","a", perl=TRUE, UrbanCenters$City) 
+  UrbanCenters$City <- gsub("\\xc3\xa5","a", perl=TRUE, UrbanCenters$City) 
+  UrbanCenters$City <- gsub("\\xc3\xa0","a", perl=TRUE, UrbanCenters$City) 
+  UrbanCenters$City <- gsub("\\xc3\xa8","e", perl=TRUE, UrbanCenters$City) 
+  UrbanCenters$City <- gsub("\\xc3\xa9","e", perl=TRUE, UrbanCenters$City) 
+  UrbanCenters$City <- gsub("\\xc3\xaa","e", perl=TRUE, UrbanCenters$City) 
+  UrbanCenters$City <- gsub("\\xc3\xab","e", perl=TRUE, UrbanCenters$City) 
+  UrbanCenters$City <- gsub("\\xc3\xb1","n", perl=TRUE, UrbanCenters$City) 
+  UrbanCenters$City <- gsub("\\xc3\xb2","o", perl=TRUE, UrbanCenters$City) 
+  UrbanCenters$City <- gsub("\\xc3\xb3","o", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\xb4","o", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\xb5","o", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\xb6","o", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\xb9","u", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\xba","u", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\xbb","u", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\xbc","u", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc5\xab","u", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\xac","i", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\xad","i", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\xae","i", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\xaf","i", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc4\xaf","i", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x80","A", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x81","A", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x82","A", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x83","A", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x84","A", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x85","A", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x88","E", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x89","E", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x8a","E", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x8b","E", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x8c","I", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x8d","I", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x8e","I", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x8f","I", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc4\xb0","I", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x91","N", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x92","O", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x93","O", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x94","O", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x95","O", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x98","O", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x99","U", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x9a","U", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x9c","U", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xc3\x9b","U", perl=TRUE, UrbanCenters$City)
   UrbanCenters$City <- gsub("\\(.*","", UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xe2\x80\x91.*","", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xe2\x80\x92.*","", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xe2\x80\x93.*","", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\xe2\x80\x94.*","", perl=TRUE, UrbanCenters$City)
   UrbanCenters$City <- gsub("\\,.*","", UrbanCenters$City)
   UrbanCenters$City <- gsub("\\[.+?\\]","", UrbanCenters$City)
   UrbanCenters$City <- gsub("\\(.+?\\)","", UrbanCenters$City)
-  UrbanCenters$City <- gsub("[[:digit:]]", "", UrbanCenters$City)
+  #UrbanCenters$City <- gsub("[[:digit:]]", "", UrbanCenters$City)
   UrbanCenters$City <- gsub("\\x2d.*","", perl=TRUE, UrbanCenters$City)
-  UrbanCenters$City  <- gsub("\\xe2\x80\x91.*","", perl=TRUE, UrbanCenters$City)
-  UrbanCenters$City  <- gsub("\\xe2\x80\x92.*","", perl=TRUE, UrbanCenters$City)
-  UrbanCenters$City  <- gsub("\\xe2\x80\x93.*","", perl=TRUE, UrbanCenters$City)
-  UrbanCenters$City  <- gsub("\\xe2\x80\x94.*","", perl=TRUE, UrbanCenters$City)
   UrbanCenters$City <- gsub("Region", "", UrbanCenters$City)
   UrbanCenters$City <- gsub("Greater ", "", UrbanCenters$City)
-  X <- UrbanCenters$City
-  source('SmallScripts/CleanSpecialCharacters.R')
-  UrbanCenters$City <- X
-  rm(X)
+  UrbanCenters$City <- gsub(" de la Sierra", "", UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\x2d","", perl=TRUE, UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\.","",UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\\\", "", UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\(","",UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\)","",UrbanCenters$City)
+  
+  UrbanCenters$Country <- gsub("^..", "", UrbanCenters$Country)
+  UrbanCenters$Country[UrbanCenters$City=="Kathmandu"] <- "Nepal"
+  CoCi <-data.frame(paste(UrbanCenters$Country, UrbanCenters$City, sep=", "), row.names = NULL)
+  
+  UrbanCenters$City <- gsub("\\,","",UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\-","",UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\'","",UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\'","",UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\`","",UrbanCenters$City)
+  UrbanCenters$City <- gsub("\\'","",UrbanCenters$City)
+  UrbanCenters$City <- gsub(" ","",UrbanCenters$City)
+  UrbanCenters$City <- tolower(UrbanCenters$City)
   
   
   ###### Manipulate Data ######
   
   #Putting in a string with "Country, City" to allow google.maps API to find them
-  CoCi <-data.frame(paste(UrbanCenters$Country, UrbanCenters$City, sep=", "), row.names = NULL)
   CoCi["loc"] <- CoCi
   CoCi$loc <- as.character(CoCi$loc)
-  CoCi$loc <- gsub("^..", "", CoCi$loc)
   CoCiLoc<-(CoCi$loc)
   
   #Looking up lon/lat data for each Urban Center via google.maps using the geocode function of the package maps.
@@ -77,7 +141,7 @@ if(file.exists("Cache/UrbanCenters.csv"))
   {UrbanLoc <- read.csv("Cache/UrbanLoc.csv")
   } else
   {
-    UrbanLoc <- geocode(CoCiLoc, output = c("latlon", "latlona", "more", "all"),messaging = FALSE, sensor = FALSE, override_limit = FALSE)
+    UrbanLoc <- geocode(CoCiLoc, output = c("latlon", "latlona", "more", "all"),messaging = FALSE, sensor = FALSE, override_limit = TRUE)
     write.csv(UrbanLoc, "Cache/UrbanLoc.csv")
   }
   
@@ -159,17 +223,9 @@ if(file.exists("Cache/world.cities.csv"))
   worldcities2013 <- worldcities2013[order(-worldcities2013$Population),]
   worldcities2013["merge"] <- paste(worldcities2013$Country, worldcities2013$City, sep="xxx")
   worldcities2013 <- worldcities2013[!duplicated(worldcities2013$merge),]
-  worldcities2013$merge <-NULL  
+  worldcities2013$merge <- NULL  
   
-  
-  ###World cities dataset 3/3 (world.cities from the 'maps' package)###
-  
-  #The dataset is called world.cities. Since it is from 2009, we call it worldcities2009.
-  data(world.cities)
-  worldcities2009 <- world.cities
-  rm(world.cities)
-  
-  
+
   ###### Cleaning Data  ######
   
   #Our standard for city names is lowercase letters with no special characters from the worldcities2009 dataset 
@@ -194,11 +250,14 @@ if(file.exists("Cache/world.cities.csv"))
   
   
   
-  ###World cities dataset 2/2 (worldcities2009 from the 'maps' package)###
+  
+  ###World cities dataset 3/3 (world.cities from the 'maps' package)###
+  
+  #The dataset is called world.cities. Since it is from 2009, we call it worldcities2009.
   data(world.cities)
   worldcities2009 <- world.cities
   rm(world.cities)
-  worldcities2009$name <- tolower(worldcities2009$name)
+
   
   #the dataset has missing or wrong information
   worldcities2009$capital[worldcities2009$name == "delhi" & worldcities2009$country.etc == "India"] <- "1"
@@ -276,7 +335,7 @@ if(file.exists("Cache/world.cities.csv"))
 
 
 #############################################################################################################
-####################### 3. Merging Data Both City Data Sets and Urban Centers ###############################
+####################### 3. Merging Data: Both City Data Sets and Urban Centers ###############################
 #############################################################################################################
 
 
@@ -327,45 +386,40 @@ rm(WCmerge4, DTWC4, UCmerge, DTUC, world.cities1, world.cities2, world.cities3, 
 
 
 #Finding each distance ( ~ 30 million individual distances will be found )
-DISTkm <- gdist(ALLDIST1$lon, ALLDIST1$lat.x, ALLDIST1$long, ALLDIST1$lat.y, units = "km",
-                a = 6378137, b = 6356752, verbose = FALSE)
-ALLDIST1 <-  data.table(ALLDIST1, DISTkm)
-rm(DISTkm)
+ALLDIST1 <- ALLDIST1[order(ALLDIST1$CityID), ]
+ALLDIST1$DISTkm <- (distCosine(matrix(c(ALLDIST1$long, ALLDIST1$lat.y), ncol=2),matrix(c(ALLDIST1$lon, ALLDIST1$lat.x), ncol=2), r=6378137)/1000)
 ALLDIST1 <- subset(ALLDIST1, select=c(CityID, DISTkm, full.name))
-
+ALLDIST1 <-  data.table(ALLDIST1)
 #Reducing to only the closest Urban Center for each and every city
 ALLDIST1.min  <- ALLDIST1[,list(DISTkm = min(DISTkm)),by=list(CityID)]
-ALLDIST1.min <-merge(ALLDIST1.min, ALLDIST1, by=c("CityID","DISTkm"), all.y=FALSE)
+ALLDIST1.min <- merge(ALLDIST1.min, ALLDIST1, by=c("CityID","DISTkm"), all.y=FALSE)
 rm(ALLDIST1)
 
 #We will merge this back into the original City Data set later. Now, we repeat the two steps above
 #for the othe rparts of the splittet city data set (all because of the RAM issue)
 #2
-DISTkm <- gdist(ALLDIST2$lon, ALLDIST2$lat.x, ALLDIST2$long, ALLDIST2$lat.y, units = "km",
-                a = 6378137, b = 6356752, verbose = FALSE)
-ALLDIST2 <-  data.table(ALLDIST2, DISTkm)
+ALLDIST2$DISTkm <- (distCosine(matrix(c(ALLDIST2$long, ALLDIST2$lat.y), ncol=2),matrix(c(ALLDIST2$lon, ALLDIST2$lat.x), ncol=2), r=6378137)/1000)
 ALLDIST2 <- subset(ALLDIST2, select=c(CityID, DISTkm, full.name))
+ALLDIST2 <-  data.table(ALLDIST2)
 ALLDIST2.min  <- ALLDIST2[,list(DISTkm = min(DISTkm)),by=list(CityID)]
 ALLDIST2.min <-merge(ALLDIST2.min, ALLDIST2, by=c("CityID","DISTkm"), all.y=FALSE)
-rm(ALLDIST2, DISTkm)
+rm(ALLDIST2)
 
 #3
-DISTkm <- gdist(ALLDIST3$lon, ALLDIST3$lat.x, ALLDIST3$long, ALLDIST3$lat.y, units = "km",
-                a = 6378137, b = 6356752, verbose = FALSE)
-ALLDIST3 <-  data.table(ALLDIST3, DISTkm)
+ALLDIST3$DISTkm <- (distCosine(matrix(c(ALLDIST3$long, ALLDIST3$lat.y), ncol=2),matrix(c(ALLDIST3$lon, ALLDIST3$lat.x), ncol=2), r=6378137)/1000)
 ALLDIST3 <- subset(ALLDIST3, select=c(CityID, DISTkm, full.name))
+ALLDIST3 <-  data.table(ALLDIST3)
 ALLDIST3.min  <- ALLDIST3[,list(DISTkm = min(DISTkm)),by=list(CityID)]
 ALLDIST3.min <-merge(ALLDIST3.min, ALLDIST3, by=c("CityID","DISTkm"), all.y=FALSE)
-rm(ALLDIST3, DISTkm)
+rm(ALLDIST3)
 
 #4
-DISTkm <- gdist(ALLDIST4$lon, ALLDIST4$lat.x, ALLDIST4$long, ALLDIST4$lat.y, units = "km",
-                a = 6378137, b = 6356752, verbose = FALSE)
-ALLDIST4 <-  data.table(ALLDIST4, DISTkm)
+ALLDIST4$DISTkm <- (distCosine(matrix(c(ALLDIST4$long, ALLDIST4$lat.y), ncol=2),matrix(c(ALLDIST4$lon, ALLDIST4$lat.x), ncol=2), r=6378137)/1000)
 ALLDIST4 <- subset(ALLDIST4, select=c(CityID, DISTkm, full.name))
+ALLDIST4 <-  data.table(ALLDIST4)
 ALLDIST4.min  <- ALLDIST4[,list(DISTkm = min(DISTkm)),by=list(CityID)]
 ALLDIST4.min <-merge(ALLDIST4.min, ALLDIST4, by=c("CityID","DISTkm"), all.y=FALSE)
-rm(ALLDIST4, DISTkm)
+rm(ALLDIST4)
 
 #Bring them all together again
 ALLDIST.min <- merge(ALLDIST1.min, ALLDIST2.min, by=c("CityID", "DISTkm", "full.name"), all=TRUE)
@@ -419,7 +473,7 @@ rm(LC)
 #Housekeeping
 WC.UC$lat.y <- NULL
 WC.UC$lat <- WC.UC$lat.x
-WC.UC <- subset(WC.UC, select=c(pop, country.etc, merge, name, lat, long, capital, Region, Closest.Urban.Center, 
+WC.UC.dist <- subset(WC.UC, select=c(pop, country.etc, merge, name, lat, long, capital, Region, Closest.Urban.Center, 
                                 Population, WC.UC.dist.km, Area, Density, coastalMC, largest.UC, part.of.urban.center,
                                 largestC))
 
@@ -430,13 +484,13 @@ write.csv(WC.UC, "Cache/WC.UC.dist.old.csv")
 #############################################################################################################
 ################################################ 4. Manipulating  ###########################################
 #############################################################################################################
-#WC.UC.dist <- read.csv("Cache/WC.UC.dist.old.csv")
+WC.UC.dist <- read.csv("Cache/WC.UC.dist.old.csv")
 
 
 # Country level data from the World Bank Development Indicators (WDI) and the The Correlates of War (COW) project data on wars.
 if(file.exists("Cache/CountryData.csv")){CountryData <- read.csv("Cache/CountryData.csv")} else{source("1.b - Country Data.R")}
 
-# Now with both City and Country Data gathered, we can fill sime gaps in the Wold Banks largest city population indicator
+# Now with both City and Country Data gathered, we can fill some gaps in the Wold Banks largest city population indicator
 source('SmallScripts/fill.EN.URB.LCTY.UR.R')
 
 # Bring Country level Data for 2010 into the WC.UC Data for the purpose of changing city population to fit WDI aggregates
@@ -531,7 +585,7 @@ write.csv(WC.UC.dist, "Cache/WC.UC.dist.csv")
 
 
 
-#################### Load some GIS Data into the set ;) ########################
+#################### Load some GIS Data into the set ########################
 
 C <- read.csv("Cache/WC.UC.dist.csv")
 
@@ -616,7 +670,7 @@ rm(RASTERnldi)
 RASTER90pop <- raster("Downloaded_Data/glds90ag30.asc")
 p1 <- data.frame(lon=C$lon, lat=C$lat)
 p1["dens.90"] <- raster::extract(RASTER90pop, p1, method='bilinear')
-C["dens.90"] <- round(p1$dens.90)
+C["dens.90"] <- ifelse(is.na(p1$dens.90), 0, round(p1$dens.90))
 
 # Plus Countries Maximum
 Rank.POP90.MAX<-aggregate(C$dens.90, by=list(C$country.etc), FUN=max)
@@ -633,7 +687,7 @@ rm(Rank.POP90.MAX, RASTER90pop)
 RASTER95pop <- raster("Downloaded_Data/glds95ag30.asc")
 p1 <- data.frame(lon=C$lon, lat=C$lat)
 p1["dens.95"] <- raster::extract(RASTER95pop, p1, method='bilinear')
-C["dens.95"] <- round(p1$dens.95)
+C["dens.95"]<- ifelse(is.na(p1$dens.95), 0, round(p1$dens.95))
 
 # Plus Countries Maximum
 Rank.POP95.MAX<-aggregate(C$dens.95, by=list(C$country.etc), FUN=max)
@@ -650,7 +704,7 @@ rm(Rank.POP95.MAX, RASTER95pop)
 RASTER00pop <- raster("Downloaded_Data/glds00ag30.asc")
 p1 <- data.frame(lon=C$lon, lat=C$lat)
 p1["dens.00"] <- raster::extract(RASTER00pop, p1, method='bilinear')
-C["dens.00"] <- round(p1$dens.00)
+C["dens.00"] <- ifelse(is.na(p1$dens.00), 0, round(p1$dens.00))
 
 # Plus Countries Maximum
 Rank.POP00.MAX<-aggregate(C$dens.00, by=list(C$country.etc), FUN=max)
@@ -667,7 +721,7 @@ rm(Rank.POP00.MAX, RASTER00pop)
 RASTER05pop <- raster("Downloaded_Data/glds05ag30.asc")
 p1 <- data.frame(lon=C$lon, lat=C$lat)
 p1["dens.05"] <- raster::extract(RASTER05pop, p1, method='bilinear')
-C["dens.05"] <- round(p1$dens.05)
+C["dens.05"] <- ifelse(is.na(p1$dens.05), 0, round(p1$dens.05))
 
 # Plus Countries Maximum
 Rank.POP05.MAX<-aggregate(C$dens.05, by=list(C$country.etc), FUN=max)
@@ -684,7 +738,7 @@ rm(Rank.POP05.MAX, RASTER05pop)
 RASTER10pop <- raster("Downloaded_Data/glds10ag30.asc")
 p1 <- data.frame(lon=C$lon, lat=C$lat)
 p1["dens.10"] <- raster::extract(RASTER10pop, p1, method='bilinear')
-C["dens.10"] <- round(p1$dens.10)
+C["dens.10"] <- ifelse(is.na(p1$dens.10), 0, round(p1$dens.10))
 
 # Plus Countries Maximum
 Rank.POP10.MAX<-aggregate(C$dens.10, by=list(C$country.etc), FUN=max)
@@ -702,6 +756,7 @@ write.csv(WC.UC.dist.gis, "Cache/WC.UC.dist.gis.csv")
 
 unlink("Downloaded_Data/NLDI_2006_0p25_rev20111230.tif")
 unlink("Downloaded_Data/GDP_grid_flt.tif")
+unlink("Downloaded_Data/GDP_grid_flt.tif.gz")
 unlink("Downloaded_Data/LNMDMS2a.tif")
 unlink("Downloaded_Data/DICGSH1a.tif")
 unlink("Downloaded_Data/G19ESA3a.tif")

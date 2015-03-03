@@ -110,8 +110,8 @@ G2$Area <-ifelse(G2$largest.UC==0 & (((G2$EN.URB.MCTY - G2$EN.URB.LCTY.UR)/(G2$M
 
 
 # re-answering the question again, if a city is part of an UC, now with new area estimates of all UCs
-G2["inUC"] <- ifelse((G2$WC.UC.dist.km <= (15+(((G2$Area)/pi)**0.5))), 1, 0) # 20km + radius of UC as circle
-G2["aroundUC"] <- ifelse((G2$WC.UC.dist.km <= (30+(((G2$Area)/pi)**0.5))), 1, 0) # 40km + radius of UC as circle
+G2["inUC"] <- ifelse((G2$WC.UC.dist.km <= (15+(((G2$Area)/pi)**0.5))), 1, 0) # 15km + radius of UC as circle
+G2["aroundUC"] <- ifelse((G2$WC.UC.dist.km <= (30+(((G2$Area)/pi)**0.5))), 1, 0) # 30km + radius of UC as circle
 G2$inUC[is.na(G2$inUC)]<- 0 
 G2$name <- ifelse((G2$inUC==1), as.character(G2$name), as.character(G2$old.name))
 
@@ -335,19 +335,18 @@ GTDr <- merge(GTDr, R.COASTDIST.MAX, by=c("country_txt"), all.x=TRUE)
 rm(R.COASTDIST.MAX)
 
 
+# In order to determine population movements, we define the average coastal distance of country populations
 DT <- data.table(WC.UC.full)                
 Pop.Coast.Dist <- data.frame(DT[,list(Pop.Coast.Dist = weighted.mean(coast.dist, pop.that.year, rm.na=TRUE)),by=list(country.etc, Time)])
 GTDr <- merge(GTDr, Pop.Coast.Dist, by.x=c("iyear", "country_txt"), by.y=c("Time", "country.etc"), all.x=TRUE)
-
 WC.UC.full.towns <- subset(WC.UC.full, pop.that.year<= 5000)
 DT <- data.table(WC.UC.full.towns)                
 Small.Town.Pop.Coast.Dist <- data.frame(DT[,list(Town.Coast.Dist = weighted.mean(coast.dist, pop.that.year, rm.na=TRUE)),by=list(country.etc, Time)])
 GTDr <- merge(GTDr, Small.Town.Pop.Coast.Dist, by.x=c("iyear", "country_txt"), by.y=c("Time", "country.etc"), all.x=TRUE)
-
 rm(Pop.Coast.Dist, DT, Small.Town.Pop.Coast.Dist, WC.UC.full.towns)
 
-###### Merge combined set with GTD ######
 
+###### Merge combined set with GTD ######
 # merge
 GTD2 <- merge(GTDr, CountryData, by.x=c("country_txt", "iyear"), by.y=c("country", "year"), all.x=TRUE, sort=TRUE)
 rm(GTDr)
@@ -382,10 +381,10 @@ PreGTD["merge"]<- PreGTD$merge.x
 
 
 # limit and order the new PreGTD
-PreGTD <- subset(PreGTD, select=c(eventid, iyear, imonth, iday, Date, country_txt, region_txt, GTD.city, WCUC.city.old, WCUC.city,
+PreGTD <- subset(PreGTD, select=c(eventid, iyear, Date, country_txt, GTD.city, WCUC.city.old, WCUC.city,
                                   latitude, longitude, pop.that.year, Rel.CS, inUC, aroundUC, RANK.Country, Rank.C.MAX, Rank01.C, 
                                   RANK.World, Rank.W.MAX, Rank01.W, capital, largestC, Closest.Urban.Center,largest.UC, 
-                                  coastalMC, WC.UC.dist.km, attacktype1, targtype1, targsubtype1, weaptype1, weapsubtype1, 
+                                  coastalMC, WC.UC.dist.km, attacktype1, targtype1, targsubtype1,  
                                   TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, old.pop, 
                                   merge, original.city, coast.dist, Pop.Coast.Dist, Town.Coast.Dist, coast.dist.MIN, coast.dist.MAX, access, access.MAX, light, 
                                   light.MAX, nldi, nldi.MAX, urbn.cover, city.gdp, gdp.MAX, density, density.MAX, density.growth, 
@@ -469,7 +468,7 @@ PreGTD["DV.Kilcullen"] <- ifelse(is.na(PreGTD$DV.Target.Coastal),
                                    ((PreGTD$DV.Target.Urban+PreGTD$DV.Target.Crowded+PreGTD$DV.Target.Connected)/3),
                                    (PreGTD$DV.Target.Urban+PreGTD$DV.Target.Crowded+PreGTD$DV.Target.Connected+PreGTD$DV.Target.Coastal)/4)
 
-
+###  One additional Dependent Variable: The average populations distance from the coast
 DT <- data.table(PreGTD)
 IVdst <- data.frame(DT[,list(IV.Pop.Coastal.Dist = mean(Pop.Coast.Dist, rm.na=TRUE)),by=list(country_txt, iyear)])
 PreGTD <- merge(PreGTD, IVdst, by=c("country_txt", "iyear"), all.x=TRUE)
