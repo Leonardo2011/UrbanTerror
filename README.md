@@ -14,26 +14,32 @@ Lukas Bretzinger, Cameron Reed, Sascha Schuster
 ===========
 
 
-**short run: to do**
- *  reorganize repo: only main scripts in the main folder, everything else goes into subfolders, data is zipped (Scripts: 1 - Data Gathering, Cleaning, Merging.R, 1.a - Global Terrorism Database.R, 1.b - Country Data.R, 1.c - City Data.R, 2. Data Preparation for Analysis, 3. Analysis (bring all regressions in one script) 4. Visuals
- *  The "2. Data Preparation for Analysis" would create two csv files in the Cache folder, one with country means for fixed effects and one with all observations (PreGTD)
- *  replace data.frame with data.table operations if possible to save time an make the script run again on machines with less than 24GB RAM. 
- *  bring some "small scripts" back into the main ones, even if they become larger
-- improve readability of the main scripts, rename generic Variables with something telling
- *  replace gsub operations in the GTD City cleaning with a counrty sensitive process to reduce false positives (done with the example of lima
+** QUAL: to do**
+ * Check if Dropbox-Mendely-MendeleyGroup-Bibfile Nexus is working 
+ * Clean existing articles in terms of this Nexus be working (knidr and word)
+ * Add new Literature: http://www.start.umd.edu/publications
+ * Toughts: What does targeting infrastructure mean, how it is explained, what are trends over time (theoretical foundation)
 
-**long run: to do** 
+
+
+**QUANT short run: to do**
+ *  DONE: reorganize repo: only main scripts in the main folder, everything else goes into subfolders, data is zipped (Scripts: 1 - Data Gathering, Cleaning, Merging.R, 1.a - Global Terrorism Database.R, 1.b - Country Data.R, 1.c - City Data.R, 2. Data Preparation for Analysis, 3. Analysis (bring all regressions in one script) 4. Visuals
+ *  DONE: The "2. Data Preparation for Analysis" would create two csv files in the Cache folder, one with country means for fixed effects and one with all observations (PreGTD)
+ *  DONE: replace data.frame with data.table operations if possible to save time an make the script run again on machines with less than 24GB RAM. 
+ *  improve readability of the main scripts, rename generic Variables with something telling
+ *  replace gsub operations in the GTD City cleaning with a counrty sensitive process to reduce false positives (done with the example of lima
+ *  fix variables
+
+**QUANT long run: to do** 
  *  learn stats and how to interpret regression results correctely (not kidding guys)
  *  run much more tests: non-country-relative variables. different regressions, glm, exponential growth etc. Adding one variable after another. test for other indicators than urbanization, what about cell phone / internet penetration. 
- *  Model with treatment on country level: Drones vs. no drones. 
- *  Model with treatment on country level: Coastal Megacity vs. no Coastal Megacity. Gravitation?  
  * single out the effect of various institutions coding and account for it, if possible, to run analysis back til 1970.
-
  * Identify the best analytical tools and methods to study group behaviour (we want to identify both if there are clear trends, and if certain events have an impact, so some sort of polynomial regression and visualisation would be a potentially usefull first step)
+ * New Variable: Infrastructure / Urban Infrastructure variable
+ * Test the Infrastructure hypothesis: Urban atacks are substituted by urban infrastructure atacks (indirect effect, signaling to population)
 
-
-**nice to haves** 
- *  use geonames to find missing values
+** QUANT nice to haves** 
+ *  DONE: use geonames to find missing values
  *  find exact urban center growth for larger cities to replace our estimates. 
  *  get into spatial analysis, as c.traxler suggested at the thesis cluster meeting 
 
