@@ -367,6 +367,25 @@ PreGTD  <- PreGTD [order(-PreGTD$HUMscale, na.last=TRUE) , ]
 PreGTD$latitude <- ifelse(is.na(PreGTD$latitude), as.numeric(PreGTD$lat), as.numeric(PreGTD$lat))
 PreGTD$longitude <- ifelse(is.na(PreGTD$longitude), as.numeric(PreGTD$long), as.numeric(PreGTD$long))
 
+# now we add a random noise to the latlong data, in case the location was previously identified as non-city 
+# geo data. We found a lot of locations on the geonames severes that e.g. is rather a province capital, once we search for
+# a province name from the GTD. Those were identified and now a random noise is added in order to bring the latlong outside of 
+# city. Just to be sure. 
+
+add.geo.noise <- function (x) {
+  z <- runif(1, -1, 1)
+  z <- z/abs(z)
+  z <- z*runif(1, 0.3, 1)
+  x <- z+x
+  rm(z)
+  return(x)
+}
+
+PreGTD$longitude[PreGTD$non.city.loc == 1] <- add.geo.noise(PreGTD$longitude)
+PreGTD$latitude[PreGTD$non.city.loc == 1] <- add.geo.noise(PreGTD$latitude)
+
+rm(add.geo.noise)
+
 # Introduce loged ranks 
 PreGTD["Rank01.C"] <-((((PreGTD$RANK.Country-1)/(PreGTD$Rank.C.MAX-1))-1)*-1)
 PreGTD["Rank01.W"] <-((((PreGTD$RANK.World-1)/(PreGTD$Rank.W.MAX-1))-1)*-1)
@@ -382,7 +401,7 @@ PreGTD["merge"]<- PreGTD$merge.x
 
 # limit and order the new PreGTD
 PreGTD <- subset(PreGTD, select=c(eventid, iyear, Date, country_txt, GTD.city, WCUC.city.old, WCUC.city,
-                                  latitude, longitude, pop.that.year, Rel.CS, inUC, aroundUC, RANK.Country, Rank.C.MAX, Rank01.C, 
+                                  latitude, longitude, non.city.loc, pop.that.year, Rel.CS, inUC, aroundUC, RANK.Country, Rank.C.MAX, Rank01.C, 
                                   RANK.World, Rank.W.MAX, Rank01.W, capital, largestC, Closest.Urban.Center,largest.UC, 
                                   coastalMC, WC.UC.dist.km, attacktype1, targtype1, targsubtype1,  
                                   TUPscale, PROPscale, HUMscale, Extra.WAR.In, Extra.WAR.Out, Intra.WAR, Inter.WAR, old.pop, 
